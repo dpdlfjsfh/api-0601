@@ -4,7 +4,7 @@ from typing import List
 app = FastAPI()
 
 # 가상의 쥬얼리 상품 데이터
-jewelry = [
+jewelry_data = [
     {"category": "earring", "brand": "ABC jewelry", "price": 100000, "gemstone": "diamond", "inventory": 5},
     {"category": "necklace", "brand": "XYZ accessories", "price": 80000, "gemstone": "ruby", "inventory": 3},
     {"category": "bracelet", "brand": "DEF gems", "price": 120000, "gemstone": "emerald", "inventory": 8},
