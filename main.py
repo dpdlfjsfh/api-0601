@@ -45,7 +45,7 @@ async def filter_jewelry(
 
     return filtered_items
 
-#가상으 자동차 렌트 상품 데이터
+#가상의 자동차 렌트 상품 데이터
 car_rental_data = [
     {"vehicle_type": "SUV", "model": "Kia Sportage", "mileage": 10.5, "daily_rental_fee": 90000, "available": True, "location": "서울특별시 강남구"},
     {"vehicle_type": "Sedan", "model": "Hyundai Sonata", "mileage": 12.3, "daily_rental_fee": 80000, "available": True, "location": "서울특별시 마포구"},
@@ -295,3 +295,153 @@ async def filter_sports_schedule(
 
     return filtered_schedule
 
+# 야구선수 타자 기록
+season_records = [
+    {"id": 1, "player_name": "Kim", "position": "1B", "avg": 0.305, "obp": 0.400, "slg": 0.550, "rbi": 100, "runs": 95, "stolen_bases": 20, "home_runs": 35},
+    {"id": 2, "player_name": "Lee", "position": "2B", "avg": 0.290, "obp": 0.380, "slg": 0.500, "rbi": 80, "runs": 75, "stolen_bases": 10, "home_runs": 20},
+    {"id": 3, "player_name": "Park", "position": "SS", "avg": 0.320, "obp": 0.420, "slg": 0.550, "rbi": 90, "runs": 85, "stolen_bases": 15, "home_runs": 25},
+    {"id": 4, "player_name": "Choi", "position": "3B", "avg": 0.280, "obp": 0.370, "slg": 0.480, "rbi": 70, "runs": 65, "stolen_bases": 5, "home_runs": 15},
+    {"id": 5, "player_name": "Kang", "position": "CF", "avg": 0.300, "obp": 0.390, "slg": 0.520, "rbi": 85, "runs": 80, "stolen_bases": 12, "home_runs": 22},
+    {"id": 6, "player_name": "Yoo", "position": "RF", "avg": 0.275, "obp": 0.360, "slg": 0.500, "rbi": 75, "runs": 70, "stolen_bases": 8, "home_runs": 18},
+    {"id": 7, "player_name": "Jung", "position": "LF", "avg": 0.290, "obp": 0.380, "slg": 0.490, "rbi": 80, "runs": 75, "stolen_bases": 10, "home_runs": 20},
+    {"id": 8, "player_name": "Ha", "position": "DH", "avg": 0.280, "obp": 0.370, "slg": 0.480, "rbi": 70, "runs": 65, "stolen_bases": 5, "home_runs": 15},
+    {"id": 9, "player_name": "Chung", "position": "C", "avg": 0.275, "obp": 0.360, "slg": 0.500, "rbi": 75, "runs": 70, "stolen_bases": 8, "home_runs": 18}
+]
+
+@app.get("/season_records")
+async def filter_season_records(
+    player_name: str = Query(default=None),
+    position: str = Query(default=None),
+    min_avg: float = Query(default=None, ge=0.0),
+    min_obp: float = Query(default=None, ge=0.0),
+    min_slg: float = Query(default=None, ge=0.0),
+    min_rbi: int = Query(default=None, ge=0),
+    min_runs: int = Query(default=None, ge=0),
+    min_stolen_bases: int = Query(default=None, ge=0),
+    min_home_runs: int = Query(default=None, ge=0)
+):
+    filtered_records = season_records
+
+    if player_name is not None:
+        filtered_records = [record for record in filtered_records if player_name.lower() in record['player_name'].lower()]
+
+    if position is not None:
+        filtered_records = [record for record in filtered_records if position == record['position']]
+
+    if min_avg is not None:
+        filtered_records = [record for record in filtered_records if record['avg'] >= min_avg]
+
+    if min_obp is not None:
+        filtered_records = [record for record in filtered_records if record['obp'] >= min_obp]
+
+    if min_slg is not None:
+        filtered_records = [record for record in filtered_records if record['slg'] >= min_slg]
+
+    if min_rbi is not None:
+        filtered_records = [record for record in filtered_records if record['rbi'] >= min_rbi]
+
+    if min_runs is not None:
+        filtered_records = [record for record in filtered_records if record['runs'] >= min_runs]
+
+    if min_stolen_bases is not None:
+        filtered_records = [record for record in filtered_records if record['stolen_bases'] >= min_stolen_bases]
+
+    if min_home_runs is not None:
+        filtered_records = [record for record in filtered_records if record['home_runs'] >= min_home_runs]
+
+    return filtered_records
+
+#야구 투수 기록
+pitcher_stats = [
+    {"id": 1, "name": "Kim", "games": 30, "innings": 180.1, "wins": 15, "losses": 5, "strikeouts": 200, "home_runs_allowed": 10, "era": 2.50},
+    {"id": 2, "name": "Lee", "games": 28, "innings": 170.2, "wins": 12, "losses": 8, "strikeouts": 180, "home_runs_allowed": 15, "era": 3.20},
+    {"id": 3, "name": "Park", "games": 32, "innings": 200.0, "wins": 18, "losses": 3, "strikeouts": 220, "home_runs_allowed": 12, "era": 2.10},
+    {"id": 4, "name": "Choi", "games": 25, "innings": 150.0, "wins": 10, "losses": 7, "strikeouts": 160, "home_runs_allowed": 8, "era": 3.50},
+    {"id": 5, "name": "Kang", "games": 27, "innings": 165.2, "wins": 14, "losses": 6, "strikeouts": 190, "home_runs_allowed": 11, "era": 2.80},
+    {"id": 6, "name": "Yoo", "games": 29, "innings": 175.1, "wins": 11, "losses": 9, "strikeouts": 170, "home_runs_allowed": 13, "era": 3.00},
+    {"id": 7, "name": "Jung", "games": 26, "innings": 155.0, "wins": 9, "losses": 8, "strikeouts": 150, "home_runs_allowed": 10, "era": 3.30},
+    {"id": 8, "name": "Ha", "games": 31, "innings": 190.2, "wins": 16, "losses": 4, "strikeouts": 210, "home_runs_allowed": 9, "era": 2.40}
+]
+
+@app.get("/pitcher_stats")
+async def filter_pitcher_stats(
+    name: str = Query(default=None),
+    min_innings: float = Query(default=None, ge=0.0),
+    max_era: float = Query(default=None, le=10.0),
+    min_wins: int = Query(default=None, ge=0),
+    max_losses: int = Query(default=None, le=20),
+    min_strikeouts: int = Query(default=None, ge=0),
+    max_home_runs_allowed: int = Query(default=None, le=30)
+):
+    filtered_stats = pitcher_stats
+
+    if name is not None:
+        filtered_stats = [stat for stat in filtered_stats if name.lower() in stat['name'].lower()]
+
+    if min_innings is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['innings'] >= min_innings]
+
+    if max_era is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['era'] <= max_era]
+
+    if min_wins is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['wins'] >= min_wins]
+
+    if max_losses is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['losses'] <= max_losses]
+
+    if min_strikeouts is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['strikeouts'] >= min_strikeouts]
+
+    if max_home_runs_allowed is not None:
+        filtered_stats = [stat for stat in filtered_stats if stat['home_runs_allowed'] <= max_home_runs_allowed]
+
+    return filtered_stats
+
+# 악보 상품 조회
+
+sheet_music = [
+    {"id": 1, "title": "Classical Sonata", "instrument": "Piano", "difficulty": 4.5, "price": 25, "rating": 4.2, "genre": "Classical"},
+    {"id": 2, "title": "Jazz Improvisation", "instrument": "Saxophone", "difficulty": 3.2, "price": 18, "rating": 4.5, "genre": "Jazz"},
+    {"id": 3, "title": "Rock Riffs", "instrument": "Guitar", "difficulty": 2.8, "price": 20, "rating": 4.0, "genre": "Rock"},
+    {"id": 4, "title": "Pop Ballad", "instrument": "Piano", "difficulty": 2.1, "price": 15, "rating": 4.8, "genre": "Pop"},
+    {"id": 5, "title": "Folk Songs", "instrument": "Violin", "difficulty": 3.5, "price": 22, "rating": 4.3, "genre": "Folk"},
+    {"id": 6, "title": "Blues Guitar", "instrument": "Guitar", "difficulty": 3.9, "price": 19, "rating": 4.1, "genre": "Blues"},
+    {"id": 7, "title": "Broadway Showtunes", "instrument": "Piano", "difficulty": 3.0, "price": 24, "rating": 4.4, "genre": "Broadway"},
+    {"id": 8, "title": "Country Fiddle", "instrument": "Violin", "difficulty": 2.5, "price": 17, "rating": 4.6, "genre": "Country"}
+]
+
+@app.get("/sheet_music")
+async def filter_sheet_music(
+    title: str = Query(default=None),
+    instrument: str = Query(default=None),
+    min_difficulty: float = Query(default=None, ge=0.0),
+    max_difficulty: float = Query(default=None, le=5.0),
+    min_price: int = Query(default=None, ge=0),
+    genre: str = Query(default=None),
+    min_rating: float = Query(default=None, ge=0.0)
+):
+    filtered_music = sheet_music
+
+    if title is not None:
+        filtered_music = [music for music in filtered_music if title.lower() in music['title'].lower()]
+
+    if instrument is not None:
+        filtered_music = [music for music in filtered_music if instrument.lower() == music['instrument'].lower()]
+
+    if min_difficulty is not None:
+        filtered_music = [music for music in filtered_music if music['difficulty'] >= min_difficulty]
+
+    if max_difficulty is not None:
+        filtered_music = [music for music in filtered_music if music['difficulty'] <= max_difficulty]
+
+    if min_price is not None:
+        filtered_music = [music for music in filtered_music if music['price'] >= min_price]
+
+    if genre is not None:
+        filtered_music = [music for music in filtered_music if genre.lower() == music['genre'].lower()]
+
+    if min_rating is not None:
+        filtered_music = [music for music in filtered_music if music['rating'] >= min_rating]
+
+    return filtered_music
