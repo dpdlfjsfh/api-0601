@@ -182,16 +182,16 @@ async def filter_health_center_members(
 
 #약 처방 기록
 pharmacy_prescriptions = [
-    {"id": 1, "prescriber_age": 45, "prescriber_gender": "M", "medicine": "Medicine A", "prescription_date": "2022-01-01", "prescribing_doctor": "Dr. John Doe"},
-    {"id": 2, "prescriber_age": 35, "prescriber_gender": "F", "medicine": "Medicine B", "prescription_date": "2022-02-15", "prescribing_doctor": "Dr. Jane Smith"},
-    {"id": 3, "prescriber_age": 50, "prescriber_gender": "M", "medicine": "Medicine C", "prescription_date": "2022-03-10", "prescribing_doctor": "Dr. David Johnson"},
-    {"id": 4, "prescriber_age": 40, "prescriber_gender": "F", "medicine": "Medicine A", "prescription_date": "2022-04-05", "prescribing_doctor": "Dr. Emily Davis"},
-    {"id": 5, "prescriber_age": 55, "prescriber_gender": "M", "medicine": "Medicine B", "prescription_date": "2022-05-20", "prescribing_doctor": "Dr. Michael Wilson"},
-    {"id": 6, "prescriber_age": 30, "prescriber_gender": "F", "medicine": "Medicine C", "prescription_date": "2022-06-15", "prescribing_doctor": "Dr. Sarah Brown"},
-    {"id": 7, "prescriber_age": 60, "prescriber_gender": "M", "medicine": "Medicine A", "prescription_date": "2022-07-01", "prescribing_doctor": "Dr. Christopher Lee"},
-    {"id": 8, "prescriber_age": 50, "prescriber_gender": "F", "medicine": "Medicine B", "prescription_date": "2022-08-12", "prescribing_doctor": "Dr. Olivia Taylor"},
-    {"id": 9, "prescriber_age": 45, "prescriber_gender": "M", "medicine": "Medicine C", "prescription_date": "2022-09-05", "prescribing_doctor": "Dr. Daniel Martin"},
-    {"id": 10, "prescriber_age": 55, "prescriber_gender": "F", "medicine": "Medicine A", "prescription_date": "2022-10-20", "prescribing_doctor": "Dr. Sophia Anderson"}
+    {"id": 1, "prescriber_age": 45, "prescriber_gender": "M", "medicine": "타이레놀", "prescription_date": "2022-01-01", "prescribing_doctor": "Dr. John Doe"},
+    {"id": 2, "prescriber_age": 35, "prescriber_gender": "F", "medicine": "이기탄", "prescription_date": "2022-02-15", "prescribing_doctor": "Dr. Jane Smith"},
+    {"id": 3, "prescriber_age": 50, "prescriber_gender": "M", "medicine": "게보린", "prescription_date": "2022-03-10", "prescribing_doctor": "Dr. David Johnson"},
+    {"id": 4, "prescriber_age": 40, "prescriber_gender": "F", "medicine": "타이레놀", "prescription_date": "2022-04-05", "prescribing_doctor": "Dr. Emily Davis"},
+    {"id": 5, "prescriber_age": 55, "prescriber_gender": "M", "medicine": "이기탄", "prescription_date": "2022-05-20", "prescribing_doctor": "Dr. Michael Wilson"},
+    {"id": 6, "prescriber_age": 30, "prescriber_gender": "F", "medicine": "게보린", "prescription_date": "2022-06-15", "prescribing_doctor": "Dr. Sarah Brown"},
+    {"id": 7, "prescriber_age": 60, "prescriber_gender": "M", "medicine": "타이레놀", "prescription_date": "2022-07-01", "prescribing_doctor": "Dr. Christopher Lee"},
+    {"id": 8, "prescriber_age": 50, "prescriber_gender": "F", "medicine": "이기탄", "prescription_date": "2022-08-12", "prescribing_doctor": "Dr. Olivia Taylor"},
+    {"id": 9, "prescriber_age": 45, "prescriber_gender": "M", "medicine": "게보린", "prescription_date": "2022-09-05", "prescribing_doctor": "Dr. Daniel Martin"},
+    {"id": 10, "prescriber_age": 55, "prescriber_gender": "F", "medicine": "타이레놀", "prescription_date": "2022-10-20", "prescribing_doctor": "Dr. Sophia Anderson"}
 ]
 
 @app.get("/pharmacy_prescriptions")
@@ -220,16 +220,16 @@ async def filter_pharmacy_prescriptions(
 #스트리밍 영상 조회
 
 streaming_videos = [
-    {"title": "Video A", "channel": "Channel X", "views": 100000, "likes": 5000, "comments": 100, "shares": 50, "duration": "05:30"},
-    {"title": "Video B", "channel": "Channel Y", "views": 50000, "likes": 2000, "comments": 50, "shares": 20, "duration": "10:45"},
-    {"title": "Video C", "channel": "Channel X", "views": 80000, "likes": 3000, "comments": 80, "shares": 30, "duration": "03:15"},
-    {"title": "Video D", "channel": "Channel Z", "views": 120000, "likes": 8000, "comments": 200, "shares": 100, "duration": "08:20"},
-    {"title": "Video E", "channel": "Channel Y", "views": 60000, "likes": 2500, "comments": 70, "shares": 40, "duration": "06:50"},
-    {"title": "Video F", "channel": "Channel X", "views": 90000, "likes": 4000, "comments": 120, "shares": 60, "duration": "07:30"},
-    {"title": "Video G", "channel": "Channel Z", "views": 150000, "likes": 10000, "comments": 300, "shares": 150, "duration": "12:15"},
-    {"title": "Video H", "channel": "Channel Y", "views": 70000, "likes": 3500, "comments": 90, "shares": 35, "duration": "04:40"},
-    {"title": "Video I", "channel": "Channel X", "views": 110000, "likes": 6000, "comments": 150, "shares": 75, "duration": "09:05"},
-    {"title": "Video J", "channel": "Channel Z", "views": 100000, "likes": 5000, "comments": 100, "shares": 50, "duration": "06:10"}
+    {"title": "Queen Live concert 220701", "channel": "Queen fantube", "views": 100000, "likes": 5000, "comments": 100, "shares": 50, "duration": "05:30"},
+    {"title": "Queen Live concert 220708", "channel": "Queen fantube", "views": 50000, "likes": 2000, "comments": 50, "shares": 20, "duration": "10:45"},
+    {"title": "Queen Live Under pressure", "channel": "Queen fantube", "views": 80000, "likes": 3000, "comments": 80, "shares": 30, "duration": "03:15"},
+    {"title": "Queen Live Don't stop me now", "channel": "Queen fantube", "views": 120000, "likes": 8000, "comments": 200, "shares": 100, "duration": "08:20"},
+    {"title": "Queen fan meeting", "channel", "channel": "Queen fantube", "views": 60000, "likes": 2500, "comments": 70, "shares": 40, "duration": "06:50"},
+    {"title": "Summer concert queen", "channel": "Summer concert Official", "views": 90000, "likes": 4000, "comments": 120, "shares": 60, "duration": "07:30"},
+    {"title": "Summer concert oasis", "channel": "Summer concert Official", "views": 150000, "likes": 10000, "comments": 300, "shares": 150, "duration": "12:15"},
+    {"title": "Summer concert Adel", "channel": "Summer concert Official", "views": 70000, "likes": 3500, "comments": 90, "shares": 35, "duration": "04:40"},
+    {"title": "Summer concert GOD", "channel": "Summer concert Official", "views": 110000, "likes": 6000, "comments": 150, "shares": 75, "duration": "09:05"},
+    {"title": "Summer concert IU", "channel": "Summer concert Official", "views": 100000, "likes": 5000, "comments": 100, "shares": 50, "duration": "06:10"}
 ]
 
 @app.get("/streaming_videos")
