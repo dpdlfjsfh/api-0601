@@ -631,7 +631,6 @@ async def get_destinations(
     name: str = Query(default=None),
     country: str = Query(default=None),
     continent: str = Query(default=None),
-    attractions: List[str] = Query(default=None),
     description: str = Query(default=None)
 ):
     filtered_destinations = destinations
