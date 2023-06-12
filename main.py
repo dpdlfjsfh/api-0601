@@ -462,8 +462,7 @@ async def get_gym_equipment(
     brand: str = Query(default=None),
     min_weight_capacity: int = Query(default=None, ge=0),
     max_price: int = Query(default=None, ge=0),
-    availability: bool = Query(default=None),
-    min_rating: float = Query(default=None, ge=0, le=5)
+    availability: bool = Query(default=None)
 ):
     filtered_equipment = gym_equipment
 
@@ -504,8 +503,7 @@ async def get_hotels(
     region: str = Query(default=None),
     min_area: int = Query(default=None, ge=0),
     max_price: int = Query(default=None, ge=0),
-    max_competition_rate: float = Query(default=None, ge=0, le=1),
-    cooking_available: bool = Query(default=None)
+    max_competition_rate: float = Query(default=None, ge=0, le=1)
 ):
     filtered_hotels = hotels
 
@@ -546,7 +544,6 @@ async def get_videos(
     title: str = Query(default=None),
     genre: str = Query(default=None),
     min_duration: int = Query(default=None, ge=0),
-    max_release_year: int = Query(default=None, ge=0),
     min_rating: float = Query(default=None, ge=0),
     language: str = Query(default=None)
 ):
@@ -646,10 +643,6 @@ async def get_destinations(
     if continent is not None:
         # 대륙 필터링
         filtered_destinations = [dest for dest in filtered_destinations if continent.lower() == dest['continent'].lower()]
-
-    if attractions is not None:
-        # 관광지 필터링
-        filtered_destinations = [dest for dest in filtered_destinations if set(attractions).issubset(dest['attractions'])]
 
     if description is not None:
         # 설명 필터링
