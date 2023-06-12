@@ -503,7 +503,7 @@ async def get_hotels(
     region: str = Query(default=None),
     min_area: int = Query(default=None, ge=0),
     max_price: int = Query(default=None, ge=0),
-    max_competition_rate: float = Query(default=None, ge=0, le=1)
+    min_competition_rate: float = Query(default=None, ge=0, le=1)
 ):
     filtered_hotels = hotels
 
