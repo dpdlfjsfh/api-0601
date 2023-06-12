@@ -751,7 +751,7 @@ async def filter_sandwich_menu(
 
     if include_ingredients is not None:
         include_ingredients_list = include_ingredients.split(",")
-        filtered_menu = [menu for menu in filtered_menu if all(ingredient.lower() in menu['ingredients'] for ingredient in include_ingredients_list)]
+        filtered_menu = [menu for menu in filtered_menu if any(ingredient.lower() in menu['ingredients'] for ingredient in include_ingredients_list)]
 
     if include_allergens is not None:
         include_allergens_list = include_allergens.split(",")
