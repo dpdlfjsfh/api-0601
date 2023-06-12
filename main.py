@@ -708,7 +708,6 @@ async def filter_piano_products(
     max_price: int = Query(default=None, ge=0),
     min_keys: int = Query(default=None, ge=0),
     max_keys: int = Query(default=None, ge=0),
-    user_level: str = Query(default=None),
     color: str = Query(default=None)
 ):
     filtered_products = piano_products
