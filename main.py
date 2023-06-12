@@ -503,7 +503,7 @@ async def get_hotels(
     region: str = Query(default=None),
     min_area: int = Query(default=None, ge=0),
     max_price: int = Query(default=None, ge=0),
-    min_competition_rate: float = Query(default=None, ge=0, le=1)
+    max_competition_rate: float = Query(default=None, ge=0, le=1)
 ):
     filtered_hotels = hotels
 
@@ -519,9 +519,9 @@ async def get_hotels(
         # 최대 가격 필터링
         filtered_hotels = [hotel for hotel in filtered_hotels if hotel['price'] <= max_price]
 
-    if min_competition_rate is not None:
-        # 최소 경쟁율 필터링
-        filtered_hotels = [hotel for hotel in filtered_hotels if hotel['competition_rate'] >= max_competition_rate]
+    if max_competition_rate is not None:
+        # 최대 경쟁율 필터링
+        filtered_hotels = [hotel for hotel in filtered_hotels if hotel['competition_rate'] <= max_competition_rate]
 
     return filtered_hotels
 
