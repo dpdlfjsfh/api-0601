@@ -523,10 +523,6 @@ async def get_hotels(
         # 최소 경쟁율 필터링
         filtered_hotels = [hotel for hotel in filtered_hotels if hotel['competition_rate'] >= max_competition_rate]
 
-    if name is not None:
-        # 호텔이름 필터링
-        filtered_hotels = [hotel for hotel in filtered_hotels if name.lower() == hotel['name'].lower()]
-
     return filtered_hotels
 
 # 영상 조회 데이터
