@@ -8,11 +8,16 @@ class Item(BaseModel):
     name: str
     price: float
 
+inventory = []  # 임시로 아이템을 저장하는 리스트
+
 @app.post("/items/")
 async def create_item(item: Item):
-    # item을 처리하는 로직 작성
-    # 예를 들어, 데이터베이스에 저장하거나 다른 작업을 수행할 수 있습니다.
+    inventory.append(item)
     return {"message": "Item created successfully"}
+
+@app.get("/items/")
+async def get_items():
+    return inventory
 
 
 
