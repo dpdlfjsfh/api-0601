@@ -3,6 +3,20 @@ from typing import List
 
 app = FastAPI()
 
+#post method 테스트
+@app.post("/test/")
+async def create_item(item: Item):
+    # item을 처리하는 로직 작성
+    # 예를 들어, 데이터베이스에 저장하거나 다른 작업을 수행할 수 있습니다.
+    return {"message": "Item created successfully"}
+
+class Item(BaseModel):
+    name: str
+    price: float
+
+
+
+
 # 가상의 쥬얼리 상품 데이터
 jewelry_data = [
     {"category": "earring", "brand": "ABC jewelry", "price": 100000, "gemstone": "diamond", "inventory": 5},
