@@ -1,23 +1,18 @@
 from fastapi import FastAPI, Query
 from typing import List
-from pydantic import Field
+from pydantic import BaseModel
 
 app = FastAPI()
 
-class Item:
-    def __init__(self, name: str, price: float):
-        self.name = name
-        self.price = price
+class Item(BaseModel):
+    name: str
+    price: float
 
 @app.post("/items/")
 async def create_item(item: Item):
     # item을 처리하는 로직 작성
     # 예를 들어, 데이터베이스에 저장하거나 다른 작업을 수행할 수 있습니다.
     return {"message": "Item created successfully"}
-
-class ItemCreateRequest:
-    name: str = Field(..., example="Example Item")
-    price: float = Field(..., example=9.99)
 
 
 
