@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -21,7 +21,49 @@ async def get_items():
     return inventory
 #########
 
+@app.get("/mobile_app")
+def filter_mobile_application(
+    min_ranking: Optional[int] = Query(None, ge=1),
+    max_ranking: Optional[int] = Query(None, ge=1),
+    name: Optional[str] = Query(None),
+    category: Optional[str] = Query(None),
+    min_rating: Optional[float] = Query(None, ge=0, le=5),
+    max_rating: Optional[float] = Query(None, ge=0, le=5),
+    pub: Optional[str] = Query(None)
+):
+    filtered_apps = []
+    # 여기서는 주어진 데이터를 리스트 형태로 정의했습니다.
+    data = [
+        [1, "NH올원뱅크", "금융", "당신을 위한 모든 금융이 한 곳에! 농협은행 모바일 뱅크. NH올원뱅크를 만나 보세요!", 3.7, "NH농협은행"],
+        [2, "시티즌코난", "도구", "일선 경찰관을 위한 보이스피싱 악성 앱 순간 탐지기(구 피싱아이즈 폴리스)로서 *피싱아이즈*와 함께 운영되고 있습니다.", 4.2, "(주)인피니그루"],
+        [3, "KB Pay", "금융", "KB Pay 모든 금융을 한번에, 한손에, 한눈에 담다", 4.2, "KB국민카드"],
+        [4, "쿠팡플레이", "엔터테인먼트", "쿠팡플레이로 쿠팡 와우 멤버십에 시청의 즐거움을 더했어요.", 3.6, "Coupang Corp."],
+        [5, "AliExpress", "쇼핑", "해외직구는 알리익스프레스!", 4.5, "Alibaba Mobile"],
+        [6, "Nike", "쇼핑", "최신 운둥화와 남성 여성 키즈 의류부터 앱 전용 제품과 멤버 혜택, 운동 콘텐츠까지. 당신만을 위한 특별한 나이키를 앱에서 만나보세요.", 4.3, "Nike, Inc."],
+        [7, "네이버 파파고", "도구", "똑똑한 AI 통변역기, 언어 장벽 없이 대화하는 세상을 꿈꿉니다.", 4.7, "NAVER Corp."]
+    ]
 
+    for app_data in data:
+        ranking, app_name, app_category, desc, rating, app_pub = app_data
+        if (
+            (min_ranking is None or ranking >= min_ranking) and
+            (max_ranking is None or ranking <= max_ranking) and
+            (name is None or app_name.lower() == name.lower()) and
+            (category is None or app_category.lower() == category.lower()) and
+            (min_rating is None or rating >= min_rating) and
+            (max_rating is None or rating <= max_rating) and
+            (pub is None or app_pub.lower() == pub.lower())
+        ):
+            filtered_apps.append({
+                "ranking": ranking,
+                "name": app_name,
+                "category": app_category,
+                "desc": desc,
+                "rating": rating,
+                "pub": app_pub
+            })
+
+    return filtered_apps
 
 
 
