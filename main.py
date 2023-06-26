@@ -2271,6 +2271,875 @@ async def filter_toy_rental(
 
     return filtered_toys
 
+# 미국 주식 데이터 리스트
+us_stock_list = [
+    {
+        "company": "마이크로소프트",
+        "ticker": "MSFT",
+        "price": 339.71,
+        "increase": 1.84,
+        "per": 35.44,
+        "eps": 6.99
+    },
+    {
+        "company": "어도비",
+        "ticker": "ADBE",
+        "price": 477.58,
+        "increase": 0.10,
+        "per": 47.17,
+        "eps": 10.50
+    },
+    {
+        "company": "애플",
+        "ticker": "AAPL",
+        "price": 187,
+        "increase": 3.04,
+        "per": 30.25,
+        "eps": 6.11
+    },
+    {
+        "company": "코카콜라",
+        "ticker": "KO",
+        "price": 61.85,
+        "increase": 0.42,
+        "per": 25.57,
+        "eps": 2.41
+    },
+    {
+        "company": "아마존 닷컴",
+        "ticker": "AMZN",
+        "price": 130.15,
+        "increase": 5.32,
+        "per": 10.22,
+        "eps": -0.27
+    },
+    {
+        "company": "테슬라",
+        "ticker": "TSLA",
+        "price": 264.61,
+        "increase": 5.15,
+        "per": 69.87,
+        "eps": 3.73
+    },
+    {
+        "company": "알파벳 CLASS A",
+        "ticker": "GOOGL",
+        "price": 123.15,
+        "increase": 2.6,
+        "per": 27.10,
+        "eps": 4.56
+    }
+]
+
+
+@app.get("/us_stocks")
+async def filter_us_stocks(
+    company: Optional[str] = Query(None, description="기업명"),
+    ticker: Optional[str] = Query(None, description="티커"),
+    min_price: Optional[float] = Query(None, description="최소 현재가"),
+    max_price: Optional[float] = Query(None, description="최대 현재가"),
+    max_increase: Optional[float] = Query(None, description="최대 상승폭"),
+    min_increase: Optional[float] = Query(None, description="최소 상승폭"),
+    per: Optional[float] = Query(None, description="주가 수익률"),
+    eps: Optional[float] = Query(None, description="earnings per share (1주당 이익)")
+) -> List[dict]:
+    filtered_stocks = []
+
+    for us_stock in us_stock_list:
+        if company and company != us_stock["company"]:
+            continue
+        if ticker and ticker != us_stock["ticker"]:
+            continue
+        if min_price is not None and min_price > us_stock["price"]:
+            continue
+        if max_price is not None and max_price < us_stock["price"]:
+            continue
+        if max_increase is not None and max_increase < us_stock["increase"]:
+            continue
+        if min_increase is not None and min_increase > us_stock["increase"]:
+            continue
+        if per is not None and per != us_stock["per"]:
+            continue
+        if eps is not None and eps != us_stock["eps"]:
+            continue
+
+        filtered_stocks.append(us_stock)
+
+    return filtered_stocks
+
+# 개인 캣시터 데이터 리스트
+catsitter_list = [
+    {
+        "시터이름": "오경원",
+        "이용가능지역": "성남시",
+        "가격": "48000",
+        "평점": 5.0,
+        "예약가능여부": "N",
+        "이용후기": "친절하세요.",
+        "연락처": "010-7320-4633"
+    },
+    {
+        "시터이름": "성재숙",
+        "이용가능지역": "제주시",
+        "가격": "65000",
+        "평점": 4.2,
+        "예약가능여부": "Y",
+        "이용후기": "상냥하세요.",
+        "연락처": "010-6252-1750"
+    },
+    {
+        "시터이름": "손주연",
+        "이용가능지역": "관악구",
+        "가격": "50000",
+        "평점": 4.5,
+        "예약가능여부": "Y",
+        "이용후기": "꼼꼼하시네요.",
+        "연락처": "010-4894-5996"
+    },
+    {
+        "시터이름": "서미연",
+        "이용가능지역": "진안군",
+        "가격": "52000",
+        "평점": 3.0,
+        "예약가능여부": "Y",
+        "이용후기": "시간 약속을 잘 지키지 않으세요.",
+        "연락처": "010-5982-6146"
+    },
+    {
+        "시터이름": "배원태",
+        "이용가능지역": "담양군",
+        "가격": "60000",
+        "평점": 4.8,
+        "예약가능여부": "Y",
+        "이용후기": "아주 만족스러워요.",
+        "연락처": "010-1904-6208"
+    }
+]
+
+
+@app.get("/catsitter")
+async def search_catsitters(
+    name: Optional[str] = Query(None, description="시터 이름"),
+    area: Optional[str] = Query(None, description="이용 가능 지역"),
+    min_price: Optional[str] = Query(None, description="최소 가격"),
+    max_price: Optional[str] = Query(None, description="최대 가격"),
+    min_rating: Optional[float] = Query(None, description="최소 평점"),
+    max_rating: Optional[float] = Query(None, description="최대 평점"),
+    available: Optional[str] = Query(None, description="예약 가능 여부"),
+) -> List[dict]:
+    filtered_catsitters = []
+
+    for catsitter in catsitter_list:
+        if name and name != catsitter["시터이름"]:
+            continue
+        if area and area != catsitter["이용가능지역"]:
+            continue
+        if min_price and float(min_price) > float(catsitter["가격"]):
+            continue
+        if max_price and float(max_price) < float(catsitter["가격"]):
+            continue
+        if min_rating and min_rating > catsitter["평점"]:
+            continue
+        if max_rating and max_rating < catsitter["평점"]:
+            continue
+        if available and available != catsitter["예약가능여부"]:
+            continue
+
+        filtered_catsitters.append(catsitter)
+
+    return filtered_catsitters
+
+# 개인 도그워커 데이터 리스트
+dogwalker_list = [
+    {
+        "도그워커이름": "오경원",
+        "이용가능지역": "성남시",
+        "가격": "48000",
+        "평점": 5.0,
+        "예약가능여부": "N",
+        "이용후기": "친절하세요.",
+        "연락처": "010-7320-4633"
+    },
+    {
+        "도그워커이름": "성재숙",
+        "이용가능지역": "제주시",
+        "가격": "65000",
+        "평점": 4.2,
+        "예약가능여부": "Y",
+        "이용후기": "상냥하세요.",
+        "연락처": "010-6252-1750"
+    },
+    {
+        "도그워커이름": "손주연",
+        "이용가능지역": "관악구",
+        "가격": "50000",
+        "평점": 4.5,
+        "예약가능여부": "Y",
+        "이용후기": "꼼꼼하시네요.",
+        "연락처": "010-4894-5996"
+    },
+    {
+        "도그워커이름": "서미연",
+        "이용가능지역": "진안군",
+        "가격": "52000",
+        "평점": 3.0,
+        "예약가능여부": "Y",
+        "이용후기": "시간 약속을 잘 지키지 않으세요.",
+        "연락처": "010-5982-6146"
+    },
+    {
+        "도그워커이름": "배원태",
+        "이용가능지역": "담양군",
+        "가격": "60000",
+        "평점": 4.8,
+        "예약가능여부": "Y",
+        "이용후기": "아주 만족스러워요.",
+        "연락처": "010-1904-6208"
+    }
+]
+
+
+@app.get("/dogsitter")
+async def search_dogwalkers(
+    name: Optional[str] = Query(None, description="도그워커 이름"),
+    area: Optional[str] = Query(None, description="이용 가능 지역"),
+    min_price: Optional[str] = Query(None, description="최소 가격"),
+    max_price: Optional[str] = Query(None, description="최대 가격"),
+    min_rating: Optional[float] = Query(None, description="최소 평점"),
+    max_rating: Optional[float] = Query(None, description="최대 평점"),
+    available: Optional[str] = Query(None, description="예약 가능 여부"),
+) -> List[dict]:
+    filtered_dogwalkers = []
+
+    for dogwalker in dogwalker_list:
+        if name and name != dogwalker["도그워커이름"]:
+            continue
+        if area and area != dogwalker["이용가능지역"]:
+            continue
+        if min_price and float(min_price) > float(dogwalker["가격"]):
+            continue
+        if max_price and float(max_price) < float(dogwalker["가격"]):
+            continue
+        if min_rating and min_rating > dogwalker["평점"]:
+            continue
+        if max_rating and max_rating < dogwalker["평점"]:
+            continue
+        if available and available != dogwalker["예약가능여부"]:
+            continue
+
+        filtered_dogwalkers.append(dogwalker)
+
+    return filtered_dogwalkers
+
+# 웹툰 데이터 리스트
+webtoon_list = [
+    {
+        "작품명": "즐거우리인생",
+        "작가명": "현미씨",
+        "연재플랫폼": "네이버웹툰",
+        "장르": "일상",
+        "이용가능연령": "전체이용가",
+        "완결여부": "완결"
+    },
+    {
+        "작품명": "마라샹궈매직",
+        "작가명": "쉐프님",
+        "연재플랫폼": "네이버웹툰",
+        "장르": "개그",
+        "이용가능연령": "전체이용가",
+        "완결여부": "연재중"
+    },
+    {
+        "작품명": "카드값을숨김",
+        "작가명": "유리쿠쿠다스",
+        "연재플랫폼": "카카오페이지",
+        "장르": "스릴러",
+        "이용가능연령": "15세이상",
+        "완결여부": "연재중"
+    },
+    {
+        "작품명": "호박고구마",
+        "작가명": "김상무상무",
+        "연재플랫폼": "만화경",
+        "장르": "드라마",
+        "이용가능연령": "12세이상",
+        "완결여부": "휴재중"
+    },
+    {
+        "작품명": "아미산귀환",
+        "작가명": "소인배점소이",
+        "연재플랫폼": "레진코믹스",
+        "장르": "무협",
+        "이용가능연령": "18세이상",
+        "완결여부": "연재중"
+    }
+]
+
+@app.get("/webtoon_search")
+def webtoon_search(
+    작품명: Optional[str] = Query(None, description="검색하고자 하는 웹툰의 작품 이름"),
+    작가명: Optional[str] = Query(None, description="검색하고자 하는 웹툰의 작가 이름"),
+    연재플랫폼: Optional[str] = Query(None, description="검색하고자 하는 웹툰의 연재 플랫폼"),
+    장르: Optional[str] = Query(None, description="검색하고자 하는 웹툰의 장르 ex) 판타지, 액션, 일상, 스릴러, 개그, 드라마, 무협 등"),
+    이용가능연령: Optional[str] = Query(None, description="이용가능연령 ex) 전체이용가, 12세이상, 15세이상, 18세이상"),
+    키워드: Optional[str] = Query(None, description="작품의 이름, 설명, 플랫폼, 장르, 이용가능 연령, 완결여부의 설명을 모두 포함해 검색하는 키워드")
+) -> List[dict]:
+    results = []
+    
+    for webtoon in webtoon_list:
+        if 작품명 and 작품명 != webtoon["작품명"]:
+            continue
+        if 작가명 and 작가명 != webtoon["작가명"]:
+            continue
+        if 연재플랫폼 and 연재플랫폼 != webtoon["연재플랫폼"]:
+            continue
+        if 장르 and 장르 != webtoon["장르"]:
+            continue
+        if 이용가능연령 and 이용가능연령 != webtoon["이용가능연령"]:
+            continue
+        if 키워드 and 키워드 not in f"{webtoon['작품명']} {webtoon['작가명']} {webtoon['연재플랫폼']} {webtoon['장르']} {webtoon['이용가능연령']} {webtoon['완결여부']}":
+            continue
+        
+        results.append(webtoon)
+    
+    return results
+
+# 체육센터 데이터 리스트
+sports_center_list = [
+    {
+        "센터명": "흑석체육센터",
+        "지역구": "동작구",
+        "상세주소": "서울특별시 동작구 현충로 73",
+        "주요시설": "헬스장",
+        "주요강습": "헬스",
+        "운영시간": "06:00 ~ 22:00",
+        "휴관일": "법정공휴일 및 일요일",
+        "연락처": "02-823-2273"
+    },
+    {
+        "센터명": "목동다목적체육관",
+        "지역구": "중랑구",
+        "상세주소": "서울특별시 중랑구 숙선옹주로 66",
+        "주요시설": "기구필라테스",
+        "주요강습": "필라테스",
+        "운영시간": "07:00 ~ 20:00",
+        "휴관일": "법정공휴일 및 토요일과 일요일",
+        "연락처": "02-949-5577"
+    },
+    {
+        "센터명": "신월문화체육센터",
+        "지역구": "양천구",
+        "상세주소": "서울특별시 양천구 지양로 47",
+        "주요시설": "수영장",
+        "주요강습": "수영",
+        "운영시간": "05:00 ~ 19:00",
+        "휴관일": "법정공휴일",
+        "연락처": "02-2605-4093~5"
+    },
+    {
+        "센터명": "성북구민체육관",
+        "지역구": "성북구",
+        "상세주소": "서울특별시 성북구 화랑로13길 144",
+        "주요시설": "베드민턴장",
+        "주요강습": "베드민턴",
+        "운영시간": "06:00 ~ 22:00",
+        "휴관일": "법정공휴일 및 일요일",
+        "연락처": "02-909-3497~8"
+    },
+    {
+        "센터명": "대현산체육관",
+        "지역구": "성동구",
+        "상세주소": "서울특별시 성동구 독서당로63길 44",
+        "주요시설": "수영장",
+        "주요강습": "아쿠아로빅",
+        "운영시간": "09:00 ~ 22:00",
+        "휴관일": "휴무 없음",
+        "연락처": "02-2204-7681"
+    }
+]
+
+@app.get("/seoul_public")
+def search_seoul_public(
+    센터명: Optional[str] = Query(None, description="조회하고자 하는 체육센터의 이름"),
+    지역구: Optional[str] = Query(None, description="조회하고자 하는 구 이름 ex)은평구, 서초구, 마포구 등"),
+    상세주소: Optional[str] = Query(None, description="조회하고자 하는 센터의 상세 주소 ex) 중랑구 신내로21길, 방이1동 방이동 439-8 등"),
+    주요시설: Optional[str] = Query(None, description="센터 내 주요 시설 ex) 헬스장, 기구필라테스, 수영장 등"),
+    주요강습: Optional[str] = Query(None, description="센터 내 주요 강습 프로그램 ex) 수영, 아쿠아로빅, 배드민턴, 요가, 필라테스 등")
+) -> List[dict]:
+    results = []
+    
+    for center in sports_center_list:
+        if 센터명 and 센터명 != center["센터명"]:
+            continue
+        if 지역구 and 지역구 != center["지역구"]:
+            continue
+        if 상세주소 and 상세주소 != center["상세주소"]:
+            continue
+        if 주요시설 and 주요시설 != center["주요시설"]:
+            continue
+        if 주요강습 and 주요강습 != center["주요강습"]:
+            continue
+        
+        results.append(center)
+    
+    return results
+# 공원 데이터 리스트
+park_list = [
+    {
+        "공원명": "북악산도시자연공원",
+        "지역구": "종로구",
+        "상세주소": "서울특별시 종로구 부암동 산2-1",
+        "주요시설": "주차장",
+        "면적": 954553,
+        "문의연락처": "02-2148-2832"
+    },
+    {
+        "공원명": "효창근린공원",
+        "지역구": "용산구",
+        "상세주소": "서울특별시 용산구 효창원로 177-18",
+        "주요시설": "농구장",
+        "면적": 171294,
+        "문의연락처": "02-2199-7608"
+    },
+    {
+        "공원명": "샘말공원",
+        "지역구": "관악구",
+        "상세주소": "서울특별시 관악구 대학동 산63-1일대 샘말공원",
+        "주요시설": "유아숲체험장",
+        "면적": 10634,
+        "문의연락처": "02-879-6523"
+    },
+    {
+        "공원명": "초안산생태공원",
+        "지역구": "도봉구",
+        "상세주소": "서울특별시 도봉구 창동 산24",
+        "주요시설": "잔디쉼터",
+        "면적": 22113,
+        "문의연락처": "02-2091-3754"
+    },
+    {
+        "공원명": "금천폭포근린공원",
+        "지역구": "금천구",
+        "상세주소": "서울특별시 금천구 시흥대로38길 61",
+        "주요시설": "캠핑장",
+        "면적": 4835,
+        "문의연락처": "02-2627-1652"
+    }
+]
+
+@app.get("/seoul_park")
+def search_seoul_park(
+    공원명: Optional[str] = Query(None, description="조회하고자 하는 공원의 이름"),
+    지역구: Optional[str] = Query(None, description="조회하고자 하는 구 이름 ex)은평구, 서초구, 마포구 등"),
+    상세주소: Optional[str] = Query(None, description="조회하고자 하는 공원의 상세 주소 ex) 중랑구 신내로21길, 방이1동 방이동 439-8 등"),
+    주요시설: Optional[str] = Query(None, description="공원 내 주요 시설 ex) 캠핑장, 배드민턴장, 잔디쉼터 등"),
+    최소면적: Optional[int] = Query(None, description="찾고자 하는 공원 면적의 최소치"),
+    최대면적: Optional[int] = Query(None, description="찾고자 하는 공원 면적의 최대치")
+) -> List[dict]:
+    results = []
+    
+    for park in park_list:
+        if 공원명 and 공원명 != park["공원명"]:
+            continue
+        if 지역구 and 지역구 != park["지역구"]:
+            continue
+        if 상세주소 and 상세주소 != park["상세주소"]:
+            continue
+        if 주요시설 and 주요시설 != park["주요시설"]:
+            continue
+        if 최소면적 and park["면적"] < 최소면적:
+            continue
+        if 최대면적 and park["면적"] > 최대면적:
+            continue
+        
+        results.append(park)
+    
+    return results
+
+# 지진 정보 데이터 리스트
+earthquake_list = [
+    {
+        "발생일자": "2023/06/18",
+        "발생시각": "23:39:16",
+        "발생위치": "북한 함경북도 길주 북북서쪽 38km 지역",
+        "최대진도": 1,
+        "규모": 2.3
+    },
+    {
+        "발생일자": "2023/06/17",
+        "발생시각": "22:34:38",
+        "발생위치": "강원 동해시 북동쪽 50km 해역",
+        "최대진도": 1,
+        "규모": 2.1
+    },
+    {
+        "발생일자": "2023/06/05",
+        "발생시각": "12:42:18",
+        "발생위치": "전북 완주군 남쪽 15km 지역",
+        "최대진도": 3,
+        "규모": 2.1
+    },
+    {
+        "발생일자": "2016/09/12",
+        "발생시각": "19:44:32",
+        "발생위치": "경북 경주시 남남서쪽 8.2km 지역",
+        "최대진도": 5,
+        "규모": 5.1
+    },
+    {
+        "발생일자": "2017/11/15",
+        "발생시각": "14:29:31",
+        "발생위치": "경북 포항시 북구 북쪽 8km 지역",
+        "최대진도": 6,
+        "규모": 5.4
+    }
+]
+
+@app.get("/earthquake")
+def search_earthquake(
+    검색년도: Optional[str] = Query(None, description="조회하고자 하는 지진 발생년도"),
+    시도명: Optional[str] = Query(None, description="조회하고자 하는 지진 발생지역 시도 이름 ex) 창원시, 경기도 등"),
+    군구명: Optional[str] = Query(None, description="조회하고자 하는 지진 발생지역 군구 이름 ex) 고성군, 무안군, 마포구 등"),
+    최대진도: Optional[int] = Query(None, description="최대진도의 표기(로마 숫자가 아닌 일반 숫자로 검색) ex) 1, 2, 3 등"),
+    규모: Optional[int] = Query(None, description="지진의 규모")
+) -> List[dict]:
+    results = []
+
+    for earthquake in earthquake_list:
+        if 검색년도 and 검색년도 != earthquake["발생일자"].split("/")[0]:
+            continue
+        if 시도명 and 시도명 != earthquake["발생위치"].split(" ")[0]:
+            continue
+        if 군구명 and 군구명 != earthquake["발생위치"].split(" ")[1]:
+            continue
+        if 최대진도 and 최대진도 != earthquake["최대진도"]:
+            continue
+        if 규모 and 규모 != earthquake["규모"]:
+            continue
+
+        results.append(earthquake)
+
+    return results
+
+
+# 복숭아 예약 농장 데이터 리스트
+peach_farm_list = [
+    {
+        "농장명": "현철이네",
+        "대표명": "신현철",
+        "복숭아품종명": "신비복숭아",
+        "가격": "60000",
+        "예약가능여부": "Y",
+        "연락처": "010-5290-5959"
+    },
+    {
+        "농장명": "피치팜팜",
+        "대표명": "노승환",
+        "복숭아품종명": "납작복숭아",
+        "가격": "72000",
+        "예약가능여부": "Y",
+        "연락처": "010-6289-6620"
+    },
+    {
+        "농장명": "복자네",
+        "대표명": "이복희",
+        "복숭아품종명": "망고복숭아",
+        "가격": "60000",
+        "예약가능여부": "Y",
+        "연락처": "010-5775-8909"
+    },
+    {
+        "농장명": "별빛도원",
+        "대표명": "권태환",
+        "복숭아품종명": "마도카복숭아",
+        "가격": "58000",
+        "예약가능여부": "N",
+        "연락처": "010-6151-6807"
+    },
+    {
+        "농장명": "청암농원",
+        "대표명": "최정화",
+        "복숭아품종명": "양홍장",
+        "가격": "50000",
+        "예약가능여부": "Y",
+        "연락처": "010-9344-9628"
+    }
+]
+
+@app.get("/paech_farm")
+def search_peach_farm(
+    농장명: Optional[str] = Query(None, description="검색하고자 하는 농장의 이름"),
+    대표명: Optional[str] = Query(None, description="검색하고자 하는 농장의 대표명"),
+    복숭아품종명: Optional[str] = Query(None, description="예약하고자 하는 복숭아 품종의 이름"),
+    최소가격: Optional[int] = Query(None, description="가격의 최소치"),
+    최대가격: Optional[int] = Query(None, description="가격의 최대치"),
+    예약가능여부: Optional[str] = Query(None, description="현재 예약이 가능한지 여부 (Y or N)"),
+    키워드: Optional[str] = Query(None, description="농장명, 대표명, 복숭아품종명, 가격을 통틀어 검색하는 키워드")
+):
+    results = []
+
+    for farm in peach_farm_list:
+        if 농장명 and 농장명 != farm["농장명"]:
+            continue
+        if 대표명 and 대표명 != farm["대표명"]:
+            continue
+        if 복숭아품종명 and 복숭아품종명 != farm["복숭아품종명"]:
+            continue
+        if 최소가격 is not None and farm["가격"] < 최소가격:
+            continue
+        if 최대가격 is not None and farm["가격"] > 최대가격:
+            continue
+        if 예약가능여부 and 예약가능여부 != farm["예약가능여부"]:
+            continue
+        if 키워드 and 키워드 not in [farm["농장명"], farm["대표명"], farm["복숭아품종명"], str(farm["가격"])]:
+            continue
+
+        results.append(farm)
+
+    return results
+
+# 수영장 데이터 리스트
+swimming_pool_list = [
+    {
+        "수영장명": "여의도실내수영장",
+        "주소": "서울시 영등포구 국제금융로 79(여의도동 42-1)",
+        "이용가격": "5000",
+        "레일수": 7,
+        "레일길이": 25,
+        "연락처": "02-786-0955"
+    },
+    {
+        "수영장명": "홍제스포츠센터",
+        "주소": "서울시 서대문구 홍은중앙로 13(홍은1동 48)",
+        "이용가격": "4000",
+        "레일수": 5,
+        "레일길이": 25,
+        "연락처": "02-395-4422"
+    },
+    {
+        "수영장명": "안양월드스포츠센터",
+        "주소": "경기도 안양 만안구 안양로 329번길 108(만안구 안양3동 900-10)",
+        "이용가격": "6000",
+        "레일수": 6,
+        "레일길이": 20,
+        "연락처": "031-441-4310"
+    },
+    {
+        "수영장명": "세종국민체육센터",
+        "주소": "세종시 조치원읍 새내8길 115(조치원읍 명리 24-1)",
+        "이용가격": "4200",
+        "레일수": 6,
+        "레일길이": 30,
+        "연락처": "044-868-9885"
+    },
+    {
+        "수영장명": "제주종합경기장 실내수영장",
+        "주소": "제주시 서광로2길 24(오라1동 1165)",
+        "이용가격": "8000",
+        "레일수": 8,
+        "레일길이": 50,
+        "연락처": "064-728-3290"
+    }
+]
+
+@app.get("/swimming_pool")
+def search_swimming_pool(
+    수영장명: Optional[str] = Query(None, description="검색하고자 하는 수영장의 이름"),
+    지역: Optional[str] = Query(None, description="수영장이 위치한 지역 시,도를 검색시에 사용합니다 ex) 서울시, 고양시"),
+    상세주소: Optional[str] = Query(None, description="수영장의 상세 주소입니다(도로명 표기)"),
+    최소가격: Optional[int] = Query(None, description="수영장 일일권 이용 최소 가격입니다(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="수영장 일일권 이용 최대가격입니다(원화 기준)"),
+    최소레일수: Optional[int] = Query(None, description="수영장의 최소 레일 개수입니다"),
+    최대레일수: Optional[int] = Query(None, description="수영장의 최대 레일 개수입니다"),
+    최소레일길이: Optional[int] = Query(None, description="수영장의 최소 레일 길이입니다(미터 기준)"),
+    최대레일길이: Optional[int] = Query(None, description="수영장의 최대 레일 길이입니다(미터 기준)")
+) -> List[dict]:
+    results = []
+
+    for pool in swimming_pool_list:
+        if 수영장명 and 수영장명 != pool["수영장명"]:
+            continue
+        if 지역 and 지역 not in pool["주소"]:
+            continue
+        if 상세주소 and 상세주소 not in pool["주소"]:
+            continue
+        if 최소가격 is not None and int(pool["이용가격"]) < 최소가격:
+            continue
+        if 최대가격 is not None and int(pool["이용가격"]) > 최대가격:
+            continue
+        if 최소레일수 is not None and pool["레일수"] < 최소레일수:
+            continue
+        if 최대레일수 is not None and pool["레일수"] > 최대레일수:
+            continue
+        if 최소레일길이 is not None and pool["레일길이"] < 최소레일길이:
+            continue
+        if 최대레일길이 is not None and pool["레일길이"] > 최대레일길이:
+            continue
+
+        results.append(pool)
+
+    return results
+
+
+# 독립서점 데이터 리스트
+bookshop_list = [
+    {
+        "서점명": "책방연희",
+        "대표명": "이지현",
+        "주소": "서울특별시 마포구 와우산로35길 3 (서교동) 지하 1층",
+        "활동내용": "독서모임",
+        "운영시간": "12:00 ~ 19:00",
+        "휴무일": "일요일과 법정 공휴일 휴무",
+        "웹사이트": "https://www.instagram.com/chaegbangyeonhui/"
+    },
+    {
+        "서점명": "다다르다",
+        "대표명": "김승헌",
+        "주소": "대전광역시 중구 중교로73번길 6 (은행동) 2층",
+        "활동내용": "낭독회",
+        "운영시간": "12:00 ~ 22:00",
+        "휴무일": "일요일과 월요일 휴무",
+        "웹사이트": "http://www.citytraveller.co.kr/"
+    },
+    {
+        "서점명": "조용한흥분색",
+        "대표명": "이신재",
+        "주소": "전라북도 군산시 옥구읍 옥구남로 11 (선제리)",
+        "활동내용": "전시",
+        "운영시간": "11:00 ~ 20:00",
+        "휴무일": "화요일 휴무",
+        "웹사이트": "https://www.instagram.com/colors.ordinaryday/"
+    },
+    {
+        "서점명": "책다방 밭",
+        "대표명": "박지원",
+        "주소": "전라북도 순창군 동계면 동계로 17-1 (동계면)",
+        "활동내용": "독서모임",
+        "운영시간": "11:00 ~ 18:00",
+        "휴무일": "토요일과 일요일 휴무",
+        "웹사이트": "https://www.instagram.com/batt_bookshop/"
+    },
+    {
+        "서점명": "안녕책방",
+        "대표명": "백아라",
+        "주소": "제주특별자치도 제주시 인다13길 60 (아라일동) 1층",
+        "활동내용": "공간대여",
+        "운영시간": "11:00~17:00",
+        "휴무일": "일요일과 월요일 휴무",
+        "웹사이트": "https://www.instagram.com/hihi_books/"
+    }
+]
+
+@app.get("/indi_library")
+async def get_bookshops(
+    서점명: Optional[str] = Query(None, description="검색하고자 하는 서점의 이름"),
+    대표명: Optional[str] = Query(None, description="검색하고자 하는 서점의 대표명"),
+    지역: Optional[str] = Query(None, description="서점이 위치한 지역 시,도를 검색시에 사용합니다 ex) 서울시, 경기도"),
+    상세주소: Optional[str] = Query(None, description="서점의 상세 주소입니다(도로명 표기)"),
+    활동내용: Optional[str] = Query(None, description="서점에서 진행하는 활동 설명입니다 ex) 독서모임, 낭독회, 전시 등"),
+    키워드: Optional[str] = Query(None, description="서점명, 대표명, 활동내용을 통틀어 검색하는 키워드")
+) -> List[dict]:
+    results = []
+
+    for bookshop in bookshop_list:
+        if 서점명 and 서점명 != bookshop["서점명"]:
+            continue
+        if 대표명 and 대표명 != bookshop["대표명"]:
+            continue
+        if 지역 and 지역 not in bookshop["주소"]:
+            continue
+        if 상세주소 and 상세주소 not in bookshop["주소"]:
+            continue
+        if 활동내용 and 활동내용 != bookshop["활동내용"]:
+            continue
+        if 키워드 and 키워드 not in bookshop["서점명"] and 키워드 not in bookshop["대표명"] and 키워드 not in bookshop["활동내용"]:
+            continue
+
+        results.append(bookshop)
+
+    return results
+
+# 주말농장 데이터 리스트
+weekend_farm_list = [
+    {
+        "농장명": "고덕주말농장",
+        "주소": "서울시 강동구 고덕1동 479",
+        "분양가": "120000",
+        "분양면적": 15,
+        "현재분양가능여부": "N",
+        "연락처": "010-4214-9347"
+    },
+    {
+        "농장명": "황금주말농장",
+        "주소": "서울시 강서구 개화동 497-2",
+        "분양가": "100000",
+        "분양면적": 16.5,
+        "현재분양가능여부": "Y",
+        "연락처": "010-3790-1005"
+    },
+    {
+        "농장명": "천수텃밭농원",
+        "주소": "서울시 노원구 중계로8길 56",
+        "분양가": "450000",
+        "분양면적": 14,
+        "현재분양가능여부": "Y",
+        "연락처": "010-6426-2153"
+    },
+    {
+        "농장명": "웰빙주말농장",
+        "주소": "서울시 도봉구 두봉1동 468",
+        "분양가": "110000",
+        "분양면적": 13,
+        "현재분양가능여부": "Y",
+        "연락처": "010-6271-3264"
+    },
+    {
+        "농장명": "청계주말농장",
+        "주소": "서울시 서초구 원지동530",
+        "분양가": "200000",
+        "분양면적": 10,
+        "현재분양가능여부": "Y",
+        "연락처": "010-6273-1234"
+    }
+]
+
+@app.get("/weekend_farm")
+async def get_weekend_farms(
+    농장명: Optional[str] = Query(None, description="검색하고자 하는 농장의 이름"),
+    지역구: Optional[str] = Query(None, description="농장이 위치한 지역구를 검색시에 사용합니다 ex) 강동구, 도봉구"),
+    농장주소: Optional[str] = Query(None, description="농장의 상세 주소입니다(도로명 표기)"),
+    최소분양가: Optional[str] = Query(None, description="농장의 최소 분양가입니다(원화 기준)"),
+    최대분양가: Optional[str] = Query(None, description="농장의 최대 분양가입니다(원화 기준)"),
+    최소분양면적: Optional[int] = Query(None, description="농장의 최소분양면적입니다(제곱미터 단위)"),
+    최대분양면적: Optional[int] = Query(None, description="농장의 최대분양면적입니다(제곱미터 단위)"),
+    현재분양가능여부: Optional[str] = Query(None, description="현재 분양이 가능한지 여부입니다 Y or N")
+) -> List[dict]:
+    results = []
+
+    for farm in weekend_farm_list:
+        if 농장명 and 농장명 != farm["농장명"]:
+            continue
+        if 지역구 and 지역구 not in farm["주소"]:
+            continue
+        if 농장주소 and 농장주소 not in farm["주소"]:
+            continue
+        if 최소분양가 and 최소분양가 != farm["분양가"]:
+            continue
+        if 최대분양가 and 최대분양가 != farm["분양가"]:
+            continue
+        if 최소분양면적 and (not farm.get("분양면적") or farm["분양면적"] < 최소분양면적):
+            continue
+        if 최대분양면적 and (not farm.get("분양면적") or farm["분양면적"] > 최대분양면적):
+            continue
+        if 현재분양가능여부 and 현재분양가능여부 != farm["현재분양가능여부"]:
+            continue
+
+        results.append(farm)
+
+    return results
+
+
+
 # 가상의 쥬얼리 상품 데이터
 jewelry_data = [
     {"category": "earring", "brand": "ABC jewelry", "price": 100000, "gemstone": "diamond", "inventory": 5},
