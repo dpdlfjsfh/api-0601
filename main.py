@@ -3138,7 +3138,702 @@ async def get_weekend_farms(
 
     return results
 
+# 향수 상품 데이터 리스트
+perfume_list = [
+    {
+        "name": "디올",
+        "type": "미스 디올 블루밍 부케 오 드 뚜왈렛",
+        "brand": "오 드 뚜왈렛",
+        "price": 96000,
+        "capacity": 30,
+        "rating": 4.5
+    },
+    {
+        "name": "버버리",
+        "type": "버버리 히어로",
+        "brand": "오 드 퍼퓸",
+        "price": 199000,
+        "capacity": 100,
+        "rating": 4.2
+    },
+    {
+        "name": "딥티크",
+        "type": "오 카피탈",
+        "brand": "오 드 퍼퓸",
+        "price": 255550,
+        "capacity": 75,
+        "rating": 4.8
+    },
+    {
+        "name": "바이레도",
+        "type": "블랑쉬",
+        "brand": "오 드 퍼퓸",
+        "price": 168300,
+        "capacity": 50,
+        "rating": 4.0
+    },
+    {
+        "name": "조말론",
+        "type": "잉글리쉬 페어 앤 프리지아",
+        "brand": "오 드 코롱",
+        "price": 250000,
+        "capacity": 130,
+        "rating": 4.7
+    }
+]
 
+@app.get("/perfume")
+async def filter_perfume(
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="제품명"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    type: Optional[str] = Query(None, description="향수 종류 ex) 퍼퓸, 오 드 퍼퓸, 오 드 뚜왈렛, 오 드 코롱"),
+    capacity: Optional[float] = Query(None, description="용량")
+) -> List[dict]:
+    results = []
+
+    for perfume in perfume_list:
+        if brand and brand != perfume["brand"]:
+            continue
+        if name and name != perfume["name"]:
+            continue
+        if max_price and (not perfume.get("price") or perfume["price"] > max_price):
+            continue
+        if type and type != perfume["type"]:
+            continue
+        if capacity and (not perfume.get("capacity") or perfume["capacity"] != capacity):
+            continue
+
+        results.append(perfume)
+
+    return results
+
+# 영양제 정보 데이터 리스트
+supplement_list = [
+    {
+        "name": "트루포뮬러",
+        "type": "위톱",
+        "brand": "알약",
+        "expiration_date": 20250622,
+        "price": 28900,
+        "efficacy": "위건강에 도움"
+    },
+    {
+        "name": "심플리케어",
+        "type": "알파",
+        "brand": "환",
+        "expiration_date": 20230825,
+        "price": 59800,
+        "efficacy": "활력"
+    },
+    {
+        "name": "블랙모어스",
+        "type": "액티브 프로바이오틱스플러스면역건강",
+        "brand": "가루",
+        "expiration_date": 20240408,
+        "price": 50000,
+        "efficacy": "장건강도움"
+    },
+    {
+        "name": "리얼레시피",
+        "type": "홍삼젤리",
+        "brand": "젤리",
+        "expiration_date": 20250120,
+        "price": 41900,
+        "efficacy": "면역력 증진"
+    },
+    {
+        "name": "네츄럴플러스",
+        "type": "징코+오메가3",
+        "brand": "알약",
+        "expiration_date": 20250804,
+        "price": 28600,
+        "efficacy": "눈건강에 도움"
+    }
+]
+
+@app.get("/supplements")
+async def filter_supplements(
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="제품명"),
+    type: Optional[str] = Query(None, description="종류 ex) 알약, 젤리, 가루, 액체"),
+    expiration_date: Optional[int] = Query(None, description="유통기한 데이터 형식 yyyymmdd"),
+    keyword: Optional[str] = Query(None, description="키워드 ex) 위 건강에 도움, 눈 건강 개선")
+) -> List[dict]:
+    results = []
+
+    for supplement in supplement_list:
+        if brand and brand != supplement["brand"]:
+            continue
+        if name and name != supplement["name"]:
+            continue
+        if type and type != supplement["type"]:
+            continue
+        if expiration_date and (not supplement.get("expiration_date") or supplement["expiration_date"] != expiration_date):
+            continue
+        if keyword and keyword not in supplement["efficacy"]:
+            continue
+
+        results.append(supplement)
+
+    return results
+
+#시계
+watch_list = [
+    {
+        "name": "Omega",
+        "size": 43.0,
+        "brand": "AQUA TERRA 150M",
+        "price": 38600000,
+        "material": "세드나 골드 및 레더 스트랩",
+        "water_resistance": "Y"
+    },
+    {
+        "name": "TAG HEUER",
+        "size": 36.0,
+        "brand": "CARRERA DATE",
+        "price": 4380000,
+        "material": "Steel",
+        "water_resistance": "Y"
+    },
+    {
+        "name": "danielwellington",
+        "size": 28.0,
+        "brand": "PETITE CORNWALL",
+        "price": 188000,
+        "material": "Steel",
+        "water_resistance": "N"
+    },
+    {
+        "name": "ALBA",
+        "size": 41.5,
+        "brand": "AG8K17X1",
+        "price": 135000,
+        "material": "Steel",
+        "water_resistance": "Y"
+    },
+    {
+        "name": "Emporio Armani",
+        "size": 43.0,
+        "brand": "SPORTIVO",
+        "price": 209000,
+        "material": "Steel",
+        "water_resistance": "Y"
+    }
+]
+
+@app.get("/watch")
+async def filter_watch(
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="제품명"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    material: Optional[str] = Query(None, description="시계 소재 ex) 티타늄, 골드, 스틸"),
+    water_resistance: Optional[str] = Query(None, description="방수기능 유무 Y or N")
+) -> List[dict]:
+    results = []
+
+    for watch in watch_list:
+        if brand and brand != watch["brand"]:
+            continue
+        if name and name != watch["name"]:
+            continue
+        if max_price and (not watch.get("price") or watch["price"] > max_price):
+            continue
+        if material and material != watch["material"]:
+            continue
+        if water_resistance and water_resistance != watch["water_resistance"]:
+            continue
+
+        results.append(watch)
+
+    return results
+
+# 서울시 주차장 시설 정보 데이터 리스트
+parking_lot_list = [
+    {
+        "name": "잠실종합운동장 주차장",
+        "type": "공영주차장",
+        "address": "서울 송파구 올림픽로 25 서울종합운동장",
+        "운영시간": 24,
+        "price": 1200,
+        "전화번호": "02-2240-8876"
+    },
+    {
+        "name": "성북로138 주차장",
+        "type": "유료주차장",
+        "address": "서울 성북구 성북로 138 주차장",
+        "운영시간": 24,
+        "price": 900,
+        "전화번호": "0507-1387-3781"
+    },
+    {
+        "name": "연남2 공영주차장",
+        "type": "공영주차장",
+        "address": "서울 마포구 동교동 147-74",
+        "운영시간": 11,
+        "price": 1500,
+        "전화번호": "02-1234-5678"
+    },
+    {
+        "name": "문래근린공원공영주차장",
+        "type": "공영주차장",
+        "address": "서울 영등포구 당산로 1",
+        "운영시간": 24,
+        "price": 1500,
+        "전화번호": "02-2650-1435"
+    },
+    {
+        "name": "동작대교노상공영주차장",
+        "type": "공영주차장",
+        "address": "서울 동작구 동작대로 335",
+        "운영시간": 9,
+        "price": 1560,
+        "전화번호": "02-1111-2222"
+    }
+]
+
+@app.get("/parking_lot")
+async def filter_parking_lot(
+    gu: Optional[str] = Query(None, description="지역구분_구"),
+    dong: Optional[str] = Query(None, description="지역구분_동"),
+    name: Optional[str] = Query(None, description="주차장 명"),
+    parking_type: Optional[str] = Query(None, description="주차장 종류 ex) 공영주차장, 유료주차장, 노상주차장"),
+    operating_hours: Optional[int] = Query(None, description="운영시간 데이터 형식 00시~00시"),
+    min_price: Optional[int] = Query(None, description="최소가격 ex) 시간당 1200원")
+) -> List[dict]:
+    results = []
+
+    for parking_lot in parking_lot_list:
+        if gu and gu != parking_lot.get("gu"):
+            continue
+        if dong and dong != parking_lot.get("dong"):
+            continue
+        if name and name != parking_lot.get("name"):
+            continue
+        if parking_type and parking_type != parking_lot.get("type"):
+            continue
+        if operating_hours and operating_hours != parking_lot.get("운영시간"):
+            continue
+        if min_price and (not parking_lot.get("price") or parking_lot.get("price") < min_price):
+            continue
+
+        results.append(parking_lot)
+
+    return results
+
+# 화장품 데이터 리스트
+cosmetics_list = [
+    {
+        "name": "비플레인",
+        "type": "토너",
+        "brand": "시카테롤 토너",
+        "price": 24000,
+        "유통기한": 250523,
+        "성분": "병풀추출물"
+    },
+    {
+        "name": "에스네이처",
+        "type": "선크림",
+        "brand": "아쿠아 365 유브이 선크림",
+        "price": 11900,
+        "유통기한": 250206,
+        "성분": "판테놀"
+    },
+    {
+        "name": "삐아",
+        "type": "쿠션",
+        "brand": "네버 다이 쿠션",
+        "price": 10750,
+        "유통기한": 240809,
+        "성분": "아데노신"
+    },
+    {
+        "name": "이즈앤트리",
+        "type": "크림",
+        "brand": "히알루론산 아쿠아 젤크림",
+        "price": 13900,
+        "유통기한": 26012,
+        "성분": "소듐피씨에이"
+    },
+    {
+        "name": "컬러그램",
+        "type": "틴트",
+        "brand": "쥬시 젤리 틴트",
+        "price": 9800,
+        "유통기한": 241230,
+        "성분": "석류추출물"
+    }
+]
+
+@app.get("/cosmetics")
+async def filter_cosmetics(
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="화장품 명"),
+    cosmetic_type: Optional[str] = Query(None, description="화장품 종류 ex) 토너, 바디로션, 립스틱, 파운데이션"),
+    expiration_date: Optional[int] = Query(None, description="유통기한 데이터 형식 yymmdd"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격")
+) -> List[dict]:
+    results = []
+
+    for cosmetics in cosmetics_list:
+        if brand and brand != cosmetics.get("brand"):
+            continue
+        if name and name != cosmetics.get("name"):
+            continue
+        if cosmetic_type and cosmetic_type != cosmetics.get("type"):
+            continue
+        if expiration_date and expiration_date != cosmetics.get("유통기한"):
+            continue
+        if min_price and (not cosmetics.get("price") or cosmetics.get("price") < min_price):
+            continue
+        if max_price and (not cosmetics.get("price") or cosmetics.get("price") > max_price):
+            continue
+
+        results.append(cosmetics)
+
+    return results
+
+# 애견동반 가능시설 데이터 리스트
+pets_list = [
+    {
+        "name": "스테이지28 웁시데이지",
+        "type": "애견동반카페",
+        "address": "서울특별시 강동구 고덕제1동 아리수로61길 105",
+        "전화번호": "02-3426-1928",
+        "offleash_available": "Y"
+    },
+    {
+        "name": "서울앵무새 용산점",
+        "type": "애견동반카페",
+        "address": "서울특별시 용산구 한강대로62길 55 1, 2, 3층",
+        "전화번호": "0507-1350-4710",
+        "offleash_available": "N"
+    },
+    {
+        "name": "콘래드 서울",
+        "type": "호텔",
+        "address": "서울특별시 영등포구 국제금융로 10",
+        "전화번호": "02-6137-7000",
+        "offleash_available": "Y"
+    },
+    {
+        "name": "팔레드 신",
+        "type": "식당",
+        "address": "서울특별시 중구 퇴계로 67",
+        "전화번호": "02-317-4001",
+        "offleash_available": "N"
+    },
+    {
+        "name": "도그베이 서울점",
+        "type": "수영장",
+        "address": "서울특별시 광진구 광나루로 441",
+        "전화번호": "070-4908-5890",
+        "offleash_available": "Y"
+    }
+]
+
+@app.get("/pets")
+async def filter_pets(
+    name: Optional[str] = Query(None, description="시설 이름"),
+    facility_type: Optional[str] = Query(None, description="시설 종류 ex) 식당, 쇼핑몰, 카페, 애견운동장, 수영장, 숙소"),
+    gu: Optional[str] = Query(None, description="지역구분_구"),
+    dong: Optional[str] = Query(None, description="지역구분_동"),
+    offleash_available: Optional[str] = Query(None, description="오프리쉬 가능여부 Y or N")
+) -> List[dict]:
+    results = []
+
+    for pets in pets_list:
+        if name and name != pets.get("name"):
+            continue
+        if facility_type and facility_type != pets.get("type"):
+            continue
+        if gu and gu != pets.get("address").split()[1]:
+            continue
+        if dong and dong != pets.get("address").split()[2]:
+            continue
+        if offleash_available and offleash_available != pets.get("offleash_available"):
+            continue
+
+        results.append(pets)
+
+    return results
+
+# 질병 데이터 리스트
+diseases_list = [
+    {
+        "nameInKorean": "급성 B형간염",
+        "nameInEnglish": "Acute hepatitis B",
+        "질병코드": "B16",
+        "개정구분": "8차",
+        "keyword": "바이러스 감염성 질환"
+    },
+    {
+        "nameInKorean": "백선증",
+        "nameInEnglish": "Dermatophytosis",
+        "질병코드": "B35",
+        "개정구분": "8차",
+        "keyword": "피부 및 피하조직의 감염"
+    },
+    {
+        "nameInKorean": "헌팅톤",
+        "nameInEnglish": "Huntington’s disease",
+        "질병코드": "G10",
+        "개정구분": "8차",
+        "keyword": "신경계통의 질환"
+    },
+    {
+        "nameInKorean": "구개열",
+        "nameInEnglish": "Cleft palate",
+        "질병코드": "Q35",
+        "개정구분": "6차",
+        "keyword": "선천기형"
+    },
+    {
+        "nameInKorean": "조기 진통",
+        "nameInEnglish": "Preterm delivery",
+        "질병코드": "O60",
+        "개정구분": "5차",
+        "keyword": "임신"
+    }
+]
+
+@app.get("/diseases")
+async def filter_diseases(
+    name_in_english: Optional[str] = Query(None, description="질병 명 영어"),
+    name_in_korean: Optional[str] = Query(None, description="질병 명 한글"),
+    disease_code: Optional[str] = Query(None, description="질병코드"),
+    revision_type: Optional[str] = Query(None, description="개정구분 ex) 5차, 6차, 7차, 8차"),
+    keyword: Optional[str] = Query(None, description="키워드")
+) -> List[dict]:
+    results = []
+
+    for disease in diseases_list:
+        if name_in_english and name_in_english != disease.get("nameInEnglish"):
+            continue
+        if name_in_korean and name_in_korean != disease.get("nameInKorean"):
+            continue
+        if disease_code and disease_code != disease.get("질병코드"):
+            continue
+        if revision_type and revision_type != disease.get("개정구분"):
+            continue
+        if keyword and keyword != disease.get("keyword"):
+            continue
+
+        results.append(disease)
+
+    return results
+
+# 법령 데이터 리스트
+law_list = [
+    {
+        "name": "1인 창조기업 육성에 관한 법률",
+        "type": "법률",
+        "공포일자": 220610,
+        "시행일자": 221211,
+        "제정개정구분": "일부개정"
+    },
+    {
+        "name": "가사소송법",
+        "type": "법률",
+        "공포일자": 210126,
+        "시행일자": 221211,
+        "제정개정구분": "타법개정"
+    },
+    {
+        "name": "각종 기념일 등에 관한 규정",
+        "type": "대통령령",
+        "공포일자": 230410,
+        "시행일자": 230605,
+        "제정개정구분": "타법개정"
+    },
+    {
+        "name": "희귀질환관리법 시행규칙",
+        "type": "보건복지부령",
+        "공포일자": 230308,
+        "시행일자": 230308,
+        "제정개정구분": "일부개정"
+    },
+    {
+        "name": "경영지도사 및 기술지도사에 관한 법률",
+        "type": "법률",
+        "공포일자": 200407,
+        "시행일자": 210408,
+        "제정개정구분": "제정"
+    }
+]
+
+@app.get("/law")
+async def filter_law(
+    name: Optional[str] = Query(None, description="법령명"),
+    law_type: Optional[str] = Query(None, description="법령 종류"),
+    promulgation_date: Optional[int] = Query(None, description="공포일자 데이터형식 yymmdd"),
+    enforcement_date: Optional[int] = Query(None, description="시행일자 데이터형식 yymmdd"),
+    revision_type: Optional[str] = Query(None, description="제정·개정구분")
+) -> List[dict]:
+    results = []
+
+    for law in law_list:
+        if name and name != law.get("name"):
+            continue
+        if law_type and law_type != law.get("type"):
+            continue
+        if promulgation_date and promulgation_date != law.get("공포일자"):
+            continue
+        if enforcement_date and enforcement_date != law.get("시행일자"):
+            continue
+        if revision_type and revision_type != law.get("제정개정구분"):
+            continue
+
+        results.append(law)
+
+    return results
+
+# 보드게임 데이터 리스트
+boardgame_list = [
+    {
+        "name": "사보타지",
+        "type": "협잡",
+        "min_age": 8,
+        "최소_인원": 3,
+        "최대_인원": 10,
+        "설명": "광부들 사이에 방해꾼이 섞여 있습니다."
+    },
+    {
+        "name": "부루마불",
+        "type": "경제",
+        "min_age": 7,
+        "최소_인원": 2,
+        "최대_인원": 4,
+        "설명": "자신의 도시를 방문하면 다양한 건물을 지을 수 있습니다."
+    },
+    {
+        "name": "뱅",
+        "type": "추리",
+        "min_age": 8,
+        "최소_인원": 4,
+        "최대_인원": 7,
+        "설명": "무법자들이 보안관을 사냥하고 보안관은 무법자를 사냥합니다."
+    },
+    {
+        "name": "할리갈리",
+        "type": "순발력",
+        "min_age": 6,
+        "최소_인원": 2,
+        "최대_인원": 6,
+        "설명": "같은 과일의 개수가 보인다면 빠르게 종을 치세요."
+    },
+    {
+        "name": "클루",
+        "type": "추리",
+        "min_age": 8,
+        "최소_인원": 3,
+        "최대_인원": 6,
+        "설명": "용의자와 무기 그리고 장소를 알아내야 합니다."
+    }
+]
+
+@app.get("/boardgame")
+async def filter_boardgame(
+    name: Optional[str] = Query(None, description="보드게임 이름"),
+    game_type: Optional[str] = Query(None, description="보드게임 종류 ex) 추리, 순발력, 협잡 등"),
+    min_age: Optional[int] = Query(None, description="이용가능한 최소 연령"),
+    min_players: Optional[int] = Query(None, description="최소 인원"),
+    max_players: Optional[int] = Query(None, description="최대 인원"),
+    keyword: Optional[str] = Query(None, description="키워드")
+) -> List[dict]:
+    results = []
+
+    for game in boardgame_list:
+        if name and name != game.get("name"):
+            continue
+        if game_type and game_type != game.get("type"):
+            continue
+        if min_age and min_age > game.get("min_age"):
+            continue
+        if min_players and min_players > game.get("최소_인원"):
+            continue
+        if max_players and max_players < game.get("최대_인원"):
+            continue
+        if keyword and keyword not in game.get("설명"):
+            continue
+
+        results.append(game)
+
+    return results
+
+# 꽃 데이터 리스트
+flower_list = [
+    {
+        "꽃이름": "안개꽃",
+        "분류_속": "대나물속",
+        "분류_과": "석죽과",
+        "분류_목": "석죽목",
+        "꽃말": "맑은 마음",
+        "원산지": "캅카스"
+    },
+    {
+        "꽃이름": "해당화",
+        "분류_속": "장미속",
+        "분류_과": "장미과",
+        "분류_목": "장미목",
+        "꽃말": "이끄시는 대로",
+        "원산지": "중국"
+    },
+    {
+        "꽃이름": "스타티스",
+        "분류_속": "질경이속",
+        "분류_과": "질경이과",
+        "분류_목": "꿀풀목",
+        "꽃말": "변치않는 사랑",
+        "원산지": "중국"
+    },
+    {
+        "꽃이름": "튤립",
+        "분류_속": "튤립속",
+        "분류_과": "백합과",
+        "분류_목": "백합목",
+        "꽃말": "새로운 시작",
+        "원산지": "남동 유럽"
+    },
+    {
+        "꽃이름": "수국",
+        "분류_속": "수국속",
+        "분류_과": "수국과",
+        "분류_목": "층층나무목",
+        "꽃말": "냉정",
+        "원산지": "일본"
+    }
+]
+
+@app.get("/flower")
+async def filter_flower(
+    꽃이름: Optional[str] = Query(None, description="꽃의 이름"),
+    분류_속: Optional[str] = Query(None, description="꽃의 분류를 속으로 합니다"),
+    분류_과: Optional[str] = Query(None, description="꽃의 분류를 과로 합니다"),
+    분류_목: Optional[str] = Query(None, description="꽃의 분류를 목으로 합니다"),
+    꽃말: Optional[str] = Query(None, description="꽃말"),
+    원산지: Optional[str] = Query(None, description="원산지")
+) -> List[dict]:
+    results = []
+
+    for flower in flower_list:
+        if 꽃이름 and 꽃이름 != flower.get("꽃이름"):
+            continue
+        if 분류_속 and 분류_속 != flower.get("분류_속"):
+            continue
+        if 분류_과 and 분류_과 != flower.get("분류_과"):
+            continue
+        if 분류_목 and 분류_목 != flower.get("분류_목"):
+            continue
+        if 꽃말 and 꽃말 != flower.get("꽃말"):
+            continue
+        if 원산지 and 원산지 != flower.get("원산지"):
+            continue
+
+        results.append(flower)
+
+    return results
 
 # 가상의 쥬얼리 상품 데이터
 jewelry_data = [
