@@ -21,48 +21,6 @@ async def get_items():
     return inventory
 #########
 
-class MobileAppFilter(BaseModel):
-    min_ranking: int = Query(1, ge=1)
-    max_ranking: int = Query(1, ge=1)
-    name: str = Query(None)
-    category: str = Query(None)
-    min_rating: float = Query(0, ge=0, le=5)
-    max_rating: float = Query(5, ge=0, le=5)
-    pub: str = Query(None)
-
-# 응답 모델 정의
-class MobileApp(BaseModel):
-    ranking: int
-    name: str
-    category: str
-    desc: str
-    rating: float
-    pub: str
-
-# API 엔드포인트 정의
-@app.get("/mobile_app", response_model=List[MobileApp])
-async def filter_mobile_application(params: MobileAppFilter):
-    dummy_data = [
-        [1, "NH올원뱅크", "금융", "당신을 위한 모든 금융이 한 곳에! 농협은행 모바일 뱅크. NH올원뱅크를 만나 보세요!", 3.7, "NH농협은행"],
-        [2, "시티즌코난", "도구", "일선 경찰관을 위한 보이스피싱 악성 앱 순간 탐지기(구 피싱아이즈 폴리스)로서 *피싱아이즈*와 함께 운영되고 있습니다.", 4.2, "(주)인피니그루"],
-        [3, "KB Pay", "금융", "KB Pay 모든 금융을 한번에, 한손에, 한눈에 담다", 4.2, "KB국민카드"],
-        [4, "쿠팡플레이", "엔터테인먼트", "쿠팡플레이로 쿠팡 와우 멤버십에 시청의 즐거움을 더했어요.", 3.6, "Coupang Corp."],
-        [5, "AliExpress", "쇼핑", "해외직구는 알리익스프레스!", 4.5, "Alibaba Mobile"],
-        [6, "Nike", "쇼핑", "최신 운둥화와 남성 여성 키즈 의류부터 앱 전용 제품과 멤버 혜택, 운동 콘텐츠까지. 당신만을 위한 특별한 나이키를 앱에서 만나보세요.", 4.3, "Nike, Inc."],
-        [7, "네이버 파파고", "도구", "똑똑한 AI 통변역기, 언어 장벽 없이 대화하는 세상을 꿈꿉니다.", 4.7, "NAVER Corp."]
-    ]
-
-    filtered_apps = []
-    for app_data in dummy_data:
-        ranking, name, category, desc, rating, pub = app_data
-        if (params.min_ranking <= ranking <= params.max_ranking) and \
-           (params.name is None or params.name == name) and \
-           (params.category is None or params.category == category) and \
-           (params.min_rating <= rating <= params.max_rating) and \
-           (params.pub is None or params.pub == pub):
-            filtered_apps.append(MobileApp(ranking=ranking, name=name, category=category, desc=desc, rating=rating, pub=pub))
-    
-    return filtered_apps
 
 
 
