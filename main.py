@@ -21,6 +21,2065 @@ async def get_items():
     return inventory
 #########
 
+###0630 작업
+# 방탈출 매장 데이터 리스트
+room_escape_list = [
+    {
+        "theme": "LUCKY",
+        "name": "도어이스케이프 레드 신논현점",
+        "address": "서울특별시 서초구 서초동 1302-24",
+        "grade": 8.45,
+        "difficulty": 6,
+        "review_num": 684
+    },
+    {
+        "theme": "그림자 없는 상자",
+        "name": "방탈출, 단편선",
+        "address": "서울특별시 강남구 봉은사로4길 36",
+        "grade": 9.27,
+        "difficulty": 4,
+        "review_num": 954
+    },
+    {
+        "theme": "꼬레아 우라",
+        "name": "코드케이 홍대점",
+        "address": "서울특별시 마포구 상수동 86-22번지 3층 301호",
+        "grade": 9.13,
+        "difficulty": 8,
+        "review_num": 1701
+    },
+    {
+        "theme": "섀도우",
+        "name": "지구별방탈출 홍대라스트시티점",
+        "address": "서울 마포구 홍익로 10 (서교푸르지오) 상가건물 지하2층 지구별 방탈출",
+        "grade": 9.00,
+        "difficulty": 2,
+        "review_num": 204
+    },
+    {
+        "theme": "호텔 레토",
+        "name": "호텔 레토",
+        "address": "서울시 성동구 연무장5길 18 지하1층 101호(성수동2가)",
+        "grade": 9.21,
+        "difficulty": 8,
+        "review_num": 1103
+    },
+    {
+        "theme": "튜링테스트",
+        "name": "이스케이프샾 건대점",
+        "address": "서울 광진구 능동로 129-1 2층, 3층",
+        "grade": 8.13,
+        "difficulty": 10,
+        "review_num": 223
+    }
+]
+
+
+@app.get("/room_escape")
+async def search_room_escape(
+        theme: Optional[str] = Query(None, description="테마"),
+        address: Optional[str] = Query(None, description="매장 주소를 바탕으로 검색"),
+        name: Optional[str] = Query(None, description="매장명"),
+        min_grade: Optional[float] = Query(None, ge=0, le=10, description="최소 별점"),
+        max_grade: Optional[float] = Query(None, ge=0, le=10, description="최대 별점"),
+        min_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최소 난이도"),
+        max_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최대 난이도")
+) -> List[dict]:
+    results = []
+    for room in room_escape_list:
+        if room["theme"] and theme is not None and room["theme"] != theme:
+            continue
+        if room["address"] and address is not None and room["address"].find(address) == -1:
+            continue
+        if room["name"] and name is not None and room["name"] != name:
+            continue
+        if room["grade"] and min_grade is not None and room["grade"] < min_grade:
+            continue
+        if room["grade"] and max_grade is not None and room["grade"] > max_grade:
+            continue
+        if room["difficulty"] and min_difficulty is not None and room["difficulty"] < min_difficulty:
+            continue
+        if room["difficulty"] and max_difficulty is not None and room["difficulty"] > max_difficulty:
+            continue
+        results.append(room)
+    return results
+
+theme_park_list = [
+    {
+        "name": "에버랜드",
+        "address": "경기도 용인 처인구 포곡읍 에버랜드로 199",
+        "grade": 4.5,
+        "review_num": 1817,
+        "reviews": ["진짜 친구들이랑 갔는데 완전 재밌음 ㅋㅋ", "너무 재밌어요 ㅋㅋㅋㅋㅋ 꼭 추천 합니다.", "놀이기구도 다 재밌고 넓고 아이들이랑 같이 가면 좋은곳 먹거리 많고 맛있고 한번가면 또 가고 싶음 아이들 있으면 한번 가는것도 좋을것 같음"]
+    },
+    {
+        "name": "롯데월드",
+        "address": "서울 송파구 올림픽로 240",
+        "grade": 4.0,
+        "review_num": 3340,
+        "reviews": ["날씨도 좋고 실내도 있어서 더 재미있게 놀았다!", "아이가 정말 너무너무 행복해 했어요", "직원분이 친절하셔서 더웅 재미있던 롯데월드"]
+    },
+    {
+        "name": "레고랜드 코리아",
+        "address": "강원도 춘천 하중도길 128",
+        "grade": 5.0,
+        "review_num": 104,
+        "reviews": ["레고랜드에서 즐겁고 알차게 보냈어요", "아이들이 좋아해요", "레고랜드 마치 장난감나라의 주인공이 된 것 같아요!"]
+    },
+    {
+        "name": "한국민속촌",
+        "address": "경기도 용인 기흥구 민속촌로 90",
+        "grade": 4.5,
+        "review_num": 765,
+        "reviews": ["재방문의사 100프로", "데이트 코스로도 최고", "옛한국적인 모습을 볼 수 있는 곳."]
+    },
+    {
+        "name": "에코랜드 테마파크",
+        "address": "제주특별자치도 제주시, 조천읍 번영로 1278-169",
+        "grade": 4.0,
+        "review_num": 352,
+        "reviews": ["가족여행으로 제격", "애들과 함께라면 하루정도는 애코랜드에서 시간을 보내는것도 좋을듯하다", "힐링 힐링 그리고 다채로운 추억남김"]
+    }
+]
+
+@app.get("/themepark")
+async def search_theme_park(
+    name: Optional[str] = Query(None, description="테마파크명"),
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점"),
+) -> List[dict]:
+    results = []
+    for theme_park in theme_park_list:
+        if theme_park["name"] and name is not None and theme_park["name"] != name:
+            continue
+        if theme_park["address"] and sgngNm is not None and theme_park["address"].find(sgngNm) == -1:
+            continue
+        if theme_park["grade"] and min_grade is not None and theme_park["grade"] < min_grade:
+            continue
+        if theme_park["grade"] and max_grade is not None and theme_park["grade"] > max_grade:
+            continue
+        results.append(theme_park)
+    return results
+
+bicycle_list = [
+    {
+        "type": "MTB",
+        "brand": "도마스",
+        "name": "2022 도마스 아드레날린 2.1 MTB 27.5",
+        "price": 410000,
+        "colors": ["매트 블랙", "글로시 다크그레이", "글로시 옐로우"],
+        "review_num": 667
+    },
+    {
+        "type": "MTB",
+        "brand": "비앙키",
+        "name": "2023 비앙키 듀엘 27.S MTB",
+        "price": 1150000,
+        "colors": ["블랙", "체레스트"],
+        "review_num": 6
+    },
+    {
+        "type": "미니벨로",
+        "brand": "알톤",
+        "name": "2023 알톤 힐라리스 20 접이식 미니벨로",
+        "price": 490000,
+        "colors": ["블랙", "다크그레이", "화이트"],
+        "review_num": 11
+    },
+    {
+        "type": "미니벨로",
+        "brand": "첼로",
+        "name": "2023 첼로 토모 SE 9 접이식 9단 미니벨로",
+        "price": 890000,
+        "colors": ["다크베리", "다크 카멜레온"],
+        "review_num": 0
+    },
+    {
+        "type": "전기자전거",
+        "brand": "알톤",
+        "name": "2023 알톤 벤조 24 전기자전거 24",
+        "price": 1150000,
+        "colors": ["매트 블랙", "매트 베이지"],
+        "review_num": 5
+    },
+    {
+        "type": "전기자전거",
+        "brand": "퀄리스포츠",
+        "name": "2023 퀄리 볼트S 750W 전동스쿠터",
+        "price": 2100000,
+        "colors": ["블랙", "그레이", "그린"],
+        "review_num": 7
+    }
+]
+
+@app.get("/bicycle")
+async def search_bicycle(
+    type: Optional[str] = Query(None, description="타입"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="모델명"),
+    min_price: Optional[int] = Query(None, ge=0, description="최소 가격"),
+    max_price: Optional[int] = Query(None, ge=0, description="최대 가격"),
+    color: Optional[str] = Query(None, description="색상")
+) -> List[dict]:
+    results = []
+    for bicycle in bicycle_list:
+        if type is not None and bicycle["type"] != type:
+            continue
+        if brand is not None and bicycle["brand"] != brand:
+            continue
+        if name is not None and bicycle["name"] != name:
+            continue
+        if min_price is not None and bicycle["price"] < min_price:
+            continue
+        if max_price is not None and bicycle["price"] > max_price:
+            continue
+        if color is not None and color not in bicycle["colors"]:
+            continue
+        results.append(bicycle)
+    return results
+
+seoul_bike_list = [
+    {
+        "name": "사당역 5번출구 대여소",
+        "address": "서울 관악구 남현동 1060-12",
+        "bike_num": 0,
+        "smallbike_num": 3,
+        "subway_station": "사당역"
+    },
+    {
+        "name": "서울도시건축전시관 대여소",
+        "address": "서울 중구 태평로1가 60-20",
+        "bike_num": 26,
+        "smallbike_num": 5,
+        "subway_station": "시청역"
+    },
+    {
+        "name": "광화문 S타워 앞 대여소",
+        "address": "서울 종로구 신문로1가 5-4",
+        "bike_num": 71,
+        "smallbike_num": 6,
+        "subway_station": "광화문역"
+    },
+    {
+        "name": "롯데호텔 대여소",
+        "address": "서울 중구 을지로1가 180-6",
+        "bike_num": 4,
+        "smallbike_num": 0,
+        "subway_station": "을지로입구역"
+    },
+    {
+        "name": "청계광장 옆 대여소",
+        "address": "서울 중구 태평로1가 2-2",
+        "bike_num": 14,
+        "smallbike_num": 2,
+        "subway_station": "광화문역"
+    },
+    {
+        "name": "관악구청교차로 대여소",
+        "address": "서울 관악구 관악로 153",
+        "bike_num": 0,
+        "smallbike_num": 2,
+        "subway_station": "서울대입구역"
+    }
+]
+
+@app.get("/seoul_bike")
+async def search_seoul_bike(
+    gu: Optional[str] = Query(None, description="서울시 행정구역명(ex: 강남구, 중구 등)"),
+    name: Optional[str] = Query(None, description="대여소 이름"),
+    min_bike: Optional[int] = Query(None, ge=0, description="최소 일반 따릉이 수"),
+    max_bike: Optional[int] = Query(None, ge=0, description="최대 일반 따릉이 수"),
+    min_smallbike: Optional[int] = Query(None, ge=0, description="최소 새싹 따릉이 수"),
+    max_smallbike: Optional[int] = Query(None, ge=0, description="최대 새싹 따릉이 수"),
+) -> List[dict]:
+    results = []
+    for seoul_bike in seoul_bike_list:
+        if gu is not None and gu != seoul_bike["gu"]:
+            continue
+        if name is not None and name != seoul_bike["name"]:
+            continue
+        if min_bike is not None and seoul_bike["bike_num"] < min_bike:
+            continue
+        if max_bike is not None and seoul_bike["bike_num"] > max_bike:
+            continue
+        if min_smallbike is not None and seoul_bike["smallbike_num"] < min_smallbike:
+            continue
+        if max_smallbike is not None and seoul_bike["smallbike_num"] > max_smallbike:
+            continue
+        results.append(seoul_bike)
+    return results
+
+gyeonggi_bus_list = [
+    {
+        "num": "4000",
+        "type": "공항",
+        "starting_point": "동수원공항버스정류장",
+        "terminal": "인천공항3층출국장(T2)",
+        "bus_stops": ["동수원공항버스정류장", "못골사거리", "북수원TG", "안산IC", "연수JC", "제1여객터미널", "인천공항3층출국장(T2)"]
+    },
+    {
+        "num": "11",
+        "type": "용인시 마을",
+        "starting_point": "죽전역.신세계백화점",
+        "terminal": "미금역.2001아울렛",
+        "bus_stops": ["죽전역.신세계백화점", "정평중학교", "주공아파트", "초입마을사거리", "동천동현대홈타운1차아파트", "미금역.2001아울렛"]
+    },
+    {
+        "num": "4300",
+        "type": "공항",
+        "starting_point": "동수원공항버스정류장",
+        "terminal": "김포공항국내선(12번홈)",
+        "bus_stops": ["동수원공항버스정류장", "창룡문사거리", "호계종합시장", "비산교", "석수IC", "안현JC", "송내IC", "서운JC", "김포공항국내선(12번홈)"]
+    },
+    {
+        "num": "M5115",
+        "type": "광역급행",
+        "starting_point": "상현역",
+        "terminal": "서울역버스환승센터(6번승강장)(중)",
+        "bus_stops": ["상현역", "광교중앙.경기도청.아주대역환승센터(지하1층)", "경기대수원캠퍼스후문", "죽전", "금토JC", "양재IC", "한남오거리", "서울백병원.국가인권위.안중근활동터(중)","서울역버스환승센터(6번승강장)(중)"]
+    },
+    {
+        "num": "M5342",
+        "type": "광역급행",
+        "starting_point": "수원버스터미널",
+        "terminal": "잠실광역환승센터",
+        "bus_stops": ["수원버스터미널", "수원아이파크시티.선일초교", "삼성2차아파트", "동수원TG", "죽전", "판교IC", "장지역.가든파이브", "가락시장.가락시장역","잠실광역환승센터"]
+    },
+    {
+        "num": "370",
+        "type": "성남시 일반",
+        "starting_point": "고등마을아파트",
+        "terminal": "더샵판교퍼스트파크",
+        "bus_stops": ["고등마을아파트", "성남고등공공주택지구.서편", "시흥사거리", "유라코퍼레이션.SK케미칼", "웰츠타워", "서현역.AK플라자", "정자사거리", "더샵판교퍼스트파크"]
+    }
+]
+
+@app.get("/gyeonggi_bus")
+async def search_gyeonggi_bus(
+    num: Optional[str] = Query(None, description="노선 번호"),
+    type: str = Query(..., description="노선 유형(ex: 공항, 광역급행, 용인시 마을 등)"),
+    starting_point: Optional[str] = Query(None, description="기점"),
+    terminal: Optional[str] = Query(None, description="종점"),
+    bus_stop: Optional[str] = Query(None, description="정류장명(주요 경유지를 바탕으로 검색합니다)")
+) -> List[dict]:
+    results = []
+    for bus in gyeonggi_bus_list:
+        if num is not None and num != bus["num"]:
+            continue
+        if type is not None and type != bus["type"]:
+            continue
+        if starting_point is not None and starting_point != bus["starting_point"]:
+            continue
+        if terminal is not None and terminal != bus["terminal"]:
+            continue
+        if bus_stop is not None and bus_stop not in bus["bus_stops"]:
+            continue
+        results.append(bus)
+    return results
+
+typhoon_data = [
+    {
+        "num": 1,
+        "name": "볼라벤",
+        "eng_name": "BOLAVEN",
+        "naming_cntry": "라오스",
+        "influence": "없음",
+        "generationDt": "2018.01.03",
+        "extinctionDt": "2018.01.04",
+        "desc": "제1호 태풍 볼라벤(BOLAVEN)은 라오스에서 제출한 이름으로 고원의 이름임."
+    },
+    {
+        "num": 8,
+        "name": "바비",
+        "eng_name": "BAVI",
+        "naming_cntry": "베트남",
+        "influence": "직접영향",
+        "generationDt": "2020.08.22",
+        "extinctionDt": "2020.08.27",
+        "desc": "제8호 태풍 바비(BAVI)는 베트남에서 제출한 이름으로 산맥의 이름임."
+    },
+    {
+        "num": 9,
+        "name": "마이삭",
+        "eng_name": "MAYSAK",
+        "naming_cntry": "캄보디아",
+        "influence": "상륙",
+        "generationDt": "2020.08.28",
+        "extinctionDt": "2020.09.03",
+        "desc": "제9호 태풍 마이삭(MAYSAK)은 캄보디아에서 제출한 이름으로 나무의 한 종류임."
+    },
+    {
+        "num": 10,
+        "name": "하이선",
+        "eng_name": "HAISHEN",
+        "naming_cntry": "중국",
+        "influence": "상륙",
+        "generationDt": "2020.09.01",
+        "extinctionDt": "2020.09.07",
+        "desc": "제10호 태풍 하이선(HAISHEN)은 중국에서 제출한 이름으로 바다의 신을 의미함."
+    },
+    {
+        "num": 1,
+        "name": "말라카스",
+        "eng_name": "MALAKAS",
+        "naming_cntry": "필리핀",
+        "influence": "없음",
+        "generationDt": "2022.04.08",
+        "extinctionDt": "2022.04.16",
+        "desc": "제1호 태풍 말라카스(MALAKAS)는 필리핀에서 제출한 이름으로 강력함을 의미함."
+    },
+    {
+        "num": 2,
+        "name": "메기",
+        "eng_name": "MEGI",
+        "naming_cntry": "한국",
+        "influence": "없음",
+        "generationDt": "2022.04.10",
+        "extinctionDt": "2022.04.12",
+        "desc": "제2호 태풍 메기(MEGI)는 한국에서 제출한 이름으로 메기를 의미함."
+    },
+    {
+        "num": 3,
+        "name": "차바",
+        "eng_name": "CHABA",
+        "naming_cntry": "태국",
+        "influence": "없음",
+        "generationDt": "2022.06.30",
+        "extinctionDt": "2022.07.03",
+        "desc": "제3호 태풍 차바(CHABA)는 태국에서 제출한 이름으로 꽃의 한 종류임."
+    },
+    {
+        "num": 4,
+        "name": "에어리",
+        "eng_name": "AERE",
+        "naming_cntry": "미국",
+        "influence": "직접영향",
+        "generationDt": "2022.07.01",
+        "extinctionDt": "2022.07.05",
+        "desc": "제4호 태풍 에어리(AERE)는 미국에서 제출한 이름으로 폭풍을 의미함."
+    }
+]
+
+@app.get("/typhoon")
+async def search_typhoon(
+    num: Optional[int] = Query(None, description="호수"),
+    name: Optional[str] = Query(None, description="태풍 이름"),
+    influence: Optional[str] = Query(None, description="영향도(ex: 없음, 직접영향, 상륙 등)"),
+    startDt: Optional[str] = Query(None, description="최소 발생연도(m~n년 사이에 발생한 태풍 검색 시 사용. 발생날짜를 바탕으로 검색.)"),
+    endDt: Optional[str] = Query(None, description="최대 발생연도(m~n년 사이에 발생한 태풍 검색 시 사용. 발생날짜를 바탕으로 검색.)"),
+    naming_cntry: Optional[str] = Query(None, description="작명 국가")
+) -> List[dict]:
+    results = []
+    for typhoon in typhoon_data:
+        if num is not None and num != typhoon["num"]:
+            continue
+        if name is not None and name != typhoon["name"]:
+            continue
+        if influence is not None and influence != typhoon["influence"]:
+            continue
+        if startDt is not None and startDt > typhoon["generationDt"]:
+            continue
+        if endDt is not None and endDt < typhoon["generationDt"]:
+            continue
+        if naming_cntry is not None and naming_cntry != typhoon["naming_cntry"]:
+            continue
+        results.append(typhoon)
+    return results
+
+
+particulate_matter_data = [
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "은평구",
+        "grade": "양호",
+        "density": 17,
+        "fine_density": 16
+    },
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "서대문구",
+        "grade": "좋음",
+        "density": 16,
+        "fine_density": 7
+    },
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "중구",
+        "grade": "좋음",
+        "density": 13,
+        "fine_density": 13
+    },
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "양천구",
+        "grade": "나쁨",
+        "density": 74,
+        "fine_density": 10
+    },
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "동작구",
+        "grade": "보통",
+        "density": 42,
+        "fine_density": 11
+    },
+    {
+        "ctprvNm": "서울특별시",
+        "sgngNm": "광진구",
+        "grade": "좋음",
+        "density": 20,
+        "fine_density": 13
+    }
+]
+
+@app.get("/particulate_matter")
+async def search_particulate_matter(
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    grade: Optional[str] = Query(None, description="등급"),
+    min_density: Optional[float] = Query(None, gt=0, description="최소 미세먼지 농도"),
+    max_density: Optional[float] = Query(None, gt=0, description="최대 미세먼지 농도"),
+    min_fine_density: Optional[float] = Query(None, gt=0, description="최소 초미세먼지 농도"),
+    max_fine_density: Optional[float] = Query(None, gt=0, description="최대 초미세먼지 농도")
+) -> List[dict]:
+    results = []
+    for data in particulate_matter_data:
+        if ctprvNm is not None and ctprvNm != data["ctprvNm"]:
+            continue
+        if sgngNm is not None and sgngNm != data["sgngNm"]:
+            continue
+        if grade is not None and grade != data["grade"]:
+            continue
+        if min_density is not None and min_density > data["density"]:
+            continue
+        if max_density is not None and max_density < data["density"]:
+            continue
+        if min_fine_density is not None and min_fine_density > data["fine_density"]:
+            continue
+        if max_fine_density is not None and max_fine_density < data["fine_density"]:
+            continue
+        results.append(data)
+    return results
+
+convenience_device_data = [
+    {
+        "line": 1,
+        "name": "서울역",
+        "locker": 3,
+        "cvlisMchn": 1,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 0
+    },
+    {
+        "line": 1,
+        "name": "시청역",
+        "locker": 2,
+        "cvlisMchn": 1,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 0,
+        "exchangeKiosk": 0
+    },
+    {
+        "line": 1,
+        "name": "종각역",
+        "locker": 2,
+        "cvlisMchn": 2,
+        "atm": 1,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 0
+    },
+    {
+        "line": 2,
+        "name": "을지로입구역",
+        "locker": 2,
+        "cvlisMchn": 1,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 2
+    },
+    {
+        "line": 2,
+        "name": "홍대입구역",
+        "locker": 5,
+        "cvlisMchn": 2,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 2
+    },
+    {
+        "line": 2,
+        "name": "신촌역",
+        "locker": 3,
+        "cvlisMchn": 3,
+        "atm": 1,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 1
+    },
+    {
+        "line": 3,
+        "name": "경복궁역",
+        "locker": 2,
+        "cvlisMchn": 1,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 1
+    },
+    {
+        "line": 3,
+        "name": "안국역",
+        "locker": 2,
+        "cvlisMchn": 1,
+        "atm": 0,
+        "vndngMchn": 1,
+        "autoCamera": 1,
+        "exchangeKiosk": 1
+    }
+]
+
+@app.get("/convenience_device")
+async def search_convenience_device(
+    line: Optional[int] = Query(None, description="호선"),
+    name: Optional[str] = Query(None, description="역명"),
+    min_locker: Optional[int] = Query(None, ge=0, description="물품보관함 수"),
+    max_locker: Optional[int] = Query(None, ge=0, description="물품보관함 수"),
+    min_atm: Optional[int] = Query(None, ge=0, description="현급지급기 수"),
+    max_atm: Optional[int] = Query(None, ge=0, description="현급지급기 수"),
+    min_cvlisMchn: Optional[int] = Query(None, ge=0, description="무인민원발급기 수"),
+    max_cvlisMchn: Optional[int] = Query(None, ge=0, description="무인민원발급기 수"),
+    min_vndngMchn: Optional[int] = Query(None, ge=0, description="위생용품자판기 수"),
+    max_vndngMchn: Optional[int] = Query(None, ge=0, description="위생용품자판기 수"),
+    min_autoCamera: Optional[int] = Query(None, ge=0, description="자동사진기 수"),
+    max_autoCamera: Optional[int] = Query(None, ge=0, description="자동사진기 수"),
+    min_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
+    max_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
+) -> List[dict]:
+    results = []
+    for data in convenience_device_data:
+        if line is not None and line != data["line"]:
+            continue
+        if name is not None and name != data["name"]:
+            continue
+        if min_locker is not None and min_locker > data["locker"]:
+            continue
+        if max_locker is not None and max_locker < data["locker"]:
+            continue
+        if min_atm is not None and min_atm > data["atm"]:
+            continue
+        if max_atm is not None and max_atm < data["atm"]:
+            continue
+        if min_cvlisMchn is not None and min_cvlisMchn > data["cvlisMchn"]:
+            continue
+        if max_cvlisMchn is not None and max_cvlisMchn < data["cvlisMchn"]:
+            continue
+        if min_vndngMchn is not None and min_vndngMchn > data["vndngMchn"]:
+            continue
+        if max_vndngMchn is not None and max_vndngMchn < data["vndngMchn"]:
+            continue
+        if min_autoCamera is not None and min_autoCamera > data["autoCamera"]:
+            continue
+        if max_autoCamera is not None and max_autoCamera < data["autoCamera"]:
+            continue
+        if min_exchangeKiosk is not None and min_exchangeKiosk > data["exchangeKiosk"]:
+            continue
+        if max_exchangeKiosk is not None and max_exchangeKiosk < data["exchangeKiosk"]:
+            continue
+        results.append(data)
+    return results
+
+element_data = [
+    {"num": 1, "symbol": "H", "name": "수소", "eng_name": "Hydrogen", "group": 1, "period": 1},
+    {"num": 2, "symbol": "He", "name": "헬륨", "eng_name": "Helium", "group": 18, "period": 1},
+    {"num": 3, "symbol": "Li", "name": "리튬", "eng_name": "Lithium", "group": 1, "period": 2},
+    {"num": 4, "symbol": "Be", "name": "베릴륨", "eng_name": "Beryllium", "group": 2, "period": 2},
+    {"num": 5, "symbol": "B", "name": "붕소", "eng_name": "Boron", "group": 13, "period": 2},
+    {"num": 6, "symbol": "C", "name": "탄소", "eng_name": "Carbon", "group": 14, "period": 2},
+    {"num": 7, "symbol": "N", "name": "질소", "eng_name": "Nitrogen", "group": 15, "period": 2},
+    {"num": 8, "symbol": "O", "name": "산소", "eng_name": "Oxygen", "group": 16, "period": 2},
+    {"num": 9, "symbol": "F", "name": "플루오린", "eng_name": "Fluorine", "group": 17, "period": 2},
+    {"num": 10, "symbol": "Ne", "name": "네온", "eng_name": "Neon", "group": 18, "period": 2},
+]
+
+@app.get("/element")
+async def search_element(
+    num: Optional[int] = Query(None, description="원자 번호"),
+    symbol: Optional[str] = Query(None, description="기호(ex: H, He, Li 등)"),
+    name: Optional[str] = Query(..., description="원소명"),
+    group: Optional[int] = Query(None, ge=1, le=18, description="족"),
+    period: Optional[int] = Query(None, ge=1, le=7, description="주기"),
+) -> List[dict]:
+    results = []
+    for data in element_data:
+        if num is not None and num != data["num"]:
+            continue
+        if symbol is not None and symbol != data["symbol"]:
+            continue
+        if name is not None and name != data["name"]:
+            continue
+        if group is not None and group != data["group"]:
+            continue
+        if period is not None and period != data["period"]:
+            continue
+        results.append(data)
+    return results
+
+grad_project_data = [
+    {
+        "name": "Vegan",
+        "team_members": ["김민준", "이서연"],
+        "professor": "Park",
+        "year": 2022,
+        "semester": 2,
+        "language": ["Java", "R"],
+        "desc": "비건지향인들을 위한 앱 서비스"
+    },
+    {
+        "name": "Welfare",
+        "team_members": ["장서준", "임도윤", "구예준"],
+        "professor": "Lee",
+        "year": 2022,
+        "semester": 2,
+        "language": ["Java", "Python"],
+        "desc": "복지 정보를 얻을 수 있는 챗봇 서비스"
+    },
+    {
+        "name": "Tagg",
+        "team_members": ["류지우", "김하윤", "박민서"],
+        "professor": "Na",
+        "year": 2022,
+        "semester": 2,
+        "language": ["C", "C++", "Java"],
+        "desc": "최저가 쇼핑 검색 모바일 앱"
+    },
+    {
+        "name": "Dot",
+        "team_members": ["서채원", "이준서"],
+        "professor": "Kim",
+        "year": 2022,
+        "semester": 1,
+        "language": ["Java", "Python", "PHP"],
+        "desc": "점자 번역 애플리케이션"
+    },
+    {
+        "name": "Food",
+        "team_members": ["심우진", "이수아", "김지호"],
+        "professor": "Jang",
+        "year": 2022,
+        "semester": 1,
+        "language": ["Java", "Python"],
+        "desc": "식단 관리 모바일 앱"
+    },
+    {
+        "name": "Sign Lang",
+        "team_members": ["김건우", "심지아", "구선우"],
+        "professor": "Lim",
+        "year": 2022,
+        "semester": 1,
+        "language": ["Python"],
+        "desc": "수화 통역 애플리케이션"
+    },
+]
+
+@app.get("/grad_project")
+async def search_grad_project(
+    name: Optional[str] = Query(..., description="프로젝트명"),
+    student: Optional[str] = Query(None, description="팀원명"),
+    professor: Optional[str] = Query(None, description="담당 교수명"),
+    year: Optional[int] = Query(None, description="연도"),
+    semester: Optional[int] = Query(None, ge=1, le=2, description="학기"),
+    language: Optional[str] = Query(None, description="사용 언어"),
+) -> List[dict]:
+    results = []
+    for data in grad_project_data:
+        if name is not None and name != data["name"]:
+            continue
+        if student is not None and student not in data["team_members"]:
+            continue
+        if professor is not None and professor != data["professor"]:
+            continue
+        if year is not None and year != data["year"]:
+            continue
+        if semester is not None and semester != data["semester"]:
+            continue
+        if language is not None and language not in data["language"]:
+            continue
+        results.append(data)
+    return results
+
+olympic_data = [
+    {
+        "type": "하계",
+        "country": "영국",
+        "city": "런던",
+        "openingDt": "2012-07-27",
+        "closingDt": "2021-08-12",
+        "slogan": "Inspire a Generation (시대에게 영감을)"
+    },
+    {
+        "type": "하계",
+        "country": "브라질",
+        "city": "리우데자네이루",
+        "openingDt": "2016-08-05",
+        "closingDt": "2016-08-21",
+        "slogan": "Um mundo novo (새로운 세계)"
+    },
+    {
+        "type": "하계",
+        "country": "일본",
+        "city": "도쿄",
+        "openingDt": "2021-07-23",
+        "closingDt": "2021-08-08",
+        "slogan": "感動で、私たちはひとつになる (감동으로 우리는 하나가 된다)"
+    },
+    {
+        "type": "동계",
+        "country": "러시아",
+        "city": "소치",
+        "openingDt": "2014-02-07",
+        "closingDt": "2014-02-23",
+        "slogan": "Жаркие. Зимние. Твои (열기, 시원함을, 당신에게)"
+    },
+    {
+        "type": "동계",
+        "country": "대한민국",
+        "city": "평창",
+        "openingDt": "2018-02-09",
+        "closingDt": "2018-02-25",
+        "slogan": "하나된 열정 (Passion. Connected.)"
+    },
+    {
+        "type": "동계",
+        "country": "중국",
+        "city": "베이징",
+        "openingDt": "2022-02-04",
+        "closingDt": "2022-02-20",
+        "slogan": "一起向未来 (함께하는 미래로)"
+    },
+]
+
+@app.get("/olympic")
+async def search_olympic(
+    type: Optional[str] = Query(..., description="분류"),
+    country: Optional[str] = Query(None, description="개최국"),
+    city: Optional[str] = Query(None, description="도시"),
+    strtYr: Optional[str] = Query(None, description="최소 개최 연도(개회일을 바탕으로 검색)"),
+    endYr: Optional[str] = Query(None, description="최대 개최 연도(개회일을 바탕으로 검색)")
+) -> List[dict]:
+    results = []
+    for data in olympic_data:
+        if type is not None and type != data["type"]:
+            continue
+        if country is not None and country != data["country"]:
+            continue
+        if city is not None and city != data["city"]:
+            continue
+        if strtYr is not None and strtYr > data["openingDt"]:
+            continue
+        if endYr is not None and endYr < data["openingDt"]:
+            continue
+        results.append(data)
+    return results
+
+silver_town_data = [
+    {
+        "name": "서울시니어스 서울타워",
+        "address": "서울특별시 중구 다산로 72",
+        "households": 138,
+        "phone": "02-2254-1221",
+        "cnstrYr": 1998
+    },
+    {
+        "name": "노블레스타워",
+        "address": "서울특별시 성북구 종암로 90",
+        "households": 239,
+        "phone": "02-910-6090",
+        "cnstrYr": 2008
+    },
+    {
+        "name": "더클래식500",
+        "address": "서울특별시 광진구 능동로 90",
+        "households": 380,
+        "phone": "02-2218-5526",
+        "cnstrYr": 2009
+    },
+    {
+        "name": "삼성노블카운티",
+        "address": "경기도 용인시 기흥구 하갈동 490",
+        "households": 553,
+        "phone": "031-208-8000",
+        "cnstrYr": 2001
+    },
+    {
+        "name": "스프링카운티자이",
+        "address": "경기도 용인시 기흥구 동백죽전대로 333",
+        "households": 1345,
+        "phone": "031-8067-6017",
+        "cnstrYr": 2019
+    },
+    {
+        "name": "유당마을",
+        "address": "경기도 수원시 장안구 수일로 191번길 26",
+        "households": 247,
+        "phone": "031-242-0079",
+        "cnstrYr": 1988
+    },
+]
+
+@app.get("/silver_town")
+async def search_silver_town(
+    ctprvNm: str = Query(..., description="시도명"),
+    sgngNm: Optional[str] = Query(None, description="시군구명"),
+    name: Optional[str] = Query(None, description="시설명"),
+    min_households: Optional[int] = Query(None, description="최소 세대수"),
+    max_households: Optional[int] = Query(None, description="최대 세대수")
+) -> List[dict]:
+    results = []
+    for data in silver_town_data:
+        if ctprvNm != data["address"].split()[0]:
+            continue
+        if sgngNm is not None and sgngNm != data["address"].split()[1]:
+            continue
+        if name is not None and name != data["name"]:
+            continue
+        if min_households is not None and min_households > data["households"]:
+            continue
+        if max_households is not None and max_households < data["households"]:
+            continue
+        results.append(data)
+    return results
+
+personality_test_data = [
+    {
+        "company": "삼성",
+        "name": "GSAT",
+        "q_num": 50,
+        "time": 60,
+        "subjects": ["수리논리", "추리"]
+    },
+    {
+        "company": "SK그룹",
+        "name": "SKCT",
+        "q_num": 450,
+        "time": 145,
+        "subjects": ["실행역량", "인지역량", "심층역량"]
+    },
+    {
+        "company": "CJ그룹",
+        "name": "CJAT",
+        "q_num": 80,
+        "time": 100,
+        "subjects": ["언어", "수리", "추리", "공간 지각"]
+    },
+    {
+        "company": "KT",
+        "name": "KT 종합인적성검사",
+        "q_num": 85,
+        "time": 90,
+        "subjects": ["언어적 사고", "수리적 사고", "문제해결"]
+    },
+    {
+        "company": "LG",
+        "name": "LG Way Fit Test",
+        "q_num": 243,
+        "time": 60,
+        "subjects": ["언어이해", "언어추리", "자료해석", "창의수리", "인성검사"]
+    },
+]
+
+@app.get("/personality_test")
+async def search_personality_test(
+    company: str = Query(..., description="기업명"),
+    name: Optional[str] = Query(None, description="시험명"),
+    min_questions: Optional[int] = Query(None, description="최소 문항수"),
+    max_questions: Optional[int] = Query(None, description="최대 문항수"),
+    min_time: Optional[int] = Query(None, description="최소 시험시간 (단위: 분)"),
+    max_time: Optional[int] = Query(None, description="최대 시험시간 (단위: 분)"),
+    subject: Optional[str] = Query(None, description="과목명")
+) -> List[dict]:
+    results = []
+    for data in personality_test_data:
+        if company != data["company"]:
+            continue
+        if name is not None and name != data["name"]:
+            continue
+        if min_questions is not None and min_questions > data["q_num"]:
+            continue
+        if max_questions is not None and max_questions < data["q_num"]:
+            continue
+        if min_time is not None and min_time > data["time"]:
+            continue
+        if max_time is not None and max_time < data["time"]:
+            continue
+        if subject is not None and subject not in data["subjects"]:
+            continue
+        results.append(data)
+    return results
+
+air_purifier_data = [
+    {
+        "name": "노블 공기청정기(50㎡)",
+        "brand": "coway",
+        "contract_period": 72,
+        "monthly_fee": 34900,
+        "grade": 4.9,
+        "review_num": 415
+    },
+    {
+        "name": "듀얼클린 가습공기청정기",
+        "brand": "coway",
+        "contract_period": 36,
+        "monthly_fee": 30400,
+        "grade": 4.9,
+        "review_num": 128
+    },
+    {
+        "name": "아이콘 공기청정기",
+        "brand": "coway",
+        "contract_period": 36,
+        "monthly_fee": 35900,
+        "grade": 4.9,
+        "review_num": 52
+    },
+    {
+        "name": "퓨리케어 공기청정기 10평",
+        "brand": "LG",
+        "contract_period": 60,
+        "monthly_fee": 13900,
+        "grade": 5.0,
+        "review_num": 16
+    },
+    {
+        "name": "퓨리케어 360° 공기청정기 알파 오브제컬렉션 35평 (펫 필터)",
+        "brand": "LG",
+        "contract_period": 60,
+        "monthly_fee": 44900,
+        "grade": 5.0,
+        "review_num": 13
+    },
+    {
+        "name": "퓨리케어 에어로타워 오브제컬렉션_선풍+온풍",
+        "brand": "LG",
+        "contract_period": 60,
+        "monthly_fee": 37900,
+        "grade": 5.0,
+        "review_num": 2
+    },
+]
+
+@app.get("/air_purifier")
+async def search_air_purifier(
+    name: Optional[str] = Query(None, description="제품명"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    min_contract_period: int = Query(..., description="최소 약정 기간 (단위: 개월)"),
+    max_contract_period: Optional[int] = Query(None, description="최대 약정 기간 (단위: 개월)"),
+    min_fee: Optional[int] = Query(None, description="최소 월 렌탈료"),
+    max_fee: Optional[int] = Query(None, description="최대 월 렌탈료"),
+    min_grade: Optional[float] = Query(None, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, description="최대 평점"),
+):
+    results = []
+    for data in air_purifier_data:
+        if name and name != data["name"]:
+            continue
+        if brand and brand != data["brand"]:
+            continue
+        if data["contract_period"] < min_contract_period:
+            continue
+        if max_contract_period and data["contract_period"] > max_contract_period:
+            continue
+        if min_fee and data["monthly_fee"] < min_fee:
+            continue
+        if max_fee and data["monthly_fee"] > max_fee:
+            continue
+        if min_grade and data["grade"] < min_grade:
+            continue
+        if max_grade and data["grade"] > max_grade:
+            continue
+        results.append(data)
+    return results
+
+samsungsvc_data = [
+    {
+        "name": "을지로휴대폰센터",
+        "address": "서울 중구 을지로 51 교원내외빌딩 5층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기"],
+        "subway_station": "을지로입구역"
+    },
+    {
+        "name": "용산센터",
+        "address": "서울 용산구 한강대로 314 삼성스토어 용산 2층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기", "노트북", "PC", "모니터", "프린터", "TV", "홈시어터", "오디오", "DVD", "카메라", "캠코더", "오븐/전자레인지", "기타 소형가전"],
+        "subway_station": "숙대입구역"
+    },
+    {
+        "name": "삼선교휴대폰센터",
+        "address": "서울 성북구 동소문로 47 삼성스토어 삼선교 2층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기"],
+        "subway_station": "한성대입구역"
+    },
+    {
+        "name": "홍대휴대폰센터",
+        "address": "서울 마포구 양화로 171 삼성스토어 홍대 4층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기", "노트북", "PC", "모니터", "프린터"],
+        "subway_station": "홍대입구역"
+    },
+    {
+        "name": "성남센터",
+        "address": "경기 성남시 수정구 산성대로 81 삼성스토어 성남 3층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기", "PC", "노트북", "모니터", "프린터", "TV", "홈시어터", "오디오", "DVD", "오븐/전자레인지", "더 플레이트 인덕션(휴대용)", "기타 소형가전"],
+        "subway_station": "모란역"
+    },
+    {
+        "name": "분당휴대폰센터",
+        "address": "경기 성남시 분당구 황새울로311번길 28 라포르테블랑서현 1층",
+        "congestion": "혼잡",
+        "products": ["스마트폰", "태블릿", "웨어러블기기", "노트북", "PC", "모니터", "프린터"],
+        "subway_station": "서현역"
+    }
+]
+
+@app.get("/samsungsvc")
+async def search_samsungsvc(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="센터명"),
+    congestion: Optional[str] = Query(None, description="혼잡도"),
+    item: Optional[str] = Query(None, description="제품명(수리 제품을 바탕으로 검색)"),
+) -> List[dict]:
+    results = []
+    for data in samsungsvc_data:
+        if ctprvNm and ctprvNm != data["address"].split()[0]:
+            continue
+        if sgngNm and sgngNm != data["address"].split()[1]:
+            continue
+        if name and name != data["name"]:
+            continue
+        if congestion and congestion != data["congestion"]:
+            continue
+        if item and item not in data["products"]:
+            continue
+        results.append(data)
+    return results
+
+waterpark_data = [
+    {
+        "name": "캐리비안 베이",
+        "address": "경기도 용인시 처인구 포곡읍 에버랜드로 199",
+        "grade": 4.0,
+        "review_num": 237,
+        "reviews": ["완전 꿀잼임", "어린아이에게도 좋은 워터파크", "좁은데 사람이 너무 많아요"]
+    },
+    {
+        "name": "설악 워터피아",
+        "address": "강원도 속초시 미시령로2983번길 111",
+        "grade": 4.0,
+        "review_num": 91,
+        "reviews": ["넘 좋아요", "아이들과 함께 가기 좋은 곳", "한적하게 물놀이 가능합니다."]
+    },
+    {
+        "name": "롯데워터파크",
+        "address": "경상남도 김해시 장유로 555",
+        "grade": 4.0,
+        "review_num": 34,
+        "reviews": ["부산,경남 최대 롯데워터파크", "언제나 즐거운곳", "놀기 좋아요"]
+    },
+    {
+        "name": "경주 캘리포니아비치",
+        "address": "경상북도 경주시 보문로 544",
+        "grade": 4.0,
+        "review_num": 25,
+        "reviews": ["아이들이 잘 놀아요.", "여름 휴가로 연인과 친구들과 가기에 좋습니다.", "이곳을 이용하면 놀이동산을 같이 이용할 수 있다는 장점이 있습니다"]
+    },
+    {
+        "name": "비발디파크 오션월드",
+        "address": "강원도 홍천군 서면 한치골길 262",
+        "grade": 4.0,
+        "review_num": 107,
+        "reviews": ["Good but parking was really bad.", "비내리는 겨울에도 놀기 좋은 곳", "신나게 하루 놀았어요"]
+    }
+]
+
+@app.get("/waterpark")
+async def search_waterpark(
+    name: Optional[str] = Query(None, description="워터파크명"),
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점")
+) -> List[dict]:
+    results = []
+    for data in waterpark_data:
+        if name and name != data["name"]:
+            continue
+        if ctprvNm and ctprvNm not in data["address"]:
+            continue
+        if sgngNm and sgngNm not in data["address"]:
+            continue
+        if min_grade and data["grade"] < min_grade:
+            continue
+        if max_grade and data["grade"] > max_grade:
+            continue
+        results.append(data)
+    return results
+
+post_office_data = [
+    {
+        "name": "광화문우체국",
+        "address": "서울 종로구 종로 6 (서린동)",
+        "phone": "02-3703-9011",
+        "fund_sale": True,
+        "atm": True
+    },
+    {
+        "name": "우정총국",
+        "address": "서울 종로구 우정국로 59 (견지동)",
+        "phone": "02-734-8369",
+        "fund_sale": False,
+        "atm": False
+    },
+    {
+        "name": "서울중앙우체국",
+        "address": "서울 중구 소공로 70 (충무로1가)",
+        "phone": "02-6450-1114",
+        "fund_sale": True,
+        "atm": True
+    },
+    {
+        "name": "서울도봉우체국",
+        "address": "서울 도봉구 노해로 150",
+        "phone": "02-3499-3600",
+        "fund_sale": True,
+        "atm": False
+    },
+    {
+        "name": "서수원우체국",
+        "address": "경기 수원시 권선구 호매실로 22-55(탑동)",
+        "phone": "031-8020-0702",
+        "fund_sale": False,
+        "atm": True
+    },
+    {
+        "name": "성남우체국",
+        "address": "경기 성남시 수정구 산성대로 301",
+        "phone": "031-743-0014",
+        "fund_sale": True,
+        "atm": True
+    },
+    {
+        "name": "인천연수동우체국",
+        "address": "인천 연수구 비류대로 436 (연수동)",
+        "phone": "032-812-2105",
+        "fund_sale": False,
+        "atm": True
+    }
+]
+
+@app.get("/post_office")
+async def search_post_office(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="우체국명"),
+    fund_sale: Optional[bool] = Query(None, description="펀드 판매 여부"),
+    atm: Optional[bool] = Query(None, description="365코너 설치 여부")
+) -> List[dict]:
+    results = []
+    for data in post_office_data:
+        if ctprvNm and ctprvNm not in data["address"]:
+            continue
+        if sgngNm and sgngNm not in data["address"]:
+            continue
+        if name and name != data["name"]:
+            continue
+        if fund_sale is not None and fund_sale != data["fund_sale"]:
+            continue
+        if atm is not None and atm != data["atm"]:
+            continue
+        results.append(data)
+    return results
+
+national_park_data = [
+    {
+        "name": "지리산국립공원",
+        "num": 1,
+        "address": "경상남도 산청군 시천면 남명로 376",
+        "desc": "지리산은 언제나 어머니 품처럼 깊고 따뜻합니다. 노고단에서 천왕봉에 이르는 25킬러미터 종주길은 누구나 한 번쯤 가보고 싶어하는 탐방로입니다.",
+        "courses": [
+            "노고단 코스",
+            "정령치-바래봉 코스",
+            "만복대 코스",
+            "화엄계곡 코스",
+            "피아골 코스",
+            "반야봉 코스",
+            "불일폭포 코스"
+        ]
+    },
+    {
+        "name": "경주국립공원",
+        "num": 2,
+        "address": "경상북도 경주시 천북남로 12",
+        "desc": "경주시의 8개 자연생태ㆍ문화유산지구를 국립공원으로 지정한 것입니다. 불국사와 석굴암 등 우리가 잘 알고 있는 문화재들이 국립공원에 속해 있습니다.",
+        "courses": [
+            "관음사 코스",
+            "신선사 코스",
+            "암곡 코스",
+            "삼불사 코스",
+            "용장골 코스",
+            "불국사 코스",
+            "삼릉 코스"
+        ]
+    },
+    {
+        "name": "계룡산국립공원",
+        "num": 3,
+        "address": "충청남도 공주시 반포면 동학사1로 327-6",
+        "desc": "풍수지리상 명산으로 이름난 계룡산은 능선이 마치 닭벼슬을 쓴 용의 모습을 닮아 이름지어졌다고 합니다. 대전 도심과 가까워 많은 시민이 찾고 있는 최고의 자연휴양지입니다.",
+        "courses": [
+            "신원사 코스",
+            "동학사 코스",
+            "수통골 코스",
+            "갑사 코스",
+            "천정 코스"
+        ]
+    },
+    {
+        "name": "한려해상국립공원",
+        "num": 4,
+        "address": "경상남도 사천시 사천대로 173(실안동 888)",
+        "desc": "한려해상은 거제 지심도에서 여수 오동도까지 300리 뱃길을 따라 크고 작은 섬들을 국립공원으로 지정한 우리나라 최초의 해상국립공원입니다.",
+        "courses": [
+            "금산 1코스",
+            "금산자연관찰로",
+            "해금강 코스",
+            "소매물도 등대길 코스",
+            "지심도 코스",
+            "야소 ~ 망산 코스",
+            "진두 ~ 덮을개 코스"
+        ]
+    },
+    {
+        "name": "설악산국립공원",
+        "num": 5,
+        "address": "강원도 속초시 설악산로 833",
+        "desc": "기암괴석으로 둘러싸인 협곡을 흐르는 물줄기와 바위틈 곳곳에서 자라는 나무들이 한 데 어우러져 설악산의 멋진 풍경을 만들어냅니다.",
+        "courses": [
+            "울산바위 코스",
+            "남교리 코스",
+            "대승폭포 코스",
+            "대청봉 코스(한계령)",
+            "비룡폭포(토왕폭전망대)",
+            "대청봉 코스(설악동)"
+        ]
+    },
+    {
+        "name": "속리산국립공원",
+        "num": 6,
+        "address": "충청북도 보은군 속리산면 법주사로 84",
+        "desc": "'속세를 떠난다'는 속리산은 조선 세조 이야기에 담겨있는 문장대와 정이품송, 법주사가 있습니다. 법주사에는 팔상전과 석연지 등 국보와 보물이 많아 탐방가치가 높습니다.",
+        "courses": [
+            "장성봉 코스",
+            "칠보산 코스",
+            "도명산2 코스",
+            "장각동 코스",
+            "문장대1 코스",
+            "군자산 코스",
+            "도명산1 코스",
+            "옥녀봉 코스",
+            "대야산 코스",
+            "묘봉 코스",
+            "백악산 코스",
+            "불목이옛길"
+        ]
+    }
+]
+
+@app.get("/national_park")
+async def search_national_park(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="국립공원명"),
+    num: Optional[int] = Query(None, description="호수"),
+    course: Optional[str] = Query(None, description="코스명(탐방 코스를 바탕으로 검색)")
+):
+    results = []
+    for item in data:
+        if ctprvNm is not None and ctprvNm != item[2]:
+            continue
+        if sgngNm is not None and sgngNm != item[3]:
+            continue
+        if name is not None and name != item[0]:
+            continue
+        if num is not None and num != item[1]:
+            continue
+        if course is not None and course not in item[4]:
+            continue
+        results.append({
+            "name": item[0],
+            "num": item[1],
+            "address": item[2],
+            "desc": item[3],
+            "courses": item[4]
+        })
+    return results
+
+
+data = [
+    {
+        "name": "Jack Daniel's Gentleman Jack",
+        "type": "Tennessee Whiskey",
+        "cask": ["American Oak"],
+        "abv": 40,
+        "flavors": ["Vanilla", "Coal", "Sweet", "Smooth", "Spice"]
+    },
+    {
+        "name": "Teeling Blackpitts",
+        "type": "Single Malt",
+        "cask": ["Bourbon cask", "Sauternes"],
+        "abv": 46,
+        "flavors": ["Pineapple", "Smoke", "Pear", "Fruit", "Yellow"]
+    },
+    {
+        "name": "Brenne Cuvee Speciale",
+        "type": "Single Malt",
+        "cask": ["Cognac", "European Oak"],
+        "abv": 40,
+        "flavors": ["Bubblegum", "Sweet", "Vanilla", "Banana", "Candy"]
+    },
+    {
+        "name": "Midleton Barry Crockett Legacy",
+        "type": "Single Pot Still",
+        "cask": ["Bourbon cask"],
+        "abv": 46,
+        "flavors": ["Fruit", "Delicate", "Light", "Honey", "Toffee"]
+    },
+    {
+        "name": "Tomatin Decades",
+        "type": "Single Malt",
+        "cask": ["Bourbon cask", "Sherry"],
+        "abv": 46,
+        "flavors": ["Fruit", "Vanilla", "Cream", "Oak", "Apple"]
+    },
+    {
+        "name": "W.L. Weller 12 Year Old",
+        "type": "Bourbon",
+        "cask": ["American Oak"],
+        "abv": 45,
+        "flavors": ["Vanilla", "Sweet", "Spice", "Oak", "Apple"]
+    },
+    {
+        "name": "Maker’s Mark 46",
+        "type": "Bourbon",
+        "cask": ["American Oak"],
+        "abv": 47,
+        "flavors": ["Vanilla", "Sweet", "Apple", "Bourbon", "Light"]
+    }
+]
+
+@app.get("/whiskey")
+async def search_whiskey(
+    name: Optional[str] = Query(None, description="제품명"),
+    type: Optional[str] = Query(None, description="유형(ex: Single Malt, Bourbon 등)"),
+    cask: Optional[str] = Query(None, description="캐스크"),
+    min_abv: float = Query(..., description="최소 도수 (단위: %)"),
+    max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
+):
+    results = []
+    for item in data:
+        if name is not None and name != item["name"]:
+            continue
+        if type is not None and type != item["type"]:
+            continue
+        if cask is not None and cask not in item["cask"]:
+            continue
+        if item["abv"] < min_abv:
+            continue
+        if max_abv is not None and item["abv"] > max_abv:
+            continue
+        results.append({
+            "name": item["name"],
+            "type": item["type"],
+            "cask": item["cask"],
+            "abv": item["abv"],
+            "flavors": item["flavors"]
+        })
+    return results
+
+data = [
+    {
+        "name": "국립국악고등학교",
+        "establishment": "국립",
+        "type": "예술계열",
+        "gender": "공학",
+        "address": "서울특별시 강남구 개포로22길 65 (개포동)",
+        "phone": "02-3460-0500",
+        "url": "https://gugak.sen.hs.kr/"
+    },
+    {
+        "name": "서울공연예술고등학교",
+        "establishment": "사립",
+        "type": "예술계열",
+        "gender": "공학",
+        "address": "서울특별시 구로구 오리로22나길 16-26 (궁동)",
+        "phone": "02-3281-9760",
+        "url": "https://www.sopa.hs.kr/"
+    },
+    {
+        "name": "대원외국어고등학교",
+        "establishment": "사립",
+        "type": "외국어계열",
+        "gender": "공학",
+        "address": "서울특별시 광진구 용마산로22길 26 (중곡동)",
+        "phone": "02-2204-1530",
+        "url": "http://www.dwfl.hs.kr/"
+    },
+    {
+        "name": "이화여자외국어고등학교",
+        "establishment": "사립",
+        "type": "외국어계열",
+        "gender": "여",
+        "address": "서울특별시 중구 통일로4길 30 (순화동)",
+        "phone": "02-2176-1992",
+        "url": "https://ewha-gfh.hs.kr/"
+    },
+    {
+        "name": "서울로봇고등학교",
+        "establishment": "공립",
+        "type": "마이스터고",
+        "gender": "공학",
+        "address": "서울특별시 강남구 광평로20길 63 (일원동)",
+        "phone": "02-2226-2141",
+        "url": "https://srobot.sen.hs.kr/"
+    },
+    {
+        "name": "한성과학고등학교",
+        "establishment": "공립",
+        "type": "과학계열",
+        "gender": "공학",
+        "address": "서울특별시 서대문구 통일로 279-79 (현저동)",
+        "phone": "02-6917-0000",
+        "url": "https://hansungsh.sen.hs.kr/"
+    },
+    {
+        "name": "서울국제고등학교",
+        "establishment": "공립",
+        "type": "국제계열",
+        "gender": "공학",
+        "address": "서울특별시 종로구 성균관로13길 40 (명륜1가)",
+        "phone": "02-743-9385",
+        "url": "https://sghs.sen.hs.kr/"
+    },
+    {
+        "name": "서울체육고등학교",
+        "establishment": "공립",
+        "type": "체육계열",
+        "gender": "공학",
+        "address": "서울특별시 송파구 강동대로 232 (방이동)",
+        "phone": "02-2140-9801",
+        "url": "https://seoul-ph.sen.hs.kr/"
+    }
+]
+
+@app.get("/spcl_high_school")
+def search_specialized_high_school(
+    gu: str = Query(..., description="서울시 행정구역명(ex: 강남구, 중구 등)"),
+    establishment: Optional[str] = Query(None, description="설립 구분(ex: 국립, 사립, 공립)"),
+    school_type: Optional[str] = Query(None, description="유형(ex: 예술계열, 과학계열, 외국어계열, 마이스터고, 국제계열, 체육계열)"),
+    gender: Optional[str] = Query(None, description="성별(ex: 공학, 여, 남)"),
+    name: Optional[str] = Query(None, description="학교명"),
+):
+    results = []
+    for item in data:
+        if gu and gu not in item["address"]:
+            continue
+        if establishment and establishment != item["establishment"]:
+            continue
+        if school_type and school_type != item["type"]:
+            continue
+        if gender and gender != item["gender"]:
+            continue
+        if name and name.lower() not in item["name"].lower():
+            continue
+        results.append({
+            "name": item["name"],
+            "establishment": item["establishment"],
+            "type": item["type"],
+            "gender": item["gender"],
+            "address": item["address"],
+            "phone": item["phone"],
+            "url": item["url"]
+        })
+    return results
+
+data = [
+    ["김메주와 고양이들", 622000, 1200, "오늘도 평화로운 메주네☀️", "https://www.youtube.com/c/MejooandCats"],
+    ["무지막지한 막무家네 ", 534000, 327, "무지와 막지의 일상을 담은 막무家네 채널입니다 :-)", "https://www.youtube.com/@mujimakji"],
+    ["Arirang은 고양이들내가 주인", 639000, 569, "혹시 개인적인 문의사항이 있으시면 aricat2488@gmail.com 이쪽으로 메일 주시면 가끔 아리가 메일을 열어봅니다.", "https://www.youtube.com/@arirang3"],
+    ["MochaMilk", 1640000, 380, "모카와 우유의 일상을 함께 봐주셔서 감사합니다 :)", "https://www.youtube.com/@mochamilk"],
+    ["순덕순덕", 120000, 363, "말티즈 순심, 비숑 덕선, 푸들 삼순의 행복한 유튜브 채널입니다.", "https://www.youtube.com/@sundeoksundeok"],
+    ["[THE SOY]루퐁이네", 2130000, 549, "안녕하세요 쌈바요정 루디씨와 옭옭쟁이 퐁키의 유튜브채널입니다.", "https://www.youtube.com/@rupong"]
+]
+
+@app.get("/pet_youtube")
+def search_pet_youtube(
+    name: Optional[str] = Query(None, description="채널명"),
+    min_subscribers: Optional[int] = Query(None, description="최소 구독자수", gt=0),
+    max_subscribers: Optional[int] = Query(None, description="최대 구독자수", gt=0),
+    min_videos: Optional[int] = Query(None, description="최소 영상수", gt=0),
+    max_videos: Optional[int] = Query(None, description="최대 영상수", gt=0),
+) -> List[dict]:
+    results = []
+    for item in data:
+        if name and name.lower() not in item[0].lower():
+            continue
+        if min_subscribers and item[1] < min_subscribers:
+            continue
+        if max_subscribers and item[1] > max_subscribers:
+            continue
+        if min_videos and item[2] < min_videos:
+            continue
+        if max_videos and item[2] > max_videos:
+            continue
+        results.append({
+            "name": item[0],
+            "subscribers": item[1],
+            "videos": item[2],
+            "desc": item[3],
+            "url": item[4]
+        })
+    return results
+
+data = [
+    ["서울맹학교", "국립", ["시각장애"], "서울특별시 종로구 필운대로 97", "https://bl.sen.sc.kr/"],
+    ["한국구화학교", "사립", ["청각장애", "지적장애"], "서울특별시 강동구 고덕로 295-59", "https://kuhwa.sen.sc.kr/"],
+    ["한빛맹학교", "사립", ["시각장애"], "서울특별시 강북구 삼양로73가길 47", "https://hanbit.sen.sc.kr/"],
+    ["아름학교", "공립", ["시각장애", "지적장애"], "경기도 수원시 영통구 광교로 32", "https://areum.sc.kr/"],
+    ["한국선진학교", "국립", ["지적장애"], "경기도 안산시 상록구 이호로 113", "https://seonjin.sc.kr/"],
+    ["부천혜림학교", "사립", ["지적장애"], "경기도 부천시 소사구 경인로304번길 26", "https://haelim-s.goebc.kr/haelim-s/main.do"]
+]
+
+@app.get("/spcl_edu_school")
+def search_special_education_school(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="학교명"),
+    establishment: Optional[str] = Query(None, description="설립 구분(ex: 국립, 사립, 공립)"),
+    target: Optional[str] = Query(None, description="대상자(ex: 시각장애, 지적장애 등)"),
+) -> List[dict]:
+    results = []
+    for item in data:
+        if ctprvNm.lower() not in item[3].lower():
+            continue
+        if sgngNm and sgngNm.lower() not in item[3].lower():
+            continue
+        if name and name.lower() not in item[0].lower():
+            continue
+        if establishment and establishment.lower() not in item[1].lower():
+            continue
+        if target and target.lower() not in [t.lower() for t in item[2]]:
+            continue
+        results.append({
+            "name": item[0],
+            "establishment": item[1],
+            "target": item[2],
+            "address": item[3],
+            "url": item[4]
+        })
+    return results
+
+data = [
+    {
+        "category": "의류",
+        "name": "슬로우앤드",
+        "style": ["캠퍼스룩", "심플베이직"],
+        "free_shipping": False,
+        "best_items": ["솔트 클린 반팔티셔츠", "세로니팅 반오픈 버튼티셔츠", "썸머 에어롱핏 데님팬츠"],
+        "url": "https://www.slowand.com/"
+    },
+    {
+        "category": "의류",
+        "name": "김아홉",
+        "style": ["빈티지", "유니크"],
+        "free_shipping": True,
+        "best_items": ["linen oatmeal pt", "sahara pleats dress", "V whisper open blouse"],
+        "url": "https://www.9hope.kr/"
+    },
+    {
+        "category": "의류",
+        "name": "베이델리",
+        "style": ["심플베이직", "러블리"],
+        "free_shipping": True,
+        "best_items": ["빈티지 우드 워싱 데님 반바지", "러블리 레이스 프릴 나시", "캔디 반팔 셔츠 원피스"],
+        "url": "https://beidelli.com/"
+    },
+    {
+        "category": "가방",
+        "name": "론네바이론",
+        "style": ["유니크"],
+        "free_shipping": True,
+        "best_items": ["타티백", "링크백", "제크백 크로스 숄더백"],
+        "url": "https://lonnebyron.com/"
+    },
+    {
+        "category": "신발",
+        "name": "꼼꼼구두",
+        "style": ["모던시크"],
+        "free_shipping": True,
+        "best_items": ["슈슈 스퀘어 리본 뮬 슬리퍼(2cm)", "릿츠 스퀘어 버클 스트랩 샌들(6.5cm)", "태그 라탄 배색 슬리퍼(1.5cm)"],
+        "url": "https://ccomccomshoes.com/"
+    },
+    {
+        "category": "신발",
+        "name": "잇슈",
+        "style": ["심플베이직"],
+        "free_shipping": False,
+        "best_items": ["2way 스퀘어 셔링 디테일 통굽 슬리퍼 샌들(4.0cm)", "사선스트랩 플랫폼 통굽슬리퍼(6.0cm)", "어글리 스포티 깍지버클 통굽 플랫폼 샌들(7.4cm)"],
+        "url": "https://itshu.co.kr/"
+    }
+]
+
+
+@app.get("/online_shopping")
+async def search_online_shopping_mall(
+    category: str = Query(..., description="카테고리(ex: 의류, 가방 등)"),
+    name: Optional[str] = Query(None, description="쇼핑몰 이름"),
+    style: Optional[str] = Query(None, description="스타일(ex: 심플베이직, 유니크 등)"),
+    free_shipping: Optional[bool] = Query(None, description="무료배송 여부"),
+    item: Optional[str] = Query(None, description="상품명(인기 상품을 바탕으로 검색)")
+) -> List[dict]:
+    results = []
+    for d in data:
+        if d["category"] == category:
+            if name and d["name"] != name:
+                continue
+            if style and style not in d["style"]:
+                continue
+            if free_shipping is not None and d["free_shipping"] != free_shipping:
+                continue
+            if item and item not in d["best_items"]:
+                continue
+            results.append(d)
+    return results
+
+data = [
+    {
+        "name": "LG 코드제로 오브제컬렉션 A9S",
+        "brand": "LG전자",
+        "category": "핸디스틱청소기",
+        "wire": "무선",
+        "price": 1790000,
+        "colors": ["카밍베이지"]
+    },
+    {
+        "name": "다이슨 V10 앱솔루트",
+        "brand": "다이슨",
+        "category": "핸디스틱청소기",
+        "wire": "무선",
+        "price": 1275000,
+        "colors": ["블루", "코퍼", "블랙"]
+    },
+    {
+        "name": "LG 싸이킹 K8",
+        "brand": "LG전자",
+        "category": "진공청소기",
+        "wire": "유선",
+        "price": 365000,
+        "colors": ["카밍 베이지"]
+    },
+    {
+        "name": "BESPOKE 제트 220W",
+        "brand": "삼성전자",
+        "category": "핸디스틱청소기",
+        "wire": "무선",
+        "price": 1349000,
+        "colors": ["페블 그레이", "산토리니 베이지", "모닝 블루"]
+    },
+    {
+        "name": "파워모션 4100",
+        "brand": "삼성전자",
+        "category": "진공청소기",
+        "wire": "유선",
+        "price": 259000,
+        "colors": ["그리너리"]
+    }
+]
+
+
+@app.get("/cleaner")
+async def search_cleaner(
+    name: Optional[str] = Query(None, description="제품명"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    category: Optional[str] = Query(None, description="카테고리"),
+    wire: Optional[str] = Query(None, description="무선유선방식"),
+    min_price: int = Query(..., description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격")
+) -> List[dict]:
+    results = []
+    for d in data:
+        if name and d["name"] != name:
+            continue
+        if brand and d["brand"] != brand:
+            continue
+        if category and d["category"] != category:
+            continue
+        if wire and d["wire"] != wire:
+            continue
+        if min_price is not None and d["price"] < min_price:
+            continue
+        if max_price is not None and d["price"] > max_price:
+            continue
+        results.append(d)
+    return results
+
+data = [
+    {
+        "name": "카페시바",
+        "category": "퓨전음식",
+        "address": "서울 용산구 한강대로 276-1 1층",
+        "phone": "0507-1352-1339",
+        "menu": ["슈프림 양념 후라이드", "비건 수제함벅 라구 파스타", "비건새우 오일 파스타", "청양 두부 꿔바로우"]
+    },
+    {
+        "name": "두수고방",
+        "category": "음식점",
+        "address": "경기 수원시 영통구 광교호수공원로 80 앨리웨이광교 어라운드 라이프 3층",
+        "phone": "031-548-1912",
+        "menu": ["두수고방 원테이블 다이닝"]
+    },
+    {
+        "name": "뜰안채채식뷔페",
+        "category": "샐러드뷔페",
+        "address": "경기 용인시 기흥구 용구대로2335번길 25",
+        "phone": "031-281-5879",
+        "menu": ["런치 뷔페", "디너 뷔페"]
+    },
+    {
+        "name": "남미플랜트랩",
+        "category": "퓨전음식",
+        "address": "서울 서초구 방배천로4안길 55 2층",
+        "phone": "02-522-1276",
+        "menu": ["치즈야채 피자", "파스타베르데", "가지멜란자네피자"]
+    },
+    {
+        "name": "거북이",
+        "category": "카페/디저트",
+        "address": "서울 서초구 방배천로4안길 48 1층",
+        "phone": "070-4015-5314",
+        "menu": ["아메리카노", "두유 크림라떼", "귀리 크림라떼"]
+    },
+    {
+        "name": "플랜튜드 아이파크몰 용산점",
+        "category": "퓨전음식",
+        "address": "서울 용산구 한강대로23길 55 용산역 아이파크몰 테이스트파크 7층",
+        "phone": "0507-1390-0798",
+        "menu": ["트러플 감태 크림 떡볶이", "구운 알배추 컬리플라워 샐러드", "순두부 인 헬"]
+    }
+]
+
+
+@app.get("/vegan_restaurant")
+async def search_vegan_restaurant(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    category: Optional[str] = Query(None, description="카테고리"),
+    name: Optional[str] = Query(None, description="식당명"),
+    menu: Optional[str] = Query(None, description="메뉴명(대표 메뉴를 바탕으로 검색)")
+) -> List[dict]:
+    results = []
+    for d in data:
+        if ctprvNm and d["address"].startswith(ctprvNm):
+            continue
+        if sgngNm and sgngNm not in d["address"]:
+            continue
+        if category and d["category"] != category:
+            continue
+        if name and d["name"] != name:
+            continue
+        if menu and menu not in d["menu"]:
+            continue
+        results.append(d)
+    return results
+
+data = [
+    {
+        "name": "서울재즈페스티벌 2023",
+        "startDt": "2023-05-26",
+        "endDt": "2023-05-28",
+        "place": "서울특별시 송파구 올림픽로 424 올림픽공원",
+        "price_fulltime": 420000,
+        "price_oneday": 187000,
+        "platform": ["인터파크"],
+        "lineup": ["Mika", "Christopher", "AJR", "폴킴", "새소년"]
+    },
+    {
+        "name": "월드 디제이 페스티벌 2023",
+        "startDt": "2023-06-02",
+        "endDt": "2023-06-04",
+        "place": "경기도 과천시 광명로 181 서울랜드",
+        "price_fulltime": 229000,
+        "price_oneday": 119000,
+        "platform": ["위메프"],
+        "lineup": ["GALANTIS", "THE QREATOR", "NICKY ROMERO", "ZEDD", "VINI VICI"]
+    },
+    {
+        "name": "뷰티풀 민트 라이프 2023",
+        "startDt": "2023-05-13",
+        "endDt": "2023-05-14",
+        "place": "서울특별시 송파구 올림픽로 424 올림픽공원",
+        "price_fulltime": 220000,
+        "price_oneday": 110000,
+        "platform": ["인터파크", "예스24", "위메프"],
+        "lineup": ["10CM", "하현상", "LUCY", "소란", "선우정아"]
+    },
+    {
+        "name": "해브어나이스데이 #9",
+        "startDt": "2023-04-15",
+        "endDt": "2023-04-16",
+        "place": "서울특별시 용산구 양녕로 445 노들섬",
+        "price_fulltime": 198000,
+        "price_oneday": 99000,
+        "platform": ["인터파크", "예스24"],
+        "lineup": ["HYNN(박혜원)", "소란", "치즈", "정승환", "유다빈밴드"]
+    },
+    {
+        "name": "러브썸 페스티벌 2023",
+        "startDt": "2023-04-22",
+        "endDt": "2023-04-23",
+        "place": "서울특별시 송파구 올림픽로 25 잠실 올림픽주경기장",
+        "price_fulltime": 198000,
+        "price_oneday": 99000,
+        "platform": ["예스24", "네이버"],
+        "lineup": ["멜로망스", "적재", "정승환", "이적", "비투비"]
+    },
+    {
+        "name": "피크 페스티벌 2023",
+        "startDt": "2023-05-27",
+        "endDt": "2023-05-28",
+        "place": "서울시 마포구 한강난지로 162 난지한강공원",
+        "price_fulltime": 139000,
+        "price_oneday": 99000,
+        "platform": ["인터파크", "예스24"],
+        "lineup": ["10CM", "선우정아", "NELL", "기현", "소란"]
+    }
+]
+
+
+@app.get("/festival")
+async def search_festival(
+    name: Optional[str] = Query(None, description="페스티벌명"),
+    place: Optional[str] = Query(None, description="장소"),
+    min_price_full: Optional[int] = Query(None, description="최소 전일권 가격"),
+    max_price_full: Optional[int] = Query(None, description="최대 전일권 가격"),
+    min_price_oneday: int = Query(..., description="최소 1일권 가격"),
+    max_price_oneday: Optional[int] = Query(None, description="최대 1일권 가격"),
+    artist: Optional[str] = Query(None, description="아티스트명(라인업을 바탕으로 검색)")
+) -> List[dict]:
+    results = []
+    for d in data:
+        if name and d["name"] != name:
+            continue
+        if place and d["place"] != place:
+            continue
+        if min_price_full and d["price_fulltime"] < min_price_full:
+            continue
+        if max_price_full and d["price_fulltime"] > max_price_full:
+            continue
+        if d["price_oneday"] < min_price_oneday:
+            continue
+        if max_price_oneday and d["price_oneday"] > max_price_oneday:
+            continue
+        if artist and artist not in d["lineup"]:
+            continue
+        results.append(d)
+    return results
+
+data = [
+    {
+        "type": "자연재난",
+        "subclass": "호우",
+        "area": "서울특별시 노원구",
+        "sendingDt": "2023-06-29",
+        "level": "안전안내",
+        "msg": "[노원구] 하천수위 상승으로 중랑천,당현천,우이천,묵동천 출입을 금지합니다. 특히 산사태위험지역 및 지하주택 등 침수취약지역의 주민은 안전에 유의하시기 바랍니다."
+    },
+    {
+        "type": "자연재난",
+        "subclass": "산사태",
+        "area": "전라북도 정읍시",
+        "sendingDt": "2023-06-28",
+        "level": "안전안내",
+        "msg": "[정읍시청] 금일 09시경 산내면 장금리 933-1 사실재터널(산내-순창방면) 산사태로 인해 도로 통제중이니,통행차량은 국도30호선으로 우회하여 주시기 바랍니다."
+    },
+    {
+        "type": "사회재난",
+        "subclass": "교통통제",
+        "area": "경기도 이천시 창전동",
+        "sendingDt": "2023-06-27",
+        "level": "안전안내",
+        "msg": "[이천시청]설봉중(향교로 117) 공사 중 가설구조물 일부 붕괴로 17시~내일 오전 10시까지 설봉푸르지오2차입구~설봉중사거리 도로 통제 예정이오니 우회 바랍니다"
+    },
+    {
+        "type": "자연재난",
+        "subclass": "산사태",
+        "area": "서울특별시",
+        "sendingDt": "2023-06-29",
+        "level": "안전안내",
+        "msg": "[산림청] 오늘 전국에 많은 비가 예보되어 산사태 위험이 높습니다. 산림 주변 야외활동을 자제하시고 산에 있을 경우 산림 밖으로 피하시는 등 안전에 유의바랍니다."
+    },
+    {
+        "type": "기타재난",
+        "subclass": "기타",
+        "area": "경기도 수원시 팔달구",
+        "sendingDt": "2023-06-28",
+        "level": "안전안내",
+        "msg": "[경기남부경찰청] 수원시에서 배회중인 신희준씨(남, 52세)를 찾습니다 -170cm, 55kg, 파란색반팔,반바지(잠옷) vo.la/GynnF /"
+    }
+]
+
+@app.get("/disaster_alert")
+async def search_disaster_alert(
+    type: Optional[str] = Query(None, description="재난 분류"),
+    subclass: Optional[str] = Query(None, description="재난 상세"),
+    ctprvNm: str = Query(..., description="시도명"),
+    sgngNm: Optional[str] = Query(None, description="시군구명"),
+    min_dt: Optional[str] = Query(None, description="최소 발송일"),
+    max_dt: Optional[str] = Query(None, description="최대 발송일")
+) -> List[dict]:
+    results = []
+    for item in data:
+        if type and item["type"] != type:
+            continue
+        if subclass and item["subclass"] != subclass:
+            continue
+        if item["area"] != ctprvNm:
+            continue
+        if sgngNm and item["area"] != sgngNm:
+            continue
+        if min_dt and item["sendingDt"] < min_dt:
+            continue
+        if max_dt and item["sendingDt"] > max_dt:
+            continue
+        results.append(item)
+    return results
+
+
+
+
+
+####
+
 @app.get("/mobile_app")
 def filter_mobile_application(
     min_ranking: Optional[int] = Query(None, ge=1),
