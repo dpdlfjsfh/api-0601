@@ -1436,7 +1436,7 @@ async def search_national_park(
     return results
 
 
-data = [
+whiskey_data = [
     {
         "name": "Jack Daniel's Gentleman Jack",
         "type": "Tennessee Whiskey",
@@ -1497,7 +1497,7 @@ async def search_whiskey(
     max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
 ):
     results = []
-    for item in data:
+    for item in whiskey_data:
         if name is not None and name != item["name"]:
             continue
         if type is not None and type != item["type"]:
@@ -1517,7 +1517,7 @@ async def search_whiskey(
         })
     return results
 
-data = [
+spcl_high_school_data = [
     {
         "name": "국립국악고등학교",
         "establishment": "국립",
@@ -1601,7 +1601,7 @@ def search_specialized_high_school(
     name: Optional[str] = Query(None, description="학교명"),
 ):
     results = []
-    for item in data:
+    for item in spcl_high_school_data:
         if gu and gu not in item["address"]:
             continue
         if establishment and establishment != item["establishment"]:
@@ -1623,7 +1623,7 @@ def search_specialized_high_school(
         })
     return results
 
-data = [
+pet_youtube_data = [
     ["김메주와 고양이들", 622000, 1200, "오늘도 평화로운 메주네☀️", "https://www.youtube.com/c/MejooandCats"],
     ["무지막지한 막무家네 ", 534000, 327, "무지와 막지의 일상을 담은 막무家네 채널입니다 :-)", "https://www.youtube.com/@mujimakji"],
     ["Arirang은 고양이들내가 주인", 639000, 569, "혹시 개인적인 문의사항이 있으시면 aricat2488@gmail.com 이쪽으로 메일 주시면 가끔 아리가 메일을 열어봅니다.", "https://www.youtube.com/@arirang3"],
@@ -1641,7 +1641,7 @@ def search_pet_youtube(
     max_videos: Optional[int] = Query(None, description="최대 영상수", gt=0),
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in pet_youtube_data:
         if name and name.lower() not in item[0].lower():
             continue
         if min_subscribers and item[1] < min_subscribers:
@@ -1661,7 +1661,7 @@ def search_pet_youtube(
         })
     return results
 
-data = [
+spcl_edu_school_data = [
     ["서울맹학교", "국립", ["시각장애"], "서울특별시 종로구 필운대로 97", "https://bl.sen.sc.kr/"],
     ["한국구화학교", "사립", ["청각장애", "지적장애"], "서울특별시 강동구 고덕로 295-59", "https://kuhwa.sen.sc.kr/"],
     ["한빛맹학교", "사립", ["시각장애"], "서울특별시 강북구 삼양로73가길 47", "https://hanbit.sen.sc.kr/"],
@@ -1679,7 +1679,7 @@ def search_special_education_school(
     target: Optional[str] = Query(None, description="대상자(ex: 시각장애, 지적장애 등)"),
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in spcl_edu_school_data:
         if ctprvNm.lower() not in item[3].lower():
             continue
         if sgngNm and sgngNm.lower() not in item[3].lower():
@@ -1699,7 +1699,7 @@ def search_special_education_school(
         })
     return results
 
-data = [
+online_shopping_data = [
     {
         "category": "의류",
         "name": "슬로우앤드",
@@ -1760,7 +1760,7 @@ async def search_online_shopping_mall(
     item: Optional[str] = Query(None, description="상품명(인기 상품을 바탕으로 검색)")
 ) -> List[dict]:
     results = []
-    for d in data:
+    for d in online_shopping_data:
         if d["category"] == category:
             if name and d["name"] != name:
                 continue
@@ -1773,7 +1773,7 @@ async def search_online_shopping_mall(
             results.append(d)
     return results
 
-data = [
+cleaner_data = [
     {
         "name": "LG 코드제로 오브제컬렉션 A9S",
         "brand": "LG전자",
@@ -1827,7 +1827,7 @@ async def search_cleaner(
     max_price: Optional[int] = Query(None, description="최대 가격")
 ) -> List[dict]:
     results = []
-    for d in data:
+    for d in cleaner_data:
         if name and d["name"] != name:
             continue
         if brand and d["brand"] != brand:
@@ -1843,7 +1843,7 @@ async def search_cleaner(
         results.append(d)
     return results
 
-data = [
+vegan_restaurant_data = [
     {
         "name": "카페시바",
         "category": "퓨전음식",
@@ -1898,7 +1898,7 @@ async def search_vegan_restaurant(
     menu: Optional[str] = Query(None, description="메뉴명(대표 메뉴를 바탕으로 검색)")
 ) -> List[dict]:
     results = []
-    for d in data:
+    for d in vegan_restaurant_data:
         if ctprvNm and d["address"].startswith(ctprvNm):
             continue
         if sgngNm and sgngNm not in d["address"]:
@@ -1912,7 +1912,7 @@ async def search_vegan_restaurant(
         results.append(d)
     return results
 
-data = [
+festival_data = [
     {
         "name": "서울재즈페스티벌 2023",
         "startDt": "2023-05-26",
@@ -1987,7 +1987,7 @@ async def search_festival(
     artist: Optional[str] = Query(None, description="아티스트명(라인업을 바탕으로 검색)")
 ) -> List[dict]:
     results = []
-    for d in data:
+    for d in festival_data:
         if name and d["name"] != name:
             continue
         if place and d["place"] != place:
@@ -2005,7 +2005,7 @@ async def search_festival(
         results.append(d)
     return results
 
-data = [
+disaster_alert_data = [
     {
         "type": "자연재난",
         "subclass": "호우",
@@ -2058,7 +2058,7 @@ async def search_disaster_alert(
     max_dt: Optional[str] = Query(None, description="최대 발송일")
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in disaster_alert_data:
         if type and item["type"] != type:
             continue
         if subclass and item["subclass"] != subclass:
@@ -2074,7 +2074,7 @@ async def search_disaster_alert(
         results.append(item)
     return results
 
-data = [
+playlist_data = [
     {
         "title": "미소가 저절로 나오게 만드는 노래들로만 가져왔어요",
         "category": ["해외 팝", "신나는"],
@@ -2122,7 +2122,7 @@ async def search_playlist(
     max_likes: Optional[int] = Query(None, description="최대 좋아요수", ge=0)
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in playlist_data:
         if title and title.lower() not in item["title"].lower():
             continue
         if category and category.lower() not in [c.lower() for c in item["category"]]:
@@ -2138,7 +2138,7 @@ async def search_playlist(
         results.append(item)
     return results
 
-data = [
+subway_data = [
     {
         "name": "써브웨이 클럽",
         "calorie": 299,
@@ -2192,7 +2192,7 @@ def search_subway_menu(
     sauce: Optional[str] = Query(None, description="소스(추천 소스를 바탕으로 검색)")
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in subway_data:
         if name and name.lower() not in item["name"].lower():
             continue
         if item["calorie"] < min_calorie:
@@ -2206,7 +2206,7 @@ def search_subway_menu(
         results.append(item)
     return results
 
-data = [
+earthquake_data = [
     {
         "occurDt": "2023-05-15",
         "occurTm": "06:27:37",
@@ -2279,7 +2279,7 @@ def search_earthquake(
     max_magnitude: Optional[float] = Query(None, ge=0, description="최대 규모")
 ) -> List[dict]:
     results = []
-    for item in data:
+    for item in earthquake_data:
         if ctprvNm and ctprvNm != item.get("location", "").split()[0]:
             continue
         if sgngNm and sgngNm != item.get("location", "").split()[1]:
