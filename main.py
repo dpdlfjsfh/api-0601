@@ -2442,6 +2442,1355 @@ async def search_icn_dutyfree(
                 results.append(brand_info)
     return results
 
+employees = [
+    {
+        "id": "15842",
+        "name": "이광훈",
+        "dept": "개발",
+        "position": "부장",
+        "phone": "010-8899-9988",
+        "enter": "2001"
+    },
+    {
+        "id": "15995",
+        "name": "이영현",
+        "dept": "영업",
+        "position": "과장",
+        "phone": "010-7788-8877",
+        "enter": "2013"
+    },
+    {
+        "id": "16475",
+        "name": "한미연",
+        "dept": "마케팅",
+        "position": "대리",
+        "phone": "010-4455-5566",
+        "enter": "2019"
+    },
+    {
+        "id": "16689",
+        "name": "강힘찬",
+        "dept": "인사",
+        "position": "대리",
+        "phone": "010-5522-5522",
+        "enter": "2019"
+    },
+    {
+        "id": "19978",
+        "name": "김설아",
+        "dept": "개발",
+        "position": "사원",
+        "phone": "010-4477-7744",
+        "enter": "2021"
+    }
+]
+
+@app.get("/employee")
+async def search_employee(
+    id: Optional[str] = Query(None, description="사번"),
+    name: Optional[str] = Query(None, description="이름"),
+    dept: str = Query(..., description="부서"),
+    position: Optional[str] = Query(None, description="직급"),
+    phone: Optional[str] = Query(None, description="전화번호"),
+    min_enter: Optional[str] = Query(None, description="최소 입사년도"),
+    max_enter: Optional[str] = Query(None, description="최대 입사년도"),
+):
+    results = []
+    for employee in employees:
+        if (
+            (id is None or id == employee["id"]) and
+            (name is None or name == employee["name"]) and
+            dept == employee["dept"] and
+            (position is None or position == employee["position"]) and
+            (phone is None or phone == employee["phone"]) and
+            (min_enter is None or min_enter <= employee["enter"]) and
+            (max_enter is None or max_enter >= employee["enter"])
+        ):
+            results.append(employee)
+    return results
+
+water_parks = [
+    {
+        "name": "위례 주제공원 물놀이장",
+        "location": "경기 성남시 수정구 위례순환로4길 2-1",
+        "time": "10:00-17:00",
+        "break": "월요일",
+        "review": "화장실도 깨끗하고 주차가 쉬워요."
+    },
+    {
+        "name": "금곡동물놀이장",
+        "location": "경기 성남시 분당구 구미동 99",
+        "time": "10:00-18:00",
+        "break": "",
+        "review": "휴무일 없는 최고의 물놀이장"
+    },
+    {
+        "name": "정자동 물놀이장",
+        "location": "경기 성남시 분당구 정자동 100-3",
+        "time": "10:00-18:00",
+        "break": "수요일",
+        "review": "넓고 수질이 좋아요."
+    },
+    {
+        "name": "희망대공원 물놀이장",
+        "location": "경기 성남시 수정구 신흥동",
+        "time": "10:00-17:00",
+        "break": "일요일",
+        "review": "테니스장 근처에 있는 물놀이장."
+    },
+    {
+        "name": "야탑동 물놀이장",
+        "location": "경기 성남시 분당구 야탑동 555",
+        "time": "09:00-17:00",
+        "break": "화요일",
+        "review": "반려동물 입장 금지라 아쉬워요."
+    }
+]
+
+@app.get("/sn_waterpark")
+async def search_sn_waterpark(
+    name: str = Query(..., description="이름"),
+    location: Optional[str] = Query(None, description="위치"),
+    time: Optional[str] = Query(None, description="영업시간"),
+    break_time: Optional[str] = Query(None, description="휴무일"),
+    keyword: Optional[str] = Query(None, description="리뷰를 바탕으로 검색하는 키워드입니다.")
+):
+    results = []
+    for park in water_parks:
+        if (
+            name == park["name"] and
+            (location is None or location == park["location"]) and
+            (time is None or time == park["time"]) and
+            (break_time is None or break_time == park["break"]) and
+            (keyword is None or keyword in park["review"])
+        ):
+            results.append(park)
+    return results
+
+licenses = [
+    {
+        "name": "캘리클럽 청담점",
+        "location": "서울 강남구 선릉로 832 소나무빌딩 지하2층 지하3층",
+        "time": "10:00-19:00",
+        "phone": "02-1458-2774",
+        "price": 25000,
+        "parking": False
+    },
+    {
+        "name": "코코몽키즈랜드 송파점",
+        "location": "서울 송파구 충민로 66 가든파이브 NC백화점 송파점 영관 6층",
+        "time": "10:30-20:30",
+        "phone": "02-1312-5718",
+        "price": 18000,
+        "parking": True
+    },
+    {
+        "name": "하이펀",
+        "location": "서울 마포구 신촌로 170 이대역푸르지오시티 213호",
+        "time": "08:00-22:00",
+        "phone": "02-1424-1182",
+        "price": 39000,
+        "parking": False
+    },
+    {
+        "name": "퐁퐁플라워 건대센터",
+        "location": "서울 광진구 아차산로 272 건대스타시티몰 B1층",
+        "time": "11:00-21:00",
+        "phone": "02-452-4488",
+        "price": 17000,
+        "parking": False
+    },
+    {
+        "name": "우리끼리 키즈카페 블럭마을 용산원효점",
+        "location": "서울 용산구 원효로 51 삼성테마트상가 2층 204호, 205호",
+        "time": "10:00-20:00",
+        "phone": "1899-3635",
+        "price": 21000,
+        "parking": True
+    }
+]
+
+@app.get("/license")
+async def search_license(
+    name: str = Query(..., description="이름"),
+    location: Optional[str] = Query(None, description="위치"),
+    time: Optional[str] = Query(None, description="영업시간"),
+    phone: Optional[str] = Query(None, description="전화번호"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    parking: Optional[bool] = Query(None, description="주차장 유무")
+):
+    results = []
+    for license in licenses:
+        if (
+            license["name"].lower() == name.lower() and
+            (location is None or license["location"].lower() == location.lower()) and
+            (time is None or license["time"].lower() == time.lower()) and
+            (phone is None or license["phone"].lower() == phone.lower()) and
+            (min_price is None or license["price"] >= min_price) and
+            (max_price is None or license["price"] <= max_price) and
+            (parking is None or license["parking"] == parking)
+        ):
+            results.append(license)
+    return results
+
+licenses = [
+    {
+        "institute": "ETS",
+        "category": "외국어",
+        "name": "TOEIC",
+        "require": "없음",
+        "receipt": "2023.02.19-2023.03.01",
+        "exam": "2023.05.25"
+    },
+    {
+        "institute": "서울대학교 언어교육원",
+        "category": "외국어",
+        "name": "TEPS",
+        "require": "없음",
+        "receipt": "2023.03.15-2023.03.22",
+        "exam": "2023.04.10"
+    },
+    {
+        "institute": "한국산업인력공단",
+        "category": "정보기술",
+        "name": "정보처리기능사",
+        "require": "없음",
+        "receipt": "2023.05.25-2023.05.30",
+        "exam": "2023.07.25"
+    },
+    {
+        "institute": "한국산업인력공단",
+        "category": "정보기술",
+        "name": "정보처리기사",
+        "require": "정보처리기능사 합격자, 관련전공 대학교 4학년 이상",
+        "receipt": "2023.06.05-2023.06.12",
+        "exam": "2023.08.13"
+    },
+    {
+        "institute": "국토교통부",
+        "category": "부동산",
+        "name": "공인중개사",
+        "require": "없음",
+        "receipt": "2023.06.25-2023.07.02",
+        "exam": "2023.07.31"
+    }
+]
+
+@app.get("/license")
+async def search_license(
+    institute: Optional[str] = Query(None, description="발급기관"),
+    category: str = Query(..., description="카테고리"),
+    name: Optional[str] = Query(None, description="이름"),
+    min_receipt: Optional[str] = Query(None, description="최소 접수일"),
+    max_receipt: Optional[str] = Query(None, description="최대 접수일"),
+    min_exam: Optional[str] = Query(None, description="최소 시험일"),
+    max_exam: Optional[str] = Query(None, description="최대 시험일"),
+    keyword: Optional[str] = Query(None, description="자격요건을 바탕으로 검색하는 키워드입니다.")
+):
+    results = []
+    for license in licenses:
+        if (
+            (institute is None or license["institute"].lower() == institute.lower()) and
+            license["category"].lower() == category.lower() and
+            (name is None or license["name"].lower() == name.lower()) and
+            (min_receipt is None or license["receipt"] >= min_receipt) and
+            (max_receipt is None or license["receipt"] <= max_receipt) and
+            (min_exam is None or license["exam"] >= min_exam) and
+            (max_exam is None or license["exam"] <= max_exam) and
+            (keyword is None or keyword.lower() in license["require"].lower())
+        ):
+            results.append(license)
+    return results
+
+language_swap_customers = [
+    {
+        "id": "kominji",
+        "nickname": "민지12",
+        "language": "한국어",
+        "swapLang": ["영어", "프랑스어", "중국어"],
+        "introduce": "서울에 거주하고 있는 한국인입니다. 채팅은 언제든 환영입니다.",
+        "chatPerson": ["방탄부인", "씽씬강"]
+    },
+    {
+        "id": "frpba",
+        "nickname": "fabian_00",
+        "language": "프랑스어",
+        "swapLang": ["한국어", "중국어"],
+        "introduce": "한국어 못해요 알려줄 사람 필요해요. 남자인 친구 구해요.",
+        "chatPerson": ["씽씬강"]
+    },
+    {
+        "id": "chXXing",
+        "nickname": "씽씬강",
+        "language": "중국어",
+        "swapLang": ["한국어"],
+        "introduce": "베이징에서 왔어요. 공부도 하고 친구도 해요.",
+        "chatPerson": ["민지12", "fabian_00"]
+    },
+    {
+        "id": "engEJ",
+        "nickname": "JennyLuv",
+        "language": "일본어",
+        "swapLang": ["영어", "중국어"],
+        "introduce": "됴쿄 거주중. 채팅으로만 대화해요.",
+        "chatPerson": ["방탄부인"]
+    },
+    {
+        "id": "enCher",
+        "nickname": "방탄부인",
+        "language": "영어",
+        "swapLang": ["한국어", "일본어"],
+        "introduce": "K-POP 팬입니다. 한국어 배우고 싶어요.",
+        "chatPerson": ["민지12", "JennyLuv"]
+    }
+]
+
+@app.get("/language_swap")
+async def search_language_swap_customer(
+    id: Optional[str] = Query(None, description="아이디"),
+    nickname: str = Query(..., description="닉네임"),
+    language: Optional[str] = Query(None, description="가능 언어"),
+    swapLang: Optional[str] = Query(None, description="교환 희망 언어"),
+    chatPerson: Optional[int] = Query(None, description="채팅중인 회원"),
+    keyword: Optional[str] = Query(None, description="자기소개의 설명을 검색하는 키워드")
+):
+    results = []
+    for customer in language_swap_customers:
+        if (
+            (id is None or customer["id"].lower() == id.lower()) and
+            customer["nickname"].lower() == nickname.lower() and
+            (language is None or customer["language"].lower() == language.lower()) and
+            (swapLang is None or swapLang.lower() in [lang.lower() for lang in customer["swapLang"]]) and
+            (chatPerson is None or chatPerson in [person.lower() for person in customer["chatPerson"]]) and
+            (keyword is None or keyword.lower() in customer["introduce"].lower())
+        ):
+            results.append(customer)
+    return results
+
+supp_battery_products = [
+    {
+        "manufacture": "리큐엠",
+        "name": "QP2000A",
+        "mAh": 20000,
+        "price": 36900,
+        "type": "Type-C",
+        "weight": 350
+    },
+    {
+        "manufacture": "아이워크",
+        "name": "DBL4500",
+        "mAh": 4500,
+        "price": 27900,
+        "type": "Type-C",
+        "weight": 92
+    },
+    {
+        "manufacture": "로렌텍",
+        "name": "맥세이프 갤럭시 아이폰 고속 무선충전",
+        "mAh": 5000,
+        "price": 25900,
+        "type": "Type-C",
+        "weight": 116
+    },
+    {
+        "manufacture": "프라임큐",
+        "name": "PR-ST5000-C",
+        "mAh": 5000,
+        "price": 6900,
+        "type": "8 Pin",
+        "weight": 110
+    },
+    {
+        "manufacture": "로모스",
+        "name": "PSW20-392-1183H",
+        "mAh": 25000,
+        "price": 49900,
+        "type": "8 Pin",
+        "weight": 475
+    }
+]
+
+@app.get("/supp_battery")
+async def search_supp_battery(
+    manufacture: str = Query(..., description="제조사"),
+    name: Optional[str] = Query(None, description="상품명"),
+    mAh: Optional[int] = Query(None, description="용량"),
+    min_price: Optional[int] = Query(None, ge=0, description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    type: Optional[str] = Query(None, description="타입 ex. C-Type, 8 Pin"),
+    weight: Optional[float] = Query(None, ge=0, description="무게(g)")
+):
+    results = []
+    for product in supp_battery_products:
+        if (
+            product["manufacture"].lower() == manufacture.lower() and
+            (name is None or name.lower() in product["name"].lower()) and
+            (mAh is None or product["mAh"] == mAh) and
+            (min_price is None or product["price"] >= min_price) and
+            (max_price is None or product["price"] <= max_price) and
+            (type is None or type.lower() == product["type"].lower()) and
+            (weight is None or product["weight"] == weight)
+        ):
+            results.append(product)
+    return results
+
+medical_records = [
+    {
+        "protector": "김민지",
+        "pet_name": "깨솜",
+        "type": "강아지",
+        "treatment": "중성화",
+        "date": "2023.03.06",
+        "report": "중성화 수술중 스케일링 동시진행"
+    },
+    {
+        "protector": "이민채",
+        "pet_name": "만두",
+        "type": "고양이",
+        "treatment": "구토",
+        "date": "2023.05.25",
+        "report": "헤어볼로 인한 잦은 구토, 6월 26일 재방문"
+    },
+    {
+        "protector": "안혜린",
+        "pet_name": "솜",
+        "type": "고양이",
+        "treatment": "구내염",
+        "date": "2023.02.16",
+        "report": "전발치, 구내염 가루약 처방"
+    },
+    {
+        "protector": "윤동익",
+        "pet_name": "마일로",
+        "type": "강아지",
+        "treatment": "곰팡이 피부병",
+        "date": "2023.06.01",
+        "report": "소독 스프레이, 스테로이드 연고 처방"
+    },
+    {
+        "protector": "강민혁",
+        "pet_name": "망고",
+        "type": "고양이",
+        "treatment": "후지마비",
+        "date": "2023.06.22",
+        "report": "선천적 마비로 보호자의 관리 필요, 진통제 처방"
+    }
+]
+
+@app.get("/medical_records")
+async def search_medical_records(
+    protector: Optional[str] = Query(None, description="보호자"),
+    pet_name: str = Query(..., description="동물 이름"),
+    type: Optional[str] = Query(None, description="종류"),
+    treatment: Optional[str] = Query(None, description="진료 항목 ex.중성화, 구내염 등"),
+    date: Optional[str] = Query(None, description="방문 날짜"),
+    keyword: Optional[str] = Query(None, description="진료항목과 특이사항의 정보를 검색하는 키워드")
+):
+    results = []
+    for record in medical_records:
+        if (
+            (protector is None or record["protector"].lower() == protector.lower()) and
+            record["pet_name"].lower() == pet_name.lower() and
+            (type is None or record["type"].lower() == type.lower()) and
+            (treatment is None or record["treatment"].lower() == treatment.lower()) and
+            (date is None or record["date"] == date) and
+            (keyword is None or keyword.lower() in record["treatment"].lower() or keyword.lower() in record["report"].lower())
+        ):
+            results.append(record)
+    return results
+
+water_parks = [
+    {
+        "name": "페리아도워터파크",
+        "type": "워터파크",
+        "sgg": "포천시",
+        "emd": "소홀읍",
+        "rating": 4.8
+    },
+    {
+        "name": "백운계곡",
+        "type": "계곡",
+        "sgg": "포천시",
+        "emd": "이동면",
+        "rating": 4.6
+    },
+    {
+        "name": "북한산천연옥워터파크",
+        "type": "워터파크",
+        "sgg": "고양시",
+        "emd": None,
+        "rating": 4.5
+    },
+    {
+        "name": "인디어라운드",
+        "type": "캠핑장",
+        "sgg": "이천시",
+        "emd": None,
+        "rating": 4.6
+    },
+    {
+        "name": "그랜드유원지",
+        "type": "유원지",
+        "sgg": "양주시",
+        "emd": None,
+        "rating": 3.9
+    },
+    {
+        "name": "묘적사계곡",
+        "type": "계곡",
+        "sgg": "남양주시",
+        "emd": None,
+        "rating": 4.2
+    }
+]
+
+@app.get("/water_parks")
+async def filter_water_parks(
+    name: Optional[str] = Query(None, description="시설 이름"),
+    type: str = Query(..., description="시설 종류 ex) 워터파크, 계곡, 유원지"),
+    sgg: Optional[str] = Query(None, description="지역구분 시군구"),
+    emd: Optional[str] = Query(None, description="지역구분 읍면동"),
+    min_rating: Optional[float] = Query(None, description="최소 평점", gt=0, le=5)
+):
+    results = []
+    for park in water_parks:
+        if (
+            (name is None or park["name"].lower() == name.lower()) and
+            park["type"].lower() == type.lower() and
+            (sgg is None or park["sgg"].lower() == sgg.lower()) and
+            (emd is None or park["emd"].lower() == emd.lower() if park["emd"] else False) and
+            (min_rating is None or park["rating"] >= min_rating)
+        ):
+            results.append(park)
+    return results
+
+saunas = [
+    {
+        "name": "수리산랜드",
+        "gd": "경기도",
+        "sgg": "안양시",
+        "price": 11000,
+        "opening_time": "08:00시",
+        "closed_time": "21:00시"
+    },
+    {
+        "name": "숲속한방랜드",
+        "gd": "서울특별시",
+        "sgg": "서대문구",
+        "price": 15000,
+        "opening_time": "06:30시",
+        "closed_time": "22:00시"
+    },
+    {
+        "name": "사우나파크",
+        "gd": "경기도",
+        "sgg": "안양시",
+        "price": 14000,
+        "opening_time": "00:00시",
+        "closed_time": "24:00시"
+    },
+    {
+        "name": "천지연",
+        "gd": "대전광역시",
+        "sgg": "서구",
+        "price": 8000,
+        "opening_time": "05:30시",
+        "closed_time": "23:00시"
+    },
+    {
+        "name": "호수사우나찜질방",
+        "gd": "충청북도",
+        "sgg": "충주시",
+        "price": 9000,
+        "opening_time": "00:00시",
+        "closed_time": "24:00시"
+    }
+]
+
+@app.get("/saunas")
+async def search_saunas(
+    name: Optional[str] = Query(None, description="업소명"),
+    gd: Optional[str] = Query(None, description="지역구분 광역시도"),
+    sgg: Optional[str] = Query(None, description="지역구분 시군구"),
+    max_price: int = Query(..., description="최대 가격", gt=0),
+    opening_time: Optional[str] = Query(None, description="오픈 시간"),
+    closed_time: Optional[str] = Query(None, description="마감 시간")
+):
+    results = []
+    for sauna in saunas:
+        if (
+            (name is None or sauna["name"].lower() == name.lower()) and
+            (gd is None or sauna["gd"].lower() == gd.lower()) and
+            (sgg is None or sauna["sgg"].lower() == sgg.lower()) and
+            sauna["price"] <= max_price and
+            (opening_time is None or sauna["opening_time"] == opening_time) and
+            (closed_time is None or sauna["closed_time"] == closed_time)
+        ):
+            results.append(sauna)
+    return results
+
+festivals = [
+    {
+        "name": "보성 다향대축제",
+        "region": "보성",
+        "location": "한국차문화공원",
+        "stdate": "04월 29일",
+        "ltdate": "05월 07일",
+        "number": 46
+    },
+    {
+        "name": "함평 나비대축제",
+        "region": "함평",
+        "location": "함평엑스포공원",
+        "stdate": "04월 28일",
+        "ltdate": "05월 07일",
+        "number": 25
+    },
+    {
+        "name": "화성 뱃놀이 축제",
+        "region": "화성",
+        "location": "전곡항",
+        "stdate": "06월 09일",
+        "ltdate": "06월 11일",
+        "number": 13
+    },
+    {
+        "name": "실향민 문화 축제",
+        "region": "속초",
+        "location": "속초 엑스포 잔디광장",
+        "stdate": "06월 09일",
+        "ltdate": "06월 11일",
+        "number": 8
+    },
+    {
+        "name": "김제 지평선 축제",
+        "region": "김제",
+        "location": "벽골제",
+        "stdate": "10월 05일",
+        "ltdate": "10월 09일",
+        "number": 25
+    }
+]
+
+@app.get("/local_festival")
+async def filter_local_festival(
+    name: Optional[str] = Query(None, description="축제 이름"),
+    region: Optional[str] = Query(None, description="지역 ex) 보성, 김제, 화성"),
+    location: Optional[str] = Query(None, description="축제 장소"),
+    stdate: Optional[str] = Query(None, description="축제 시작 날짜"),
+    ltdate: Optional[str] = Query(None, description="축제 마지막 날짜")
+):
+    results = []
+    for festival in festivals:
+        if (
+            (name is None or festival["name"].lower() == name.lower()) and
+            (region is None or festival["region"].lower() == region.lower()) and
+            (location is None or festival["location"].lower() == location.lower()) and
+            (stdate is None or festival["stdate"] == stdate) and
+            (ltdate is None or festival["ltdate"] == ltdate)
+        ):
+            results.append(festival)
+    return results
+
+fishing_places = [
+    {
+        "name": "화도낚시터",
+        "price": 25000,
+        "region": "경기 남양주시",
+        "fish_type": ["붕어", "향어", "떡붕어", "송어", "잉어"],
+        "closed_time": 24,
+        "review_num": 111
+    },
+    {
+        "name": "약수손맛터",
+        "price": 10000,
+        "region": "경기 고양시",
+        "fish_type": ["붕어", "떡붕어"],
+        "closed_time": 22,
+        "review_num": 27
+    },
+    {
+        "name": "샘터낚시터",
+        "price": 30000,
+        "region": "경기 광명시",
+        "fish_type": ["붕어", "향어", "잉어"],
+        "closed_time": 24,
+        "review_num": 12
+    },
+    {
+        "name": "마정낚시터",
+        "price": 25000,
+        "region": "충남 천안시",
+        "fish_type": ["붕어", "향어", "잉어", "메기"],
+        "closed_time": 24,
+        "review_num": 96
+    },
+    {
+        "name": "강촌낚시터",
+        "price": 30000,
+        "region": "강원 춘천시",
+        "fish_type": ["붕어", "향어", "토종 붕어"],
+        "closed_time": 24,
+        "review_num": 25
+    }
+]
+
+@app.get("/fishingplace")
+async def search_fishing_place(
+    name: Optional[str] = Query(None, description="낚시터 이름"),
+    max_price: Optional[int] = Query(None, description="최대 가격", ge=0),
+    region: Optional[str] = Query(None, description="지역"),
+    fish_type: Optional[str] = Query(..., description="물고기 종류"),
+    closed_time: Optional[int] = Query(None, description="마감 시간")
+):
+    results = []
+    for place in fishing_places:
+        if (
+            (name is None or place["name"].lower() == name.lower()) and
+            (max_price is None or place["price"] <= max_price) and
+            (region is None or place["region"].lower() == region.lower()) and
+            (fish_type is None or fish_type.lower() in [ftype.lower() for ftype in place["fish_type"]]) and
+            (closed_time is None or place["closed_time"] == closed_time)
+        ):
+            results.append(place)
+    return results
+
+restaurants = [
+    {
+        "name": "바이킹스워프",
+        "region": "서울",
+        "type": "해산물",
+        "price": 180000,
+        "review_num": 2784
+    },
+    {
+        "name": "더더간장게장무한리필",
+        "region": "경기",
+        "type": "해산물",
+        "price": 22000,
+        "review_num": 2328
+    },
+    {
+        "name": "무한돈",
+        "region": "부산",
+        "type": "고기",
+        "price": 11500,
+        "review_num": 121
+    },
+    {
+        "name": "통큰소무한리필",
+        "region": "경기",
+        "type": "고기",
+        "price": 29900,
+        "review_num": 752
+    },
+    {
+        "name": "피기피기무한리필",
+        "region": "서울",
+        "type": "고기",
+        "price": 14500,
+        "review_num": 196
+    }
+]
+
+@app.get("/freerefillrestaurant")
+async def filter_free_refill_restaurant(
+    name: Optional[str] = Query(None, description="식당 이름"),
+    region: Optional[str] = Query(..., description="지역"),
+    type: Optional[str] = Query(None, description="식품 종류"),
+    max_price: Optional[int] = Query(None, description="최대 가격", ge=0),
+    min_price: Optional[int] = Query(None, description="최소 가격", ge=0)
+):
+    results = []
+    for restaurant in restaurants:
+        if (
+            (name is None or restaurant["name"].lower() == name.lower()) and
+            (region is None or restaurant["region"].lower() == region.lower()) and
+            (type is None or restaurant["type"].lower() == type.lower()) and
+            (max_price is None or restaurant["price"] <= max_price) and
+            (min_price is None or restaurant["price"] >= min_price)
+        ):
+            results.append(restaurant)
+    return results
+
+stationeries = [
+    {
+        "name": "모나미스토어",
+        "type": "필기구",
+        "address": "서울 성동구 성수동 2가 315-71",
+        "opening_time": "10:00",
+        "closed_time": "21:00",
+        "parking_available": "Y"
+    },
+    {
+        "name": "작은 연필가게 흑심",
+        "type": "필기구",
+        "address": "서울 마포구 연희로 47 3층",
+        "opening_time": "13:00",
+        "closed_time": "20:00",
+        "parking_available": "N"
+    },
+    {
+        "name": "포셋",
+        "type": "엽서",
+        "address": "서울 서대문구 연희동 92-18",
+        "opening_time": "12:00",
+        "closed_time": "20:00",
+        "parking_available": "Y"
+    },
+    {
+        "name": "올라이트",
+        "type": "엽서",
+        "address": "서울 종로구 자하문로5가길 41",
+        "opening_time": "13:00",
+        "closed_time": "17:00",
+        "parking_available": "N"
+    },
+    {
+        "name": "밀리미터밀리그람",
+        "type": "필기구",
+        "address": "서울 용산구 한남동 683-142",
+        "opening_time": "11:30",
+        "closed_time": "20:00",
+        "parking_available": "Y"
+    }
+]
+
+@app.get("/stationery")
+async def search_stationery(
+    name: Optional[str] = Query(None, description="편집샵 이름"),
+    type: Optional[str] = Query(..., description="문구 타입"),
+    gu: Optional[str] = Query(None, description="지역구분 구"),
+    dong: Optional[str] = Query(None, description="지역구분 동"),
+    opening_time: Optional[str] = Query(None, description="오픈 시간"),
+    closed_time: Optional[str] = Query(None, description="마감 시간"),
+    parking_available: Optional[str] = Query(None, description="주차가능여부")
+):
+    results = []
+    for stationery in stationeries:
+        if (
+            (name is None or stationery["name"].lower() == name.lower()) and
+            (type is None or stationery["type"].lower() == type.lower()) and
+            (gu is None or stationery["address"].lower().find(gu.lower()) != -1) and
+            (dong is None or stationery["address"].lower().find(dong.lower()) != -1) and
+            (opening_time is None or stationery["opening_time"] == opening_time) and
+            (closed_time is None or stationery["closed_time"] == closed_time) and
+            (parking_available is None or stationery["parking_available"].lower() == parking_available.lower())
+        ):
+            results.append(stationery)
+    return results
+
+wines = [
+    {
+        "name": "닥터 루젠 리슬링",
+        "type": "화이트",
+        "price": 42000,
+        "origin": "독일",
+        "year": 2014
+    },
+    {
+        "name": "빌라 엠 로쏘",
+        "type": "레드",
+        "price": 40000,
+        "origin": "이탈리아",
+        "year": 2018
+    },
+    {
+        "name": "에스쿠도 로호",
+        "type": "레드",
+        "price": 47000,
+        "origin": "칠레",
+        "year": 2014
+    },
+    {
+        "name": "샤또 몽페라",
+        "type": "화이트",
+        "price": 50000,
+        "origin": "프랑스",
+        "year": 2019
+    },
+    {
+        "name": "우마니 론끼 요리오",
+        "type": "레드",
+        "price": 47000,
+        "origin": "이탈리아",
+        "year": 2019
+    }
+]
+
+@app.get("/wine")
+async def filter_wine(
+    name: Optional[str] = Query(None, description="와인 이름"),
+    type: Optional[str] = Query(None, description="와인 종류"),
+    max_price: int = Query(..., gt=0, description="최대 가격"),
+    origin: Optional[str] = Query(None, description="원산지"),
+    year: Optional[int] = Query(None, description="생산 년도")
+):
+    results = []
+    for wine in wines:
+        if (
+            (name is None or wine["name"].lower() == name.lower()) and
+            (type is None or wine["type"].lower() == type.lower()) and
+            (wine["price"] <= max_price) and
+            (origin is None or wine["origin"].lower() == origin.lower()) and
+            (year is None or wine["year"] == year)
+        ):
+            results.append(wine)
+    return results
+
+hanok_h = [
+    {
+        "상호명": "잊음",
+        "주소": "경상남도 통영시 충렬4길 33-5",
+        "가격": "190000",
+        "설명": "본채, 앞마당, 뒷마당을 독채로 사용할 수 있다.",
+        "예약가능여부": True,
+        "요리가능여부": True,
+        "연락처": "010-0000-0001"
+    },
+    {
+        "상호명": "북설악황토마을",
+        "주소": "강원도 인제군 북면 황태길 333",
+        "가격": "210000",
+        "설명": "전통 양식인 너와를 얹은 산돌너와집을 비롯해 방문객의 건강을 생각한 황토너와집, 황토집 등이 있다.",
+        "예약가능여부": False,
+        "요리가능여부": True,
+        "연락처": "010-0000-0002"
+    },
+    {
+        "상호명": "다락",
+        "주소": "전라북도 전주시 완산구 경기전길 57-6",
+        "가격": "200000",
+        "설명": "귀여운 다락방을 갖춘 전주 한옥마을 내 한옥 숙소. 객실에는 투숙객만을 위한 작은 카페 공간이 있다.",
+        "예약가능여부": True,
+        "요리가능여부": False,
+        "연락처": "010-0000-0003"
+    },
+    {
+        "상호명": "군위남천고택",
+        "주소": "경상북도 군위군 부계면 한밤5길 19",
+        "가격": "160000",
+        "설명": "민속문화재로 선정된 남천고택은 1836년경에 지어진 마을에서 가장 큰 집이다. 미식 체험도 할 수 있다.",
+        "예약가능여부": True,
+        "요리가능여부": False,
+        "연락처": "010-0000-0004"
+    },
+    {
+        "상호명": "정재종택",
+        "주소": "경상북도 안동시 임동면 경동로 2661-8",
+        "가격": "180000",
+        "설명": "퇴계 이황의 학문을 계승한 정재 류치명 선생의 고택이다. 오래된 만큼 조선시대 주거문화를 어느 곳보다 잘 간직하고 있다.",
+        "예약가능여부": True,
+        "요리가능여부": True,
+        "연락처": "010-0000-0005"
+    }
+]
+
+@app.get("/hanok_h")
+async def search_hanok_h(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역: str = Query(..., description="검색하고자 하는 지역 이름(서울시, 금천구, 창원시 등)"),
+    최소가격: Optional[int] = Query(None, gt=0, description="숙소의 최소 가격(1박, 원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="숙소의 최대 가격(1박, 원화 기준)"),
+    예약가능여부: Optional[bool] = Query(None, description="현재 예약 가능 여부(true 또는 false)"),
+    요리가능여부: Optional[bool] = Query(None, description="숙소 내 요리 가능 여부(true 또는 false)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+):
+    results = []
+    for h in hanok_h:
+        if (
+            (상호명 is None or h["상호명"].lower() == 상호명.lower()) and
+            (h["주소"].find(지역) != -1) and
+            (최소가격 is None or int(h["가격"]) >= 최소가격) and
+            (최대가격 is None or int(h["가격"]) <= 최대가격) and
+            (예약가능여부 is None or h["예약가능여부"] == 예약가능여부) and
+            (요리가능여부 is None or h["요리가능여부"] == 요리가능여부) and
+            (설명 is None or h["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(h)
+    return results
+
+p_naengmyeon = [
+    {
+        "상호명": "남포면옥",
+        "주소": "서울시 중구 을지로3길 24",
+        "가격": "15000",
+        "주차가능여부": False,
+        "설명": "평양식 냉면, 어복쟁반, 전 요리를 전문으로 한다.",
+        "연락처": "010-0000-0001"
+    },
+    {
+        "상호명": "우래옥",
+        "주소": "서울시 중구 창경궁로 62-29",
+        "가격": "21000",
+        "주차가능여부": True,
+        "설명": "대표 메뉴는 전통 평양냉면과 불고기. 1926년에 개업했다",
+        "연락처": "010-0000-0002"
+    },
+    {
+        "상호명": "정인면옥",
+        "주소": "서울시 영등포구 국회대로76길 10 기독교침례회총회빌딩 1층",
+        "가격": "20000",
+        "주차가능여부": True,
+        "설명": "아롱사태 수육, 암퇘지 편육과 접시 만두가 대표메뉴.",
+        "연락처": "010-0000-0003"
+    },
+    {
+        "상호명": "진미평양냉면",
+        "주소": "서울시 강남구 학동로 305-3",
+        "가격": "22000",
+        "주차가능여부": True,
+        "설명": "편육, 제육, 불고기 같은 냉면집 단골 메뉴를 비롯해 접시 만두와 어복쟁반, 온면도 맛볼 수 있다.",
+        "연락처": "010-0000-0004"
+    },
+    {
+        "상호명": "필동면옥",
+        "주소": "서울시 중구 서애로 26",
+        "가격": "19000",
+        "주차가능여부": False,
+        "설명": "두툼하면서도 부드럽고 촉촉한 돼지 수육은 이 집의 또 다른 명물이다.",
+        "연락처": "010-0000-0005"
+    }
+]
+
+@app.get("/p_naengmyeon")
+async def search_p_naengmyeon(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역: str = Query(..., description="검색하고자 하는 지역 이름(서울시, 금천구, 창원시 등)"),
+    최소가격: Optional[int] = Query(None, gt=0, description="검색하고자 하는 최소 가격(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="검색하고자 하는 최대 가격(원화 기준)"),
+    주차가능여부: Optional[bool] = Query(None, description="주차 가능 여부(true 또는 false)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+):
+    results = []
+    for p in p_naengmyeon:
+        if (
+            (상호명 is None or p["상호명"].lower() == 상호명.lower()) and
+            (p["주소"].find(지역) != -1) and
+            (최소가격 is None or int(p["가격"]) >= 최소가격) and
+            (최대가격 is None or int(p["가격"]) <= 최대가격) and
+            (주차가능여부 is None or p["주차가능여부"] == 주차가능여부) and
+            (설명 is None or p["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(p)
+    return results
+
+stollen = [
+    {
+        "상호명": "메종엠오",
+        "주소": "서울시 서초구 방배로26길 22 1층 코너",
+        "가격": "50000",
+        "주차가능여부": False,
+        "설명": "마들렌 반죽에 다양한 건과일, 마지팬을 넣어 구운 후 버터에 적시고 올스파이스 슈거로 코팅해 묵직하면서도 건과일의 향긋함, 스파이스의 향기, 달콤함이 복합적으로 느껴지는 맛이 매력적이다.",
+        "연락처": "010-0000-0001"
+    },
+    {
+        "상호명": "우스블랑",
+        "주소": "서울시 용산구 효창원로70길 4",
+        "가격": "48000",
+        "주차가능여부": True,
+        "설명": "1년 동안 코냑에 숙성시킨 견과류와 건조 과일, 분할을 한 반죽에 꼬냑을 넣은 마지판이 들어가는 우스블랑의 슈톨렌은 코냑 향이 강하다.",
+        "연락처": "010-0000-0002"
+    },
+    {
+        "상호명": "쉐즈롤",
+        "주소": "경기도 양평군 서종면 낙촌길 7-7",
+        "가격": "45000",
+        "주차가능여부": True,
+        "설명": "겨울을 닮은 아몬드의 깊은 향을 좋아하는 사람은 ‘아몬드 마지팬 슈톨렌’을, 입안에 은은하게 남는 고소한 맛과 피스타치오 향을 좋아하는 사람은 ‘피스타치오 마지팬 슈톨렌’을 고르면 된다.",
+        "연락처": "010-0000-0003"
+    },
+    {
+        "상호명": "앨리스",
+        "주소": "서울시 서초구 양재천로 107-4 1층",
+        "가격": "39000",
+        "주차가능여부": True,
+        "설명": "건포도와 건크랜베리를 스파이스럼과 바닐라 빈을 함께 넣고 절인 건과일 절임과 아몬드, 헤이즐넛, 호두를 넣고 만든 반죽 가운데 아몬드 가루와 계란 흰자로 반죽한 마지팬이 들어가 부드러우면서도 다채로운 향과 맛을 느낄 수 있다.",
+        "연락처": "010-0000-0004"
+    },
+    {
+        "상호명": "브라더후드",
+        "주소": "제주도 서귀포시 월드컵로 8",
+        "가격": "51000",
+        "주차가능여부": False,
+        "설명": "6가지 건과일을 1년 동안 다크 럼에 절여 시간이 지날수록 특유의 다크 럼 향이 베어 향신료과 조화를 이루며 화려한 맛을 자랑한다.",
+        "연락처": "010-0000-0005"
+    }
+]
+
+@app.get("/stollen")
+async def search_stollen(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역: str = Query(..., description="검색하고자 하는 지역 이름(서울시, 금천구, 창원시 등)"),
+    최소가격: Optional[int] = Query(None, gt=0, description="검색하고자 하는 최소 가격(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="검색하고자 하는 최대 가격(원화 기준)"),
+    주차가능여부: Optional[bool] = Query(None, description="주차 가능 여부(true 또는 false)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+):
+    results = []
+    for s in stollen:
+        if (
+            (상호명 is None or s["상호명"].lower() == 상호명.lower()) and
+            (s["주소"].find(지역) != -1) and
+            (최소가격 is None or int(s["가격"]) >= 최소가격) and
+            (최대가격 is None or int(s["가격"]) <= 최대가격) and
+            (주차가능여부 is None or s["주차가능여부"] == 주차가능여부) and
+            (설명 is None or s["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(s)
+    return results
+
+dog_campsites = [
+    {
+        "상호명": "청산리 오토캠핑장",
+        "주소": "충청남도 태안군 원북면 청산길 279",
+        "가격": "45000",
+        "반려견시설종류": ["수영장", "드라이룸"],
+        "설명": "해돋이를 볼 수 있는 서해안의 캠핑장.",
+        "연락처": "00-000-0001"
+    },
+    {
+        "상호명": "의성펫월드",
+        "주소": "경상북도 의성군 단북면 안계길 255-13",
+        "가격": "47000",
+        "반려견시설종류": ["수영장", "드라이룸"],
+        "설명": "반려견 카페를 포함한 의성의 펫월드.",
+        "연락처": "00-000-0002"
+    },
+    {
+        "상호명": "국립화천숲속야영장",
+        "주소": "강원도 화천군 간동면 배후령길 1144 화천숲속야영장",
+        "가격": "21000",
+        "반려견시설종류": ["수영장", "샤워공간"],
+        "설명": "캠핑장 이름처럼 숲속에 위치해 산책로 조성이 잘 되어 있다.",
+        "연락처": "00-000-0003"
+    },
+    {
+        "상호명": "햇살가득애견캠핑장",
+        "주소": "경기도 남양주시 수동면 비룡로 1742번길 36-104",
+        "가격": "50000",
+        "반려견시설종류": ["샤워공간", "펜스놀이장"],
+        "설명": "대형견과 소형견이 마주치지 않도록 공간이 나뉘어 있으며 강아지 성향에 따라 개별 펜스가 설치된 곳을 고를 수도 있다.",
+        "연락처": "00-000-0004"
+    },
+    {
+        "상호명": "개똥이네",
+        "주소": "강원도 홍천군 북방면 원소길 25",
+        "가격": "49000",
+        "반려견시설종류": ["샤워공간"],
+        "설명": "천연 잔디가 깔려있다. 주변 환경을 잘 관리해 두어 강아지가 마음껏 뛰어도 된다.",
+        "연락처": "00-000-0005"
+    }
+]
+
+@app.get("/dog_campsite")
+async def search_dog_campsite(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역: str = Query(..., description="검색하고자 하는 지역 이름(서울시, 금천구, 창원시 등)"),
+    최소가격: Optional[int] = Query(None, gt=0, description="검색하고자 하는 최소 가격(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="검색하고자 하는 최대 가격(원화 기준)"),
+    반려견시설종류: Optional[str] = Query(None, description="반려견 시설 종류(예: 수영장, 드라이룸, 샤워공간, 펜스놀이장 등)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+):
+    results = []
+    for campsite in dog_campsites:
+        if (
+            (상호명 is None or campsite["상호명"].lower() == 상호명.lower()) and
+            (campsite["주소"].find(지역) != -1) and
+            (최소가격 is None or int(campsite["가격"]) >= 최소가격) and
+            (최대가격 is None or int(campsite["가격"]) <= 최대가격) and
+            (반려견시설종류 is None or 반려견시설종류 in campsite["반려견시설종류"]) and
+            (설명 is None or campsite["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(campsite)
+    return results
+
+greenhouse_list = [
+    {
+        "상호명": "서울식물원",
+        "주소": "서울시 강서구 마곡동로 161",
+        "입장료": "5000",
+        "주차가능여부": True,
+        "설명": "이곳의 오목한 접시 모양의 온실은 열대관과 지중해관으로 구성돼 있고, 세계 12개 도시의 특색 있는 식물들을 볼 수 있다.",
+        "인스타그램": "@seoulbotanicpark_official"
+    },
+    {
+        "상호명": "국립세종수목원",
+        "주소": "세종시 연기면 수목원로 136",
+        "입장료": "5000",
+        "주차가능여부": True,
+        "설명": "온대 중부권역의 대표하는 붓꽃을 모티브로 디자인된 사계절 온실 역시 축구장 1.5배의 면적으로 국내 식물 전시 유리온실 중 최대 규모를 자랑한다.",
+        "인스타그램": "@sjnagreen"
+    },
+    {
+        "상호명": "경주 동궁원",
+        "주소": "경상북도 경주시 보문로 74-14",
+        "입장료": "9000",
+        "주차가능여부": True,
+        "설명": "우리나라 최초의 동식물원이었던 동궁과 월지를 현대적으로 재현한 곳이다. 한옥의 지붕과 처마를 살린 신라시대 전통 건축 양식의 유리온실이다.",
+        "인스타그램": "@gyeongju_epg"
+    },
+    {
+        "상호명": "거제식물원",
+        "주소": "경상남도 거제시 거제면 거제남서로 3595",
+        "입장료": "9800",
+        "주차가능여부": True,
+        "설명": "7,400여 장의 유리 삼각형 유리를 이어붙인 정글돔은 약 4,468제곱미터 면적에 최고 높이 30미터로 돔형 유리온실로는 국내 최대 규모다.",
+        "인스타그램": "@botanicpark_official"
+    },
+    {
+        "상호명": "여미지식물원",
+        "주소": "제주도 서귀포시 중문관광로 93",
+        "입장료": "12000",
+        "주차가능여부": True,
+        "설명": "중문 관광 단지에 위치한 아름다운 땅이란 뜻의 여미지식물원은 동양 최대의 온실을 지니고 있다.",
+        "인스타그램": "@yeomiji_botanic_garden"
+    }
+]
+
+@app.get("/greenhouse")
+async def search_greenhouse(
+    이름: Optional[str] = Query(None, description="검색하고자 하는 식물원의 이름"),
+    지역: str = Query(..., description="검색하고자 하는 지역 이름(서울시, 금천구, 창원시 등)"),
+    최소입장료: Optional[int] = Query(None, gt=0, description="검색하고자 하는 최소 입장료(원화 기준)"),
+    최대입장료: Optional[int] = Query(None, description="검색하고자 하는 최대 입장료(원화 기준)"),
+    주차가능여부: Optional[bool] = Query(None, description="주차 가능 여부(true 또는 false)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+):
+    results = []
+    for greenhouse in greenhouse_list:
+        if (
+            (이름 is None or greenhouse["상호명"].lower() == 이름.lower()) and
+            (greenhouse["주소"].find(지역) != -1) and
+            (최소입장료 is None or int(greenhouse["입장료"]) >= 최소입장료) and
+            (최대입장료 is None or int(greenhouse["입장료"]) <= 최대입장료) and
+            (주차가능여부 is None or greenhouse["주차가능여부"] == 주차가능여부) and
+            (설명 is None or greenhouse["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(greenhouse)
+    return results
+
+outdoor_wedding_list = [
+    {
+        "상호명": "라비두스",
+        "주소": "서울 중구 필동3가 62-15",
+        "수용규모": 400,
+        "설명": "하우스 웨딩, 테라스 웨딩, 야외 웨딩 세 가지가 동시에 모두 가능한 곳으로 접근성이 좋은 충무로에 위치해 있어 도심 속 대저택에서 결혼식을 하는 듯한 느낌을 줄 수 있다.",
+        "홈페이지": "laviedouce.co.kr"
+    },
+    {
+        "상호명": "엘리스몽드",
+        "주소": "서울 용산구 이태원동 258-87",
+        "수용규모": 200,
+        "설명": "탁 트인 조망을 원하는 신랑,신부에게 최적의 장소이자 이곳 역시 남산 인근에 위치해있어 접근성이 뛰어나다. 뿐만 아니라 실내 공간도 함께 겸하고 있기 때문에 날씨에 대비할 수 있다.",
+        "홈페이지": "alicemonde.co.kr"
+    },
+    {
+        "상호명": "두가헌",
+        "주소": "서울 종로구 삼청로 14 현대갤러리",
+        "수용규모": 86,
+        "설명": "1900년에 지어진 고택, 근대 러시아식 벽돌 건물인 갤러리와 함께 있어 우아한 한옥 건물이다. 한옥 스몰 웨딩을 꿈꾸는 커플에게 추천한다.",
+        "홈페이지": "dugahun.com"
+    },
+    {
+        "상호명": "한국의집",
+        "주소": "서울 중구 퇴계로36길 10",
+        "수용규모": 300,
+        "설명": "남산 자락에 위치한 한국의집은 1957년 개관, 1982년부터 전통혼례를 진행해 온 곳이다. 연지,곤지 바르고 한복을 입고 조선 방식으로 혼례를 치뤄보고 싶은 커플에게 추천한다. 사물놀이 공연과 부채춤도 함께할 수 있다.",
+        "홈페이지": "linktr.ee/koreahouse1957"
+    },
+    {
+        "상호명": "보넬리가든",
+        "주소": "서울 서초구 샘마루길 11",
+        "수용규모": 500,
+        "설명": "강남구 서초에 위치해 있어 강남 혹은 경기권 커플들이 선호할 식장. 더군다나 호젓한 산 속의 숲에 위치해있어 도심의 분위기가 전혀 나지 않는다. 넓은 주차 공간을 확보하고 있어 편리하다.",
+        "홈페이지": "linktr.ee/koreahouse1957"
+    }
+]
+
+@app.get("/outdoor_wedding")
+async def search_outdoor_wedding(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역구: Optional[str] = Query(None, description="검색하고자 하는 구 이름(금천구, 강동구 등)"),
+    최소수용규모: int = Query(..., gt=0, description="검색하고자 하는 최소 수용규모(명수 기준)"),
+    최대수용규모: Optional[int] = Query(None, description="검색하고자 하는 최대 수용규모(명수 기준)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+) -> List[dict]:
+    results = []
+    for wedding in outdoor_wedding_list:
+        if (
+            (상호명 is None or wedding["상호명"].lower() == 상호명.lower()) and
+            (지역구 is None or wedding["주소"].find(지역구) != -1) and
+            (int(wedding["수용규모"]) >= 최소수용규모) and
+            (최대수용규모 is None or int(wedding["수용규모"]) <= 최대수용규모) and
+            (설명 is None or wedding["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(wedding)
+    return results
+
+zero_waste_shop_list = [
+    {
+        "상호명": "덕분애",
+        "주소": "서울시 서초구 서초대로 389 209호",
+        "샵분류": "리필샵",
+        "서울시인증여부": True,
+        "설명": "취급품목: 대나무밴드, 고체치약, 대나무칫솔, 천연수세미 리필스테이션 외",
+        "연락처": "02-6959-4479"
+    },
+    {
+        "상호명": "지구샵",
+        "주소": "서울시 마포구 성미산로 155",
+        "샵분류": "리필샵",
+        "서울시인증여부": True,
+        "설명": "취향에 맞춘 향수를 직접 만들고 리필할 수 있습니다. (지정 용기에 한해 재사용 가능)",
+        "연락처": "070-7721-5748"
+    },
+    {
+        "상호명": "굿바이마켓",
+        "주소": "서울시 용산구 서빙고로 17",
+        "샵분류": "친환경생필품점",
+        "서울시인증여부": False,
+        "설명": "취급품목: 식품, 패션잡화, 리필스테이션, 청소용품 등",
+        "연락처": "070-4369-5982"
+    },
+    {
+        "상호명": "자연상점",
+        "주소": "서울시 은평구 통일로 684",
+        "샵분류": "식당",
+        "서울시인증여부": True,
+        "설명": "병뚜껑,생수병 수거 후 업사이클 제품 제작, 무포장 원칙이나 필요시 종이봉투 재활용",
+        "연락처": "02-2039-9631"
+    },
+    {
+        "상호명": "칸틴커피대치",
+        "주소": "강남구 테헤란로114길 38",
+        "샵분류": "카페",
+        "서울시인증여부": False,
+        "설명": "다회용 컵 무인반납기 설치",
+        "연락처": "02-568-1066"
+    }
+]
+
+@app.get("/s_zero_waste_s")
+async def search_zero_waste_shop(
+    상호명: Optional[str] = Query(None, description="검색하고자 하는 상호의 이름"),
+    지역구: Optional[str] = Query(None, description="검색하고자 하는 구 이름(금천구, 강동구 등)"),
+    샵분류: str = Query(..., description="상점의 분류(예: 리필샵, 친환경생필품점, 식당, 카페, 기타 등)"),
+    서울시인증여부: Optional[bool] = Query(None, description="서울시 인증 여부, 서울시 제로마켓(true 또는 false)"),
+    설명: Optional[str] = Query(None, description="설명을 기준으로 검색")
+) -> List[dict]:
+    results = []
+    for shop in zero_waste_shop_list:
+        if (
+            (상호명 is None or shop["상호명"].lower() == 상호명.lower()) and
+            (지역구 is None or shop["주소"].find(지역구) != -1) and
+            (shop["샵분류"].lower() == 샵분류.lower()) and
+            (서울시인증여부 is None or shop["서울시인증여부"] == 서울시인증여부) and
+            (설명 is None or shop["설명"].lower().find(설명.lower()) != -1)
+        ):
+            results.append(shop)
+    return results
 ####
 
 @app.get("/mobile_app")
