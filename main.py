@@ -2074,9 +2074,373 @@ async def search_disaster_alert(
         results.append(item)
     return results
 
+data = [
+    {
+        "title": "미소가 저절로 나오게 만드는 노래들로만 가져왔어요",
+        "category": ["해외 팝", "신나는"],
+        "songs_num": 13,
+        "likes": 535,
+        "comments": ["별로 기대 안하고 눌렀는데 미소가 번지네옇ㅎ", "진짜 넘 좋아요", "전부 다 좋아요!"]
+    },
+    {
+        "title": "듣자마자 내적댄스 갈기는 여돌 플리",
+        "category": ["국내 댄스/일렉", "신나는"],
+        "songs_num": 81,
+        "likes": 175,
+        "comments": ["아이브짱", "대박", "내가 칮던 그런 플레이리스트"]
+    },
+    {
+        "title": "어깨가 들썩들썩이게 하는 드라이빙 팝송",
+        "category": ["해외 팝", "드라이브", "상쾌한"],
+        "songs_num": 114,
+        "likes": 544,
+        "comments": ["이 플리 너무 좋네요", "좋은 선곡 감사합니다"]
+    },
+    {
+        "title": "저녁 향수 뿌린 인디에 취해",
+        "category": ["국내 인디", "잔잔한"],
+        "songs_num": 16,
+        "likes": 11,
+        "comments": ["첫 곡부터 너무 좋다", "잠들기 전 듣기 좋네요"]
+    },
+    {
+        "title": "상쾌한 아침 공기 가득 담은 청정 팝",
+        "category": ["해외 팝", "아침", "상쾌한"],
+        "songs_num": 22,
+        "likes": 1067,
+        "comments": ["좋은 팝송 찾고 있었는데 너무 좋아요!", "항상 잘 듣고 있어요"]
+    }
+]
 
+@app.get("/playlist")
+async def search_playlist(
+    title: Optional[str] = Query(None, description="플레이리스트 제목"),
+    category: Optional[str] = Query(None, description="카테고리"),
+    min_songs: int = Query(..., description="최소 곡수", gt=0),
+    max_songs: Optional[int] = Query(None, description="최대 곡수", gt=0),
+    min_likes: Optional[int] = Query(None, description="최소 좋아요수", ge=0),
+    max_likes: Optional[int] = Query(None, description="최대 좋아요수", ge=0)
+) -> List[dict]:
+    results = []
+    for item in data:
+        if title and title.lower() not in item["title"].lower():
+            continue
+        if category and category.lower() not in [c.lower() for c in item["category"]]:
+            continue
+        if item["songs_num"] < min_songs:
+            continue
+        if max_songs and item["songs_num"] > max_songs:
+            continue
+        if min_likes and item["likes"] < min_likes:
+            continue
+        if max_likes and item["likes"] > max_likes:
+            continue
+        results.append(item)
+    return results
 
+data = [
+    {
+        "name": "써브웨이 클럽",
+        "calorie": 299,
+        "ingredients": ["치킨 브레스트 햄", "햄", "베이컨", "치즈", "각종 야채"],
+        "desc": "고소한 베이컨, 담백한 치킨 슬라이스에 햄까지 더해진 완벽한 앙상블",
+        "sauce": ["랜치", "스위트 어니언"]
+    },
+    {
+        "name": "베지",
+        "calorie": 209,
+        "ingredients": ["각종 야채", "치즈"],
+        "desc": "갓 구운 빵과 신선한 8가지 야채로 즐기는 깔끔한 한끼",
+        "sauce": ["레드와인식초", "올리브오일"]
+    },
+    {
+        "name": "스테이크 앤 치즈",
+        "calorie": 355,
+        "ingredients": ["스테이크", "치즈", "각종 야채"],
+        "desc": "육즙이 쫙~풍부한 비프 스테이크의 풍미가 입안 한가득",
+        "sauce": ["사우스웨스트 치폴레", "마요네즈"]
+    },
+    {
+        "name": "스파이시 이탈리안",
+        "calorie": 464,
+        "ingredients": ["페퍼로니", "살라미", "치즈", "각종 야채"],
+        "desc": "살라미, 페퍼로니가 입안 한가득! 쏘 핫한 이탈리아의 맛",
+        "sauce": ["랜치", "스위트 어니언"]
+    },
+    {
+        "name": "에그마요",
+        "calorie": 416,
+        "ingredients": ["에그마요", "치즈", "각종 야채"],
+        "desc": "부드러운 달걀과 고소한 마요네즈가 만나 더 부드러운 스테디셀러",
+        "sauce": ["랜치", "스위트 칠리"]
+    },
+    {
+        "name": "쉬림프",
+        "calorie": 229,
+        "ingredients": ["새우", "치즈", "각종 야채"],
+        "desc": "탱글한 식감이 그대로 살아있는 통새우가 5마리 들어가 한 입 베어 먹을 때 마다 진짜 새우의 풍미가 가득",
+        "sauce": ["스위트 칠리", "랜치"]
+    }
+]
 
+@app.get("/subway_menu")
+def search_subway_menu(
+    name: Optional[str] = Query(None, description="메뉴명"),
+    min_calorie: float = Query(..., gt=0, description="최소 칼로리 (단위: kcal)"),
+    max_calorie: Optional[float] = Query(None, gt=0, description="최대 칼로리 (단위: kcal)"),
+    ingredient: Optional[str] = Query(None, description="재료(주 재료를 바탕으로 검색)"),
+    sauce: Optional[str] = Query(None, description="소스(추천 소스를 바탕으로 검색)")
+) -> List[dict]:
+    results = []
+    for item in data:
+        if name and name.lower() not in item["name"].lower():
+            continue
+        if item["calorie"] < min_calorie:
+            continue
+        if max_calorie and item["calorie"] > max_calorie:
+            continue
+        if ingredient and ingredient.lower() not in [i.lower() for i in item["ingredients"]]:
+            continue
+        if sauce and sauce.lower() not in [s.lower() for s in item["sauce"]]:
+            continue
+        results.append(item)
+    return results
+
+data = [
+    {
+        "occurDt": "2023-05-15",
+        "occurTm": "06:27:37",
+        "magnitude": 4.5,
+        "depth": 31,
+        "max_intensity": "Ⅲ",
+        "latitude": 37.87,
+        "longitude": 129.52,
+        "location": "강원 동해시 북동쪽 52km 해역"
+    },
+    {
+        "occurDt": "2023-04-25",
+        "occurTm": "15:55:55",
+        "magnitude": 3.5,
+        "depth": 33,
+        "max_intensity": "Ⅰ",
+        "latitude": 37.86,
+        "longitude": 129.49,
+        "location": "강원 동해시 북동쪽 50km 해역"
+    },
+    {
+        "occurDt": "2023-01-09",
+        "occurTm": "01:28:15",
+        "magnitude": 3.7,
+        "depth": 19,
+        "max_intensity": "Ⅳ",
+        "latitude": 37.74,
+        "longitude": 126.20,
+        "location": "인천 강화군 서쪽 25km 해역"
+    },
+    {
+        "occurDt": "2023-04-19",
+        "occurTm": "00:45:07",
+        "magnitude": 2.6,
+        "depth": 14,
+        "max_intensity": "Ⅰ",
+        "latitude": 33.09,
+        "longitude": 125.42,
+        "location": "제주 서귀포시 서쪽 108km 해역"
+    },
+    {
+        "occurDt": "2023-03-03",
+        "occurTm": "11:26:54",
+        "magnitude": 3.0,
+        "depth": 8,
+        "max_intensity": "Ⅳ",
+        "latitude": 35.21,
+        "longitude": 127.94,
+        "location": "경남 진주시 서북서쪽 16km 지역"
+    },
+    {
+        "occurDt": "2023-02-11",
+        "occurTm": "08:22:01",
+        "magnitude": 2.3,
+        "depth": 12,
+        "max_intensity": "Ⅲ",
+        "latitude": 36.52,
+        "longitude": 127.85,
+        "location": "충북 보은군 동북동쪽 11km 지역"
+    }
+]
+
+@app.get("/earthquake")
+def search_earthquake(
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    min_occurDt: Optional[str] = Query(None, description="최소 발생날짜(m~n년 사이에 발생한 지진 검색 시 사용. 발생날짜를 바탕으로 검색.)"),
+    max_occurDt: Optional[str] = Query(None, description="최대 발생날짜(m~n년 사이에 발생한 지진 검색 시 사용. 발생날짜를 바탕으로 검색.)"),
+    min_magnitude: Optional[float] = Query(None, ge=0, description="최소 규모"),
+    max_magnitude: Optional[float] = Query(None, ge=0, description="최대 규모")
+) -> List[dict]:
+    results = []
+    for item in data:
+        if ctprvNm and ctprvNm != item.get("location", "").split()[0]:
+            continue
+        if sgngNm and sgngNm != item.get("location", "").split()[1]:
+            continue
+        if min_occurDt and min_occurDt > item["occurDt"]:
+            continue
+        if max_occurDt and max_occurDt < item["occurDt"]:
+            continue
+        if min_magnitude and item["magnitude"] < min_magnitude:
+            continue
+        if max_magnitude and item["magnitude"] > max_magnitude:
+            continue
+        results.append(item)
+    return results
+
+upcycling_items = [
+    {
+        "category": "크로스백",
+        "name": "누깍 Cros",
+        "ingredient": "카이트 서핑 돛",
+        "price": 79000,
+        "offline": True
+    },
+    {
+        "category": "지갑",
+        "name": "누깍 Lompakko",
+        "ingredient": "광고 현수막",
+        "price": 39000,
+        "offline": True
+    },
+    {
+        "category": "토트백",
+        "name": "컨티뉴 브이백",
+        "ingredient": "자동차 가죽시트",
+        "price": 229000,
+        "offline": True
+    },
+    {
+        "category": "크로스백",
+        "name": "컨티뉴 네트 텀블러백",
+        "ingredient": "폐그물",
+        "price": 109000,
+        "offline": True
+    },
+    {
+        "category": "백팩",
+        "name": "프라이탁 FRINGE",
+        "ingredient": "트럭 방수포",
+        "price": 394000,
+        "offline": True
+    },
+    {
+        "category": "크로스백",
+        "name": "프라이탁 JAMIE",
+        "ingredient": "트럭 방수포",
+        "price": 218000,
+        "offline": False
+    }
+]
+
+@app.get("/upcycling_items")
+async def search_upcycling_items(
+    category: Optional[str] = Query(None, description="카테고리"),
+    name: Optional[str] = Query(None, description="제품명"),
+    ingredient: Optional[str] = Query(None, description="재료"),
+    min_price: int = Query(..., description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    offline: Optional[bool] = Query(None, description="오프라인 구매 가능 여부")
+):
+    results = []
+    for item in upcycling_items:
+        if category and item["category"] != category:
+            continue
+        if name and item["name"] != name:
+            continue
+        if ingredient and item["ingredient"] != ingredient:
+            continue
+        if item["price"] < min_price:
+            continue
+        if max_price and item["price"] > max_price:
+            continue
+        if offline is not None and item["offline"] != offline:
+            continue
+        results.append(item)
+    
+    return results
+
+icn_dutyfree_brands = [
+    {
+        "category": "명품 브랜드",
+        "brand": "구찌 (GUCCI)",
+        "phone": "1577-0371",
+        "location": "제1여객터미널 3층 면세지역 28번 게이트 부근",
+        "items": ["가방", "지갑", "액세서리"]
+    },
+    {
+        "category": "명품 브랜드",
+        "brand": "까르띠에 (CARTIER)",
+        "phone": "1661-8778",
+        "location": "제1여객터미널 3층 면세지역 27번 게이트 부근",
+        "items": ["쥬얼리", "시계"]
+    },
+    {
+        "category": "명품 브랜드",
+        "brand": "CHANEL(샤넬)",
+        "phone": "080-805-9628",
+        "location": "제1여객터미널 3층 면세지역 28번 게이트 부근",
+        "items": ["가방", "신발", "의류", "패션액세서리"]
+    },
+    {
+        "category": "향수·화장품",
+        "brand": "설화수",
+        "phone": "032-743-2151",
+        "location": "제2여객터미널 3층 면세지역 252번 게이트 근처",
+        "items": ["화장품", "향수"]
+    },
+    {
+        "category": "향수·화장품",
+        "brand": "에스티로더",
+        "phone": "032-743-2154",
+        "location": "제2여객터미널 3층 면세지역 252번 게이트 근처",
+        "items": ["화장품", "향수"]
+    },
+    {
+        "category": "주류·담배",
+        "brand": "조니워커",
+        "phone": "032-743-7584",
+        "location": "제2여객터미널 3층 면세지역 249번 게이트 부근",
+        "items": ["위스키", "몰트 위스키", "보드카", "진"]
+    },
+    {
+        "category": "주류·담배",
+        "brand": "로얄살루트",
+        "phone": "032-743-7582",
+        "location": "제2여객터미널 3층 면세지역 249번 게이트 부근",
+        "items": ["위스키"]
+    }
+]
+
+@app.get("/icn_dutyfree")
+async def search_icn_dutyfree(
+    category: str = Query(..., description="카테고리(ex: 명품 브랜드, 향수·화장품, 주류·담배, 패션·액세서리 등)"),
+    brand: Optional[str] = Query(None, description="브랜드명"),
+    phone: Optional[str] = Query(None, description="연락처"),
+    location: Optional[str] = Query(None, description="위치"),
+    item: Optional[str] = Query(None, description="상품명(주요 상품을 바탕으로 검색)")
+):
+    results = []
+    for brand_info in icn_dutyfree_brands:
+        if category == brand_info["category"]:
+            if (
+                brand is None or brand.lower() in brand_info["brand"].lower()
+            ) and (
+                phone is None or phone.lower() in brand_info["phone"].lower()
+            ) and (
+                location is None or location.lower() in brand_info["location"].lower()
+            ) and (
+                item is None or any(item.lower() in i.lower() for i in brand_info["items"])
+            ):
+                results.append(brand_info)
+    return results
 
 ####
 
