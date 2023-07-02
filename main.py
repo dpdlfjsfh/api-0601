@@ -21,6 +21,2688 @@ async def get_items():
     return inventory
 #########
 
+###0702 작업
+lens_data = [
+    {
+        "name": "데일리스 토탈원 워터렌즈",
+        "brand": "알콘",
+        "type": "투명",
+        "grade": 4.6,
+        "price": 57000,
+        "desc": "우수한 워터그라이언트 재질의 투명렌즈",
+        "review": [
+            "하루종일 눈이 편안하고 촉촉해요!",
+            "장시간 착용하는데 촉촉하고 좋아요",
+            "짱 좋음 nn통째 재구매 중!"
+        ]
+    },
+    {
+        "name": "오아시스 원데이",
+        "brand": "아큐브",
+        "type": "투명",
+        "grade": 4.5,
+        "price": 53000,
+        "desc": "긴 하루 내내 편안하고 선명하게!",
+        "review": [
+            "오래 껴도 딱히 눈 아프다는 느낌 없고 아주 굿",
+            "장시간 렌즈 껴야하는 사람한테 필수!",
+            "겁나편함"
+        ]
+    },
+    {
+        "name": "바이오피니티",
+        "brand": "쿠퍼비전",
+        "type": "투명",
+        "grade": 4.3,
+        "price": 61000,
+        "desc": "근시, 원시 사용 가능하며 일상생활에서 장시간 자연스러운 편안함을 선사하는 소프트렌즈",
+        "review": [
+            "확실히 눈 건조한 게 덜 함!",
+            "렌즈 꼈을 때 이물감이 별로 안 느껴져요",
+            "제 렌즈 정착템입니다"
+        ]
+    },
+    {
+        "name": "스칸디 올리브",
+        "brand": "오렌즈",
+        "type": "컬러",
+        "grade": 4.5,
+        "price": 25000,
+        "desc": "섬세한 그래픽 디자인으로 표현된 홍채 패턴 디자인으로 오묘한 올리브 컬러로 이국적인 눈빛을 연출",
+        "review": [
+            "은은하게 자연스럽고 티 안나요",
+            "포인트 주고 싶은 날 사용하는 제품입니다",
+            "오렌즈 중 가장 편하다"
+        ]
+    },
+    {
+        "name": "리얼링 그레이",
+        "brand": "오렌즈",
+        "type": "컬러",
+        "grade": 4.6,
+        "price": 25000,
+        "desc": "맑고 투명한 컬러가 눈빛을 물들여 자연스럽게 리얼 톤업 눈빛 완성",
+        "review": [
+            "예뻐요",
+            "그레이 렌즈 중에 자연스러운 편에 속해요",
+            "티 심하게 안 나고 자연스러워요"
+        ]
+    }
+]
+
+
+@app.get("/lens")
+async def search_lens(
+    name: Optional[str] = Query(None, description="제품명"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    type: str = Query(..., description="타입(ex: 투명, 컬러)"),
+    min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점"),
+    min_price: Optional[int] = Query(None, ge=0, description="최소 가격"),
+    max_price: Optional[int] = Query(None, ge=0, description="최대 가격"),
+) -> List[dict]:
+    results = []
+    for lens in lens_data:
+        if (
+            (name is None or lens["name"].lower() == name.lower()) and
+            (brand is None or lens["brand"].lower() == brand.lower()) and
+            (lens["type"].lower() == type.lower()) and
+            (min_grade is None or lens["grade"] >= min_grade) and
+            (max_grade is None or lens["grade"] <= max_grade) and
+            (min_price is None or lens["price"] >= min_price) and
+            (max_price is None or lens["price"] <= max_price)
+        ):
+            results.append(lens)
+    return results
+
+
+wine_data = [
+    {
+        "name": "랑송, 노블 브뤼",
+        "type": "스파클링",
+        "variety": ["샤르도네", "피노 누아"],
+        "country": "프랑스",
+        "sweetness": 1,
+        "body": 3,
+        "pairing": ["치킨", "해산물", "초밥"]
+    },
+    {
+        "name": "엘레트라, 소비뇽 블랑",
+        "type": "화이트",
+        "variety": ["소비뇽 블랑"],
+        "country": "이탈리아",
+        "sweetness": 1,
+        "body": 2,
+        "pairing": ["건육", "해산물", "오일파스타"]
+    },
+    {
+        "name": "비노블스 포레, 샤또 레 아르두앵",
+        "type": "레드",
+        "variety": ["메를로", "카베르네 소비뇽"],
+        "country": "프랑스",
+        "sweetness": 3,
+        "body": 3,
+        "pairing": ["붉은육류", "그릴요리", "베이컨"]
+    },
+    {
+        "name": "보스타반, 메를로 인 페이퍼 세미 스위트",
+        "type": "레드",
+        "variety": ["메를로"],
+        "country": "몰도바",
+        "sweetness": 3,
+        "body": 4,
+        "pairing": ["치즈"]
+    },
+    {
+        "name": "디히터트라움 아이스와인젝트",
+        "type": "스파클링",
+        "variety": ["실바너"],
+        "country": "독일",
+        "sweetness": 5,
+        "body": 4,
+        "pairing": ["샐러드"]
+    }
+]
+
+
+@app.get("/wine")
+async def search_wine(
+    name: Optional[str] = Query(None, description="제품명"),
+    type: str = Query(..., description="종류(ex: 레드, 화이트 등)"),
+    variety: Optional[str] = Query(None, description="주요 품종(ex: 카베르네 소비뇽, 샤르도네 등)"),
+    country: Optional[str] = Query(None, description="국가"),
+    food: Optional[str] = Query(None, description="음식명(음식 매칭을 바탕으로 검색)"),
+) -> List[dict]:
+    results = []
+    for wine in wine_data:
+        if (
+            (name is None or wine["name"].lower() == name.lower()) and
+            (wine["type"].lower() == type.lower()) and
+            (variety is None or variety.lower() in [v.lower() for v in wine["variety"]]) and
+            (country is None or wine["country"].lower() == country.lower()) and
+            (food is None or food.lower() in [f.lower() for f in wine["pairing"]])
+        ):
+            results.append(wine)
+    return results
+
+wedding_halls = [
+    {
+        "name": "빌라드지디 수서",
+        "address": "서울특별시 강남구 밤고개로 21길 79",
+        "desc": "2019년 9월, 하우스웨딩의 대명사인 더그레이스켈리 강남점에 이어 2호점 오픈! 빌라드지디 수서!",
+        "meals": 85000,
+        "grade": 8.9
+    },
+    {
+        "name": "토브헤세드",
+        "address": "서울특별시 강남구 논현동 72-8",
+        "desc": "나만의 프라이빗한 맞춤웨딩이 가능한 강남 최고의 고품격 하우스웨딩홀, 토브헤세드!",
+        "meals": 78000,
+        "grade": 8.5
+    },
+    {
+        "name": "보타닉파크웨딩",
+        "address": "서울특별시 강서구 마곡중앙5로 6",
+        "desc": "웅장하고 세련된 호텔형 오키드홀, 18세기 영국 블레넘궁전을 모티브로 디자인한 카라홀, 자연친화적인 최적의 장소, 보타닉파크웨딩!",
+        "meals": 65000,
+        "grade": 9.2
+    },
+    {
+        "name": "이스턴베니비스",
+        "address": "서울특별시 송파구 풍납동 천호대로 996",
+        "desc": "향군회관 시절부터 지역 내 웨딩명소로 선호도 높은 웨딩홀 · 씨푸드 음식에 대한 평이 좋고, 전체적으로 식사 만족도 높음",
+        "meals": 59000,
+        "grade": 9.2
+    },
+    {
+        "name": "상록아트홀",
+        "address": "서울특별시 강남구 언주로 508",
+        "desc": "소중한 꿈이 이루어지는 날, 웨딩상록만의 노하우와 고객감동의 친절한 서비스로 최고의 만족감을 선사합니다",
+        "meals": 78000,
+        "grade": 9.3
+    }
+]
+
+@app.get("/weddinghall")
+def search_wedding_hall(
+    ctprvNm: str = Query(..., description="시도명 (ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명 (ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="웨딩홀 이름"),
+    min_meals: Optional[int] = Query(None, ge=0, description="최소 식사비용"),
+    max_meals: Optional[int] = Query(None, ge=0, description="최대 식사비용"),
+    min_grade: Optional[float] = Query(None, ge=0, le=10, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, ge=0, le=10, description="최대 평점"),
+):
+    results = []
+    for hall in wedding_halls:
+        if (
+            hall["address"].startswith(ctprvNm) and
+            (sgngNm is None or hall["address"].find(sgngNm) != -1) and
+            (name is None or hall["name"].lower() == name.lower()) and
+            (min_meals is None or hall["meals"] >= min_meals) and
+            (max_meals is None or hall["meals"] <= max_meals) and
+            (min_grade is None or hall["grade"] >= min_grade) and
+            (max_grade is None or hall["grade"] <= max_grade)
+        ):
+            results.append(hall)
+    return results
+
+crowd_data = [
+    ["디자인 문구", "못난이 농산물의 가치를 찾다, 여름지기 잉크", "텀블벅", 220, "2023.07.05", ["선물 없이 후원하기 (1000원)", "밤그늘 잉크 + 엽서2매 + 하루자연 질문지(32,000원)", "밤그늘 잉크 + 엽서 2매 + 하루자연 질문지 + 햇살 문진 (50,800원)", "밤그늘 잉크 + 엽서2매 + 하루자연 질문지 + 노을 문진 (50,800원)", "밤그늘 잉크 + 엽서 2매 + 하루자연 질문지 + 햇살 문진 + 노을 문진 (67,200원)"]],
+    ["출판", "홍차와 함께하는 명화 속 티타임, 그림 속 홍차의 문화사", "텀블벅", 162, "2023.08.07", ["선물 없이 후원하기 (1000원)", "[홍차와 함께하는 명화 속 티타임] 1권 (24,000원)", "[홍차와 함께하는 명화 속 티타임] 1권 + [에브리데이 해피니스] 1권 (35,700원)", "[홍차와 함께하는 명화 속 티타임] 1권 + [당장 써] 1권 (36,600원)", "[홍차와 함께하는 명화 속 티타임] 1권 +[에브리데이 해피니스] 1권+ [당장 써] 1권 (48,300원)"]],
+    ["후원", "독도를 기억하다", "와디즈", 66, "2023.06.30", ["에어팟 케이스 1개 (14,800원)", "에어팟 케이스 1개 + 키링 1개 (16,800원)", "에어팟 케이스 2개 + 키링 2개 (30,000원)", "에어팟 케이스 4개 + 키링 4개 (60,000원)"]],
+    ["후원", "내 일과 남 일은 한 끗 차이, 단편영화 <우리는 빠지고 채우고>", "와디즈", 3, "2023.06.30", ["크래딧기재 + 영화링크 + 엽서 3종 (15,000원)", "크래딧기재 + 영화링크 + 오리지널 티켓 랜덤 1종 (15,000원)", "크래딧기재 + 영화링크 + 테라리움키링 (25,000원)", "크래딧기재 + 영화링크 + 테라리움키링 + 엽서3종 (30,000원)", "크래딧기재 + 영화링크 + 테라리움키링 + 오리지널 티켓 2종 (40,000원)", "영화링크 + 미공개캐릭터사진 + 엽서3종 + 오리지널 티켓 2종 + 테라리움키링 (50,000원)", "크래딧기재 + 영화링크 + 미공개캐릭터사진 + 엽서3종 + 오리지널 티켓 2종 + 테라리움키링 (80,000원)"]],
+    ["디자인", "웹툰/웹소설 타이틀을 위한 한글 딩벳 폰트", "텀블벅", 3076, "2023.07.11", ["선물 없이 후원하기 (1000원)", "한글딩벳폰트 세리프 4종 (80,000원)", "한글딩벳폰트 캘리 3종 (72,000원)", "한글딩벳폰트 7종(글셒세리프 4종 + 글셒캘리 3종) (90,000원)"]]
+]
+
+@app.get("/crowd_funding")
+async def search_crowd_funding(
+    category: Optional[str] = Query(None, description="Category (e.g., design, publication, sponsorship, etc.)"),
+    name: Optional[str] = Query(None, description="Search projects by name"),
+    platform: Optional[str] = Query(None, description="Platform (e.g., tumbler, wadiz, etc.)"),
+    min_achievement: Optional[int] = Query(None, ge=0, description="Minimum achievement rate"),
+    max_achievement: Optional[int] = Query(None, ge=0, description="Maximum achievement rate")
+) -> List[dict]:
+    results = []
+    for item in crowd_data:
+        if category and category != item[0]:
+            continue
+        if name and name not in item[1]:
+            continue
+        if platform and platform != item[2]:
+            continue
+        if min_achievement is not None and item[3] < min_achievement:
+            continue
+        if max_achievement is not None and item[3] > max_achievement:
+            continue
+        results.append({
+            "name": item[1],
+            "category": item[0],
+            "platform": item[2],
+            "achievement": item[3],
+            "deadline": item[4],
+            "reward": item[5]
+        })
+    return results
+
+nintendo_game_data = [
+    {
+        "name": "슈퍼 마리오 파티",
+        "genre": "파티",
+        "price": 64800,
+        "model": "Nintendo Switch",
+        "age": "전체이용가",
+        "desc": "언제나, 어디서나, 슈퍼 마리오 파티! Nintendo Switch의 특징을 살려 새롭게 진화한 「슈퍼 마리오 파티」!"
+    },
+    {
+        "name": "저스트 댄스 2023 에디션",
+        "genre": "음악",
+        "price": 64800,
+        "model": "Nintendo Switch",
+        "age": "전체이용가",
+        "desc": "'저스트 댄스 2023 에디션'과 함께하는 차세대 댄스의 세계로 오신 걸 환영합니다! 시리즈 역사상 최초로 등장한 BTS의 “Dynamite”를 비롯한 다양한 인기곡에 맞춰 춤을 춰보세요! 온라인 멀티플레이어, 맞춤형 꾸미기, 3D 몰입형 월드, 그리고 1년 동안* 계속 추가되는 새로운 노래 및 모드로 365일 내내 댄스 파티를 즐길 수 있습니다!"
+    },
+    {
+        "name": "젤다의 전설 티어스 오브 더 킹덤",
+        "genre": "RPG",
+        "price": 74800,
+        "model": "Nintendo Switch",
+        "age": "12세이용가",
+        "desc": "끝없이 이어지는 광활한 대지, 그리고 아득한 구름 위의 하늘까지 펼쳐진 세계에서 어디로 가는 것도, 무엇을 하는 것도 당신에게 달려 있습니다. 하늘을 날아다니며 신기한 하늘섬을 탐색할 것인가? 링크가 손에 넣은 새로운 힘으로 하이랄의 이변에 맞설 것인가? 당신만의 끝없는 모험이 다시 시작됩니다."
+    },
+    {
+        "name": "젤다의 전설 꿈꾸는 섬",
+        "genre": "어드벤처",
+        "price": 64800,
+        "model": "Nintendo Switch",
+        "age": "전체이용가",
+        "desc": "그곳은 한번 들어가면 나올 수 없는 신비한 섬. 폭풍에 휘말려 한번 들어가면 나올 수 없는 불가사의한 섬인 「코호린트섬」에 도착한 링크. 섬에 사는 개성 풍부한 주민들과 교류하거나 필드・던전의 모험을 통해 이 불가사의한 섬의 수수께끼를 풀어서 섬에서 탈출하는 것을 목표로 한다."
+    },
+    {
+        "name": "모여봐요 동물의 숲",
+        "genre": "커뮤니케이션",
+        "price": 64800,
+        "model": "Nintendo Switch",
+        "age": "전체이용가",
+        "desc": "현실과 동일한 시간이 흐르는 세계에서, 마음 가는 대로 하루하루를 보내는 「동물의 숲」 시리즈.낚시나 곤충 채집, 가드닝 등 집 밖에서 즐길 수 있는 요소부터 집 꾸미기・패션까지, 다양한 취미를 1년 내내 즐기실 수 있습니다."
+    }
+]
+
+
+@app.get("/nintendo_game")
+async def search_nintendo_game(
+    name: Optional[str] = Query(None, description="게임 이름"),
+    genre: Optional[str] = Query(None, description="장르"),
+    min_price: Optional[int] = Query(None, description="최소 가격", ge=0),
+    max_price: Optional[int] = Query(None, description="최대 가격", ge=0),
+    model: str = Query(..., description="대응 기종")
+):
+    results = []
+    for game in nintendo_game_data:
+        if (
+            (name is None or game["name"] == name)
+            and (genre is None or game["genre"] == genre)
+            and (min_price is None or game["price"] >= min_price)
+            and (max_price is None or game["price"] <= max_price)
+            and game["model"] == model
+        ):
+            results.append(game)
+    return results
+
+lol_team_data = [
+    {
+        "name": "T1",
+        "league": "LCK",
+        "company": "㈜에스케이텔레콤씨에스티원",
+        "player_list": ["최우제", "문현준", "이상혁", "김하늘", "이민형", "류민석"],
+        "worlds_wins": 3,
+        "founding_date": "2012-12-13"
+    },
+    {
+        "name": "케이티 롤스터",
+        "league": "LCK",
+        "company": "케이티스포츠",
+        "player_list": ["김기인", "문우찬", "곽보성", "김하람", "손시우"],
+        "worlds_wins": 0,
+        "founding_date": "2012-10-10"
+    },
+    {
+        "name": "젠지",
+        "league": "LCK",
+        "company": "㈜케이에스브이이스포츠코리아",
+        "player_list": ["최현준", "김무성", "한왕호", "정지훈", "김수환", "유환중"],
+        "worlds_wins": 2,
+        "founding_date": "2013-09-07"
+    },
+    {
+        "name": "디플러스 기아",
+        "league": "LCK",
+        "company": "㈜에이디이스포츠",
+        "player_list": ["김창동", "김건부", "허수", "김혁규", "김형규"],
+        "worlds_wins": 1,
+        "founding_date": "2017-05-03"
+    },
+    {
+        "name": "DRX",
+        "league": "LCK",
+        "company": "㈜디알엑스",
+        "player_list": ["김광희", "이주한", "김동범", "유수혁", "강예후", "박석현", "조건희"],
+        "worlds_wins": 1,
+        "founding_date": "2012-05-07"
+    }
+]
+
+
+@app.get("/lol_team")
+async def search_lol_team(
+    name: Optional[str] = Query(None, description="팀명"),
+    league: Optional[str] = Query(None, description="소속 리그", regex="^[a-zA-Z]+$"),
+    company: Optional[str] = Query(None, description="모기업"),
+    player: Optional[str] = Query(None, description="선수 명단을 바탕으로 검색하는 검색어"),
+    min_wins: Optional[int] = Query(None, description="최소 월드 챔피언십 우승 횟수", ge=0),
+    max_wins: Optional[int] = Query(None, description="최대 월드 챔피언십 우승 횟수", ge=0),
+):
+    results = []
+    for team in lol_team_data:
+        if (
+            (name is None or team["name"] == name)
+            and (league is None or team["league"] == league)
+            and (company is None or team["company"] == company)
+            and (player is None or player in team["player_list"])
+            and (min_wins is None or team["worlds_wins"] >= min_wins)
+            and (max_wins is None or team["worlds_wins"] <= max_wins)
+        ):
+            results.append(team)
+    return results
+
+protected_animals_data = [
+    {
+        "name": "강동리본센터",
+        "address": "서울특별시 강동구 양재대로81길 73",
+        "category": "개",
+        "breed": "푸들",
+        "sex": "암컷",
+        "end_date": "2023-07-06",
+        "rescue_place": "서울시 강동구 암사동 성당"
+    },
+    {
+        "name": "남양동물보호센터",
+        "address": "경기도 화성시 남양읍 화성로 1483-27",
+        "category": "개",
+        "breed": "믹스견",
+        "sex": "수컷",
+        "end_date": "2023-07-05",
+        "rescue_place": "남양읍 남양로 500"
+    },
+    {
+        "name": "하남동물병원",
+        "address": "경기도 하남시 덕풍동 420-35",
+        "category": "고양이",
+        "breed": "믹스묘",
+        "sex": "암컷",
+        "end_date": "2023-07-06",
+        "rescue_place": "미사소방서"
+    },
+    {
+        "name": "남양주시동물보호센터",
+        "address": "경기도 남양주시 경강로163번길 32-27",
+        "category": "고양이",
+        "breed": "믹스묘",
+        "sex": "수컷",
+        "end_date": "2023-07-06",
+        "rescue_place": "경춘로 1308번길 4"
+    },
+    {
+        "name": "한국동물구조관리협회",
+        "address": "경기도 양주시 남면 감악산로 63-37",
+        "category": "고양이",
+        "breed": "한국 고양이",
+        "sex": "수컷",
+        "end_date": "2023-07-04",
+        "rescue_place": "강북구청 인근"
+    }
+]
+
+
+@app.get("/protected_animals")
+async def search_protected_animals(
+    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
+    name: Optional[str] = Query(None, description="보호소명"),
+    category: Optional[str] = Query(None, description="동물 종류(ex: 개, 고양이, 기타)"),
+    breed: Optional[str] = Query(None, description="품종(ex: 푸들, 믹스견, 한국 고양이 등)"),
+) -> List[dict]:
+    results = []
+    for animal in protected_animals_data:
+        if (
+            animal["name"] == name if name else True
+            and animal["category"] == category if category else True
+            and animal["breed"] == breed if breed else True
+        ):
+            results.append(animal)
+    return results
+
+gym_data = [
+    {
+        "type": "필라테스",
+        "name": "문정 리윰필라테스",
+        "address": "서울특별시 송파구 법원로4길 6, 문정아이파크 3층 리윰필라테스",
+        "phone": "02-123-1234",
+        "grade": 5.0,
+        "review_num": 1
+    },
+    {
+        "type": "헬스",
+        "name": "역삼 포이나짐 24시",
+        "address": "서울특별시 강남구 역삼로 239, 화광센터 지하 1층",
+        "phone": "02-000-9876",
+        "grade": 4.9,
+        "review_num": 23
+    },
+    {
+        "type": "헬스",
+        "name": "모란 스카이뷰 휘트니스",
+        "address": "경기도 성남시 중원구 성남대로 1126 메가프라자 4층",
+        "phone": "031-123-1234",
+        "grade": 4.5,
+        "review_num": 6
+    },
+    {
+        "type": "헬스",
+        "name": "가락시장 헬스보이짐 프리미엄",
+        "address": "서울특별시 송파구 송파대로 260, 제일오피스텔 B2 헬스보이짐",
+        "phone": "02-999-8765",
+        "grade": 4.1,
+        "review_num": 15
+    },
+    {
+        "type": "크로스핏",
+        "name": "정자 크로스핏 테디짐",
+        "address": "경기도 성남시 분당구 정자일로198번길 15 제나프라자 지하1층",
+        "phone": "031-555-6666",
+        "grade": 5.0,
+        "review_num": 41
+    },
+    {
+        "type": "크로스핏",
+        "name": "신촌 크로스핏 스팀펑크",
+        "address": "서울특별시 서대문구 연세로5다길 22-3 지하 1층",
+        "phone": "02-333-5353",
+        "grade": 5.0,
+        "review_num": 19
+    }
+]
+
+
+@app.get("/gym")
+async def search_gym(
+    type: str = Query(..., description="운동 종류(ex: 헬스, 크로스핏, 필라테스 등)"),
+    name: Optional[str] = Query(None, description="시설명"),
+    address: Optional[str] = Query(None, description="주소를 바탕으로 검색하는 키워드"),
+    min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
+    max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점"),
+) -> List[dict]:
+    results = []
+    for gym in gym_data:
+        if (
+            gym["type"] == type
+            and (gym["name"] == name if name else True)
+            and (gym["address"] == address if address else True)
+            and (gym["grade"] >= min_grade if min_grade is not None else True)
+            and (gym["grade"] <= max_grade if max_grade is not None else True)
+        ):
+            results.append(gym)
+    return results
+
+pythonlecture_data = [
+    {
+        "lecture_name": "파이썬으로 배우는 프로그래밍 기초!!",
+        "name": "신정훈",
+        "provider": "edwith",
+        "lecture_num": 10,
+        "views": 0
+    },
+    {
+        "lecture_name": "SW비전공자를 위한 AI 개념 이해 및 기초 실습",
+        "name": "김유두",
+        "provider": "edwith",
+        "lecture_num": 10,
+        "views": 0
+    },
+    {
+        "lecture_name": "비전공자를 위한 AI 개념이해 및 기초 실습!",
+        "name": "김유두",
+        "provider": "KOCW",
+        "lecture_num": 10,
+        "views": 3467
+    },
+    {
+        "lecture_name": "[COSADAMA] Scrapy 입문",
+        "name": "신유진",
+        "provider": "edwith",
+        "lecture_num": 43,
+        "views": 0
+    },
+    {
+        "lecture_name": "AI프로그래밍의 이해",
+        "name": "유진아",
+        "provider": "KOCW",
+        "lecture_num": 10,
+        "views": 265
+    }
+]
+
+
+@app.get("/pythonlecture")
+async def search_python_lecture(
+    lecture_name: Optional[str] = Query(None, description="강의명"),
+    provider: Optional[str] = Query(None, description="제공업체"),
+    lecture_num: Optional[int] = Query(None, description="강의수"),
+    classification: Optional[str] = Query(None, description="분류"),
+    name: Optional[str] = Query(None, description="강사명"),
+) -> List[dict]:
+    results = []
+    for lecture in pythonlecture_data:
+        if (
+            (lecture["lecture_name"] == lecture_name if lecture_name else True)
+            and (lecture["provider"] == provider if provider else True)
+            and (lecture["lecture_num"] == lecture_num if lecture_num else True)
+            and (classification in lecture_name if classification else True)
+            and (lecture["name"] == name if name else True)
+        ):
+            results.append(lecture)
+    return results
+
+
+cupramen_data = [
+    {
+        "convience_store": "CU",
+        "name": "너구리",
+        "price": 1500,
+        "event": "N",
+        "producer": "농심",
+        "calories": 520
+    },
+    {
+        "convience_store": "GS25",
+        "name": "불닭볶음면",
+        "price": 1500,
+        "event": "N",
+        "producer": "삼양",
+        "calories": 530
+    },
+    {
+        "convience_store": "CU",
+        "name": "새우탕",
+        "price": 1600,
+        "event": "Y(2+1)",
+        "producer": "농심",
+        "calories": 480
+    },
+    {
+        "convience_store": "세븐일레븐",
+        "name": "삼양라면",
+        "price": 1500,
+        "event": "N",
+        "producer": "삼양",
+        "calories": 500
+    },
+    {
+        "convience_store": "GS25",
+        "name": "진라면순한맛",
+        "price": 1200,
+        "event": "N",
+        "producer": "오뚜기",
+        "calories": 490
+    }
+]
+
+
+@app.get("/cupramen")
+async def search_cup_ramen(
+    ramen_name: Optional[str] = Query(None, description="컵라면명"),
+    producer: Optional[str] = Query(None, description="제조업체"),
+    event: Optional[str] = Query(None, description="행사여부"),
+    calories: Optional[int] = Query(None, description="칼로리"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=1000, lt=300000),
+    max_price: Optional[int] = Query(None, description="최대가격", gt=1000, lt=300000),
+    min_calories: Optional[int] = Query(None, description="최소칼로리", ge=0, le=1000),
+    max_calories: Optional[int] = Query(None, description="최대칼로리", ge=0, le=1000),
+    cupramen_num: Optional[int] = Query(None, description="컵라면 재고 수"),
+) -> List[dict]:
+    results = []
+    for cupramen in data:
+        if (
+            (cupramen["name"] == ramen_name if ramen_name else True)
+            and (cupramen["producer"] == producer if producer else True)
+            and (cupramen["event"] == event if event else True)
+            and (cupramen["calories"] == calories if calories else True)
+            and (cupramen["price"] >= min_price if min_price else True)
+            and (cupramen["price"] <= max_price if max_price else True)
+            and (cupramen["calories"] >= min_calories if min_calories else True)
+            and (cupramen["calories"] <= max_calories if max_calories else True)
+            and (cupramen_num is None or cupramen_num >= 0)
+        ):
+            results.append(cupramen)
+    return results
+
+handcream_data = [
+    {
+        "name": "체리블라썸소프트핸드크림",
+        "price": 15000,
+        "manufacture": "록시땅",
+        "provider": "록시땅",
+        "size": 30,
+        "purchase": "Y"
+    },
+    {
+        "name": "W.DRESSROOM 퍼퓸드 핸드크림 5종 택 1",
+        "price": 7900,
+        "manufacture": "더블유드레스룸",
+        "provider": "올리브영",
+        "size": 50,
+        "purchase": "Y"
+    },
+    {
+        "name": "시어버터드라이스킨핸드크림",
+        "price": 15000,
+        "manufacture": "록시땅",
+        "provider": "록시땅",
+        "size": 30,
+        "purchase": "Y"
+    },
+    {
+        "name": "탬버린즈 미니퍼퓸 핸드크림",
+        "price": 18000,
+        "manufacture": "탬버린즈",
+        "provider": "카카오톡선물하기",
+        "size": 30,
+        "purchase": "Y"
+    },
+    {
+        "name": "레저렉션 아로마틱 핸드 밤",
+        "price": 33000,
+        "manufacture": "이솝",
+        "provider": "이솝",
+        "size": 75,
+        "purchase": "Y"
+    }
+]
+
+
+@app.get("/handcream")
+async def search_handcream(
+    name: Optional[str] = Query(None, description="제품명"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=1000, lt=10000),
+    max_price: Optional[int] = Query(None, description="최대가격", gt=1000, lt=300000),
+    size: Optional[int] = Query(None, description="용량 (단위: ml)"),
+    manufacture: Optional[str] = Query(None, description="제조사명"),
+    discount: Optional[str] = Query(None, description="할인여부"),
+) -> List[dict]:
+    results = []
+    for handcream in handcream_data:
+        if (
+            (handcream["name"] == name if name else True)
+            and (handcream["price"] >= min_price if min_price else True)
+            and (handcream["price"] <= max_price if max_price else True)
+            and (handcream["size"] == size if size else True)
+            and (handcream["manufacture"] == manufacture if manufacture else True)
+            and (handcream["purchase"] == discount if discount else True)
+        ):
+            results.append(handcream)
+    return results
+
+dietfood_data = [
+    {
+        "name": "아임닭 크리스피 닭가슴살 오리지널 10/20/30/50팩",
+        "provider": "아임닭",
+        "price": 28500,
+        "size": 90,
+        "favor": "크리스피",
+        "review": ["촉촉해요", "부드러워요"]
+    },
+    {
+        "name": "허닭 [본사당일출고] 일품 닭가슴살스테이크 100g 7종 혼합21팩",
+        "provider": "쿠팡",
+        "price": 26420,
+        "size": 90,
+        "favor": "불고기,갈릭",
+        "review": ["물리지 않아요", "부드러워요"]
+    },
+    {
+        "name": "저염 더 부드러운 닭가슴살 1kg 1팩",
+        "provider": "허닭",
+        "price": 17900,
+        "size": 1000,
+        "favor": "오리지널",
+        "review": ["부드러워요", "칼로리가 낮아요"]
+    },
+    {
+        "name": "아임닭 맛있는 닭가슴살 매운후랑크 소시지 꼬치 1팩",
+        "provider": "아임닭",
+        "price": 1800,
+        "size": 70,
+        "favor": "후추맛",
+        "review": ["촉촉하고 부드러워요", "맛있어요"]
+    },
+    {
+        "name": "하림 닭가슴살 블랙페퍼",
+        "provider": "쿠팡",
+        "price": 15860,
+        "size": 800,
+        "favor": "후추맛",
+        "review": ["안퍽퍽해요", "질리지 않아요"]
+    }
+]
+
+
+@app.get("/dietfood")
+async def search_dietfood(
+    name: Optional[str] = Query(None, description="제품명"),
+    provider: str = Query(..., description="판매처"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=1000, lt=30000),
+    max_price: Optional[int] = Query(None, description="최대가격", gt=1000, lt=30000),
+    size: Optional[int] = Query(None, description="용량"),
+    favor: Optional[str] = Query(None, description="맛"),
+    classification: Optional[str] = Query(None, description="분류"),
+) -> List[dict]:
+    results = []
+    for dietfood in dietfood_data:
+        if (
+            (dietfood["name"] == name if name else True)
+            and (dietfood["provider"] == provider)
+            and (dietfood["price"] >= min_price if min_price else True)
+            and (dietfood["price"] <= max_price if max_price else True)
+            and (dietfood["size"] == size if size else True)
+            and (dietfood["favor"] == favor if favor else True)
+        ):
+            results.append(dietfood)
+    return results
+
+leisure_data = [
+    {
+        "name": "제주레포츠랜드",
+        "location": "제주 제주시 조천읍",
+        "price": 60600,
+        "review": ["아이들이 너무 좋아해요", "어릴때 생각나서 너무 재밌어요"],
+        "rating": 4.39
+    },
+    {
+        "name": "더마파크",
+        "location": "제주 제주시 한림읍",
+        "price": 22000,
+        "review": ["말타는 것도 재밌고 즐길게 많아요", "다음에 또 오고싶어요"],
+        "rating": 4.58
+    },
+    {
+        "name": "윈드1947 테마파크",
+        "location": "제주 서귀포시 토평공단로 79-27",
+        "price": 30000,
+        "review": ["코스가 길어서 만족스러워요", "수국도 예쁘고 시설도 좋아요"],
+        "rating": 4.46
+    },
+    {
+        "name": "제주제트",
+        "location": "제주 서귀포시 대포동",
+        "price": 25000,
+        "review": ["시원하고 좋아요", "강사분들이 친절해요"],
+        "rating": 4.73
+    },
+    {
+        "name": "뷰 제주하늘",
+        "location": "제주 서귀포시 성산읍 서성이로 397",
+        "price": 35000,
+        "review": ["날씨가 좋을 때 너무 예뻤어요", "재밌는 분위기로 친절하게 잘 설명해주세요"],
+        "rating": 4.3
+    }
+]
+
+
+@app.get("/leisure")
+async def search_leisure(
+    name: Optional[str] = Query(None, description="레저시설"),
+    location: str = Query(..., description="장소"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=1000, lt=300000),
+    max_price: Optional[int] = Query(None, description="최대가격", gt=1000, lt=300000),
+    type: Optional[str] = Query(None, description="레저시설 종류"),
+    available_people_num: Optional[int] = Query(None, description="이용가능인원"),
+) -> List[dict]:
+    results = []
+    for cocktail in leisure_data:
+        if (
+            (cocktail["name"] == name if name else True)
+            and (cocktail["location"] == location)
+            and (cocktail["price"] >= min_price if min_price else True)
+            and (cocktail["price"] <= max_price if max_price else True)
+            and (cocktail["type"] == type if type else True)
+            and (cocktail["available_people_num"] == available_people_num if available_people_num else True)
+        ):
+            results.append(cocktail)
+    return results
+
+cafe_data = [
+    {
+        "cafe": "이화다방",
+        "location": "서울 서대문구",
+        "price": 5500,
+        "menu": "아메리카노",
+        "rating": 4.8,
+        "review": ["공부하기 좋아요", "조용해요"]
+    },
+    {
+        "cafe": "텅",
+        "location": "서울 종로구 운니동 98-20 701호",
+        "price": 6500,
+        "menu": "호지라떼",
+        "rating": 4.8,
+        "review": ["사람이 많아요", "뷰가 좋아요"]
+    },
+    {
+        "cafe": "테라로사",
+        "location": "서울 용산구 한남동 736-4 카프리 빌딩",
+        "price": 5500,
+        "menu": "카푸치노",
+        "rating": 4.45,
+        "review": ["인테리어가 예뻐요", "사진이 잘나와요"]
+    },
+    {
+        "cafe": "앤트러사이트 한남점",
+        "location": "서울 용산구 한남동 683-142 3,4,5층",
+        "price": 5000,
+        "menu": "모모라",
+        "rating": 4,
+        "review": ["애견동반이 가능해요", "커피가 맛있어요"]
+    },
+    {
+        "cafe": "얼스어스",
+        "location": "서울 종로구 청운동 94-1",
+        "price": 5000,
+        "menu": "코르타도",
+        "rating": 4.52,
+        "review": ["뷰가 예뻐요", "디저트가 맛있어요"]
+    }
+]
+
+
+@app.get("/cafe")
+async def search_cafe(
+    name: Optional[str] = Query(None, description="카페명"),
+    location: str = Query(..., description="장소"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=5000, lt=50000),
+    max_price: Optional[int] = Query(None, description="최대가격", gt=5000, lt=50000),
+    menu: Optional[str] = Query(None, description="메뉴"),
+    rating: Optional[int] = Query(None, description="평점"),
+) -> List[dict]:
+    results = []
+    for cafe in cafe_data:
+        if (
+            (cafe["cafe"] == name if name else True)
+            and (cafe["location"] == location)
+            and (cafe["price"] >= min_price if min_price else True)
+            and (cafe["price"] <= max_price if max_price else True)
+            and (cafe["menu"] == menu if menu else True)
+            and (cafe["rating"] == rating if rating else True)
+        ):
+            results.append(cafe)
+    return results
+
+cocktail_data = [
+    {
+        "name": "피치블러섬",
+        "location": "7",
+        "price": 8000,
+        "size": 250,
+        "alcohol": 7,
+        "composition": ["피치트리", "트리플섹", "샤워믹스"]
+    },
+    {
+        "name": "파우스트",
+        "location": "40",
+        "price": 13000,
+        "size": 150,
+        "alcohol": 40,
+        "composition": ["블랙베리", "오버 프로프"]
+    },
+    {
+        "name": "블랙러시안",
+        "location": "30",
+        "price": 15000,
+        "size": 150,
+        "alcohol": 30,
+        "composition": ["보드카", "깔루아"]
+    },
+    {
+        "name": "모스코 뮬",
+        "location": "30",
+        "price": 10000,
+        "size": 200,
+        "alcohol": 30,
+        "composition": ["라임주스", "보드카", "진저 비어"]
+    },
+    {
+        "name": "다이키리",
+        "location": "5",
+        "price": 13000,
+        "size": 150,
+        "alcohol": 5,
+        "composition": ["화이트 쿠바 럼", "라임주스"]
+    }
+]
+
+
+@app.get("/cocktail")
+async def search_cocktail(
+    name: Optional[str] = Query(None, description="칵테일명"),
+    location: Optional[str] = Query(None, description="장소"),
+    min_price: Optional[int] = Query(None, description="최소가격", gt=8000),
+    max_price: Optional[int] = Query(None, description="최대가격", lt=15000),
+    size: Optional[int] = Query(None, description="용량 (단위: ml)"),
+    alcohol: int = Query(..., description="도수"),
+) -> List[dict]:
+    results = []
+    for cocktail in cocktail_data:
+        if (
+            (cocktail["name"] == name if name else True)
+            and (cocktail["location"] == location if location else True)
+            and (cocktail["price"] >= min_price if min_price else True)
+            and (cocktail["price"] <= max_price if max_price else True)
+            and (cocktail["size"] == size if size else True)
+            and cocktail["alcohol"] == alcohol
+        ):
+            results.append(cocktail)
+    return results
+
+pub_data = [
+    {
+        "name": "백세주마을",
+        "location": "서울시 강남구 삼성동 110-3 국순당빌딩",
+        "reservation": "Y",
+        "holiday": "일",
+        "rating": 4,
+        "menu": ["백세족발", "꿀간장닭강정", "막걸리", "해물파전"]
+    },
+    {
+        "name": "언코르크드",
+        "location": "서울시 종로구 안국동 138-2 동신빌딩",
+        "reservation": "Y",
+        "holiday": "없음",
+        "rating": 4,
+        "menu": ["트러플 크림 뇨끼", "대파오일파스타", "레드와인", "라구 볼로네제 파스타"]
+    },
+    {
+        "name": "소점",
+        "location": "서울시 마포구 연남동 487-278",
+        "reservation": "N",
+        "holiday": "매달 2,4,5번째 일요일 정기 휴무",
+        "rating": 4.8,
+        "menu": ["모단야키", "돈페이야키", "생맥주", "야키소바빵"]
+    },
+    {
+        "name": "숲길정육점",
+        "location": "서울시 마포구 연남동 228-40 1층",
+        "reservation": "Y",
+        "holiday": "없음",
+        "rating": 4,
+        "menu": ["항껍이", "항정살", "소주", "항목이"]
+    },
+    {
+        "name": "유메오뎅",
+        "location": "서울시 마포구 동교로 262 1층",
+        "reservation": "Y",
+        "holiday": "없음",
+        "rating": 4.5,
+        "menu": ["키리모찌", "문어가라아게", "생맥주", "닭가라아게"]
+    }
+]
+
+
+@app.get("/pub")
+async def search_pub(
+    name: Optional[str] = Query(None, description="술집이름"),
+    location: str = Query(..., description="위치"),
+    reservation: Optional[str] = Query(None, description="예약가능여부"),
+    holiday: Optional[str] = Query(None, description="공휴일"),
+    holiday_operation: Optional[str] = Query(None, description="공휴일 운영여부"),
+    rating: Optional[int] = Query(None, description="평점 (단위:점)"),
+) -> List[dict]:
+    results = []
+    for pub in pub_data:
+        if (
+            (pub["name"] == name if name else True)
+            and pub["location"] == location
+            and (pub["reservation"] == reservation if reservation else True)
+            and (pub["holiday"] == holiday if holiday else True)
+            and (pub["rating"] == rating if rating else True)
+        ):
+            results.append(pub)
+    return results
+
+sunblock_data = [
+    {
+        "brand": "셀퓨전씨",
+        "name": "아쿠아티카 썬스크린 100 50ml",
+        "category": "선크림",
+        "price": 39000,
+        "spf": 50,
+        "pa": "++++"
+    },
+    {
+        "brand": "셀퓨전씨",
+        "name": "스틱 썬스크린 100 19g",
+        "category": "선스틱",
+        "price": 25000,
+        "spf": 45,
+        "pa": "+++"
+    },
+    {
+        "brand": "네이처리퍼블릭",
+        "name": "그린더마 마일드 시카 빅 선쿠션",
+        "category": "선쿠션",
+        "price": 12740,
+        "spf": 30,
+        "pa": "++"
+    },
+    {
+        "brand": "맑은 어성초 진정 무기자차 선크림",
+        "name": "달바",
+        "category": "선크림",
+        "price": 20000,
+        "spf": 15,
+        "pa": "++++"
+    },
+    {
+        "brand": "엔조이 워터프루프 에어리 선스틱 20g",
+        "name": "싸이닉",
+        "category": "선스틱",
+        "price": 21000,
+        "spf": 50,
+        "pa": "++++"
+    },
+    {
+        "brand": "에뛰드",
+        "name": "순정 디렉터 수분 선크림",
+        "category": "선크림",
+        "price": 25000,
+        "spf": 30,
+        "pa": "+++"
+    }
+]
+
+
+@app.get("/sunblock")
+async def filter_sunblock(
+    brand: Optional[str] = Query(None, description="브랜드명"),
+    name: Optional[str] = Query(None, description="상품명"),
+    category: str = Query(..., description="카테고리"),
+    min_price: Optional[int] = Query(None, description="최저 가격", gt=0),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    min_spf: Optional[int] = Query(None, description="최저 SPF ex. 15, 30, 50"),
+    pa: Optional[str] = Query(None, description="PA ex. +, ++, +++"),
+) -> List[dict]:
+    results = []
+    for sunblock in sunblock_data:
+        if (
+            (sunblock["brand"] == brand if brand else True)
+            and (sunblock["name"] == name if name else True)
+            and sunblock["category"] == category
+            and (sunblock["price"] >= min_price if min_price else True)
+            and (sunblock["price"] <= max_price if max_price else True)
+            and (sunblock["spf"] >= min_spf if min_spf else True)
+            and (sunblock["pa"] == pa if pa else True)
+        ):
+            results.append(sunblock)
+    return results
+
+coupon_data = [
+    {
+        "name": "첫구매 할인 쿠폰",
+        "duration": "2023.01.05~2023.01.25",
+        "sale": 40,
+        "category": "의류",
+        "use": "Y"
+    },
+    {
+        "name": "이번달도 화이팅 쿠폰",
+        "duration": "2023.05.08~2023.06.30",
+        "sale": 10,
+        "category": "식품",
+        "use": "Y"
+    },
+    {
+        "name": "일주일 깜짝 쿠폰",
+        "duration": "2023.04.22~2023.04.29",
+        "sale": 11,
+        "category": "가전",
+        "use": "N"
+    },
+    {
+        "name": "고객 감사 쿠폰",
+        "duration": "2023.06.20~2023.07.30",
+        "sale": 30,
+        "category": "가전",
+        "use": "Y"
+    },
+    {
+        "name": "쇼핑몰 5주년 맞이 대박 할인 쿠폰",
+        "duration": "2023.05.01~2023.05.30",
+        "sale": 25,
+        "category": "식품",
+        "use": "N"
+    },
+    {
+        "name": "이벤트 리워드 쿠폰",
+        "duration": "2023.03.07~2023.03.14",
+        "sale": 45,
+        "category": "의류",
+        "use": "Y"
+    }
+]
+
+
+@app.get("/coupon")
+async def filter_coupon(
+    name: Optional[str] = Query(None, description="쿠폰명"),
+    min_duration: Optional[str] = Query(None, description="최소 사용기간"),
+    max_duration: Optional[str] = Query(None, description="최대 사용기간"),
+    min_sale: Optional[int] = Query(None, description="최저 할인율", gt=0),
+    category: str = Query(..., description="카테고리 ex. 스포츠, 남성의류, 여성의류, 아동용품"),
+    use: Optional[str] = Query(None, description="사용 여부"),
+) -> List[dict]:
+    results = []
+    for coupon in coupon_data:
+        if (
+            (coupon["name"] == name if name else True)
+            and (coupon["duration"] >= min_duration if min_duration else True)
+            and (coupon["duration"] <= max_duration if max_duration else True)
+            and (coupon["sale"] >= min_sale if min_sale else True)
+            and coupon["category"] == category
+            and (coupon["use"] == use if use else True)
+        ):
+            results.append(coupon)
+    return results
+
+air_conditioner_data = [
+    {
+        "manufacture": "삼성",
+        "model": "무풍클래식 AF17B7939GZRS",
+        "category": "스탠딩",
+        "min_price": 1688000,
+        "max_price": "2023",
+        "min_mandate": "2023"
+    },
+    {
+        "manufacture": "LG",
+        "model": "휘센 FQ17HDKHC1",
+        "category": "스탠딩",
+        "min_price": 1500000,
+        "max_price": "2022",
+        "min_mandate": "2022"
+    },
+    {
+        "manufacture": "LG",
+        "model": "오브제컬렉션 FQ17HDNHC2",
+        "category": "스탠딩",
+        "min_price": 2100000,
+        "max_price": "2023",
+        "min_mandate": "2023"
+    },
+    {
+        "manufacture": "삼성",
+        "model": "AR06A1171HZS",
+        "category": "벽걸이",
+        "min_price": 750000,
+        "max_price": "2021",
+        "min_mandate": "2021"
+    },
+    {
+        "manufacture": "위니아",
+        "model": "ERV06GHP",
+        "category": "벽걸이",
+        "min_price": 550000,
+        "max_price": "2022",
+        "min_mandate": "2022"
+    },
+    {
+        "manufacture": "캐리어",
+        "model": "DRCD061FAWWSD",
+        "category": "벽걸이",
+        "min_price": 700000,
+        "max_price": "2023",
+        "min_mandate": "2023"
+    }
+]
+
+
+@app.get("/air_conditioner")
+async def filter_air_conditioner(
+    manufacture: str = Query(..., description="제조사"),
+    model: Optional[str] = Query(None, description="모델명"),
+    category: Optional[str] = Query(None, description="카테고리"),
+    min_price: Optional[int] = Query(None, description="최소 가격", gt=0),
+    max_price: Optional[int] = Query(None, description="최대 가격", gt=0),
+    min_mandate: Optional[str] = Query(None, description="최소 제조년도"),
+) -> List[dict]:
+    results = []
+    for air_conditioner in air_conditioner_data:
+        if (
+            air_conditioner["manufacture"] == manufacture
+            and (air_conditioner["model"] == model if model else True)
+            and (air_conditioner["category"] == category if category else True)
+            and (air_conditioner["min_price"] >= min_price if min_price else True)
+            and (air_conditioner["max_price"] <= max_price if max_price else True)
+            and (air_conditioner["min_mandate"] >= min_mandate if min_mandate else True)
+        ):
+            results.append(air_conditioner)
+    return results
+
+kindergarten_data = [
+    {
+        "name": "김아율",
+        "age": 5,
+        "class": "햇님반",
+        "birthday": "2019.12.30",
+        "time": "F",
+        "phonNum": "010-1234-5678"
+    },
+    {
+        "name": "정하린",
+        "age": 5,
+        "class": "구름반",
+        "birthday": "2019.11.12",
+        "time": "F",
+        "phonNum": "010-1111-2222"
+    },
+    {
+        "name": "이종희",
+        "age": 5,
+        "class": "구름반",
+        "birthday": "2019.04.03",
+        "time": "M",
+        "phonNum": "010-2222-3333"
+    },
+    {
+        "name": "강민아",
+        "age": 6,
+        "class": "꽃님반",
+        "birthday": "2018.12.25",
+        "time": "F",
+        "phonNum": "010-3333-4444"
+    },
+    {
+        "name": "엄효연",
+        "age": 6,
+        "class": "꽃님반",
+        "birthday": "2018.08.31",
+        "time": "F",
+        "phonNum": "010-4444-5555"
+    },
+    {
+        "name": "장민혁",
+        "age": 7,
+        "class": "파랑반",
+        "birthday": "2017.09.15",
+        "time": "M",
+        "phonNum": "010-5555-6666"
+    },
+    {
+        "name": "김주하",
+        "age": 7,
+        "class": "초록반",
+        "birthday": "2017.03.04",
+        "time": "M",
+        "phonNum": "010-6666-7777"
+    }
+]
+
+
+@app.get("/kindergarten")
+async def filter_kindergarten(
+    name: Optional[str] = Query(None, description="이름"),
+    min_age: Optional[int] = Query(None, description="최소 나이", gt=0),
+    max_age: Optional[int] = Query(None, description="최대 나이", gt=0),
+    class_: Optional[str] = Query(None, description="반"),
+    birthday: Optional[str] = Query(None, description="생일"),
+    gender: Optional[str] = Query(None, description="성별 ex)M, F"),
+    phonNum: Optional[str] = Query(None, description="부모님 연락처"),
+) -> List[dict]:
+    results = []
+    for child in kindergarten_data:
+        if (
+            (child["name"] == name if name else True)
+            and (child["age"] >= min_age if min_age else True)
+            and (child["age"] <= max_age if max_age else True)
+            and (child["class"] == class_ if class_ else True)
+            and (child["birthday"] == birthday if birthday else True)
+            and (child["time"] == gender if gender else True)
+            and (child["phonNum"] == phonNum if phonNum else True)
+        ):
+            results.append(child)
+    return results
+
+swimsuit_data = [
+    {
+        "brand": "나이키",
+        "name": "레이서백 비포 선셋",
+        "cut": "로우",
+        "pattern": "Y",
+        "price": 120000,
+        "sale": 0
+    },
+    {
+        "brand": "후그",
+        "name": "여행 미드 크로스 타이백 핑크 로즈",
+        "cut": "하이",
+        "pattern": "Y",
+        "price": 82000,
+        "sale": 5
+    },
+    {
+        "brand": "후그",
+        "name": "여행 로우 크로스엑스 터널백 블루 체크",
+        "cut": "1부",
+        "pattern": "N",
+        "price": 78000,
+        "sale": 25
+    },
+    {
+        "brand": "후그",
+        "name": "빈티지 블루스 그라데이션 엑스백 탄탄이 블루블랙",
+        "cut": "미들",
+        "pattern": "Y",
+        "price": 78000,
+        "sale": 30
+    },
+    {
+        "brand": "아레나",
+        "name": "팬텀 U백 와인",
+        "cut": "3부",
+        "pattern": "N",
+        "price": 123000,
+        "sale": 10
+    },
+    {
+        "brand": "아레나",
+        "name": "스타라이트 레이서백 퍼플",
+        "cut": "2부",
+        "pattern": "Y",
+        "price": 116100,
+        "sale": 15
+    },
+    {
+        "brand": "스웨이브",
+        "name": "레이어 아치백 선라이즈 오렌지",
+        "cut": "로우",
+        "pattern": "N",
+        "price": 58000,
+        "sale": 0
+    }
+]
+
+
+@app.get("/swimsuit")
+async def filter_swimsuit(
+    brand: str = Query(..., description="브랜드"),
+    name: Optional[str] = Query(None, description="상품명"),
+    cut: Optional[str] = Query(None, description="컷 스타일 ex.2부, 반신, 로우, 하이, 미들"),
+    pattern: Optional[str] = Query(None, description="패턴 유무"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    min_sale: Optional[int] = Query(None, description="최소 할인"),
+    max_sale: Optional[int] = Query(None, description="최대 할인"),
+) -> List[dict]:
+    results = []
+    for swimsuit in swimsuit_data:
+        if (
+            swimsuit["brand"] == brand
+            and (swimsuit["name"] == name if name else True)
+            and (swimsuit["cut"] == cut if cut else True)
+            and (swimsuit["pattern"] == pattern if pattern else True)
+            and (min_price is None or swimsuit["price"] >= min_price)
+            and (max_price is None or swimsuit["price"] <= max_price)
+            and (min_sale is None or swimsuit["sale"] >= min_sale)
+            and (max_sale is None or swimsuit["sale"] <= max_sale)
+        ):
+            results.append(swimsuit)
+    return results
+
+pharmacy_data = [
+    {
+        "name": "365 우리 약국",
+        "location": "경기도 구리시 검배로6번길 3 씨티은행",
+        "phone": "031-1111-2222",
+        "dayOff": "일요일",
+        "petMedicine": "Y",
+        "localCurrency": "N"
+    },
+    {
+        "name": "미소 약국",
+        "location": "서울특별시 영등포구 문래로 83 아라비즈타워",
+        "phone": "02-2222-3333",
+        "dayOff": "월요일",
+        "petMedicine": "N",
+        "localCurrency": "N"
+    },
+    {
+        "name": "미소 약국",
+        "location": "경기도 성남시 중원구 산성대로372번길 13",
+        "phone": "031-3333-4444",
+        "dayOff": "화요일",
+        "petMedicine": "N",
+        "localCurrency": "Y"
+    },
+    {
+        "name": "행복한 약국",
+        "location": "서울특별시 영등포구 영중로 15 타임스퀘어 B1 B122",
+        "phone": "02-4444-5555",
+        "dayOff": "일요일",
+        "petMedicine": "Y",
+        "localCurrency": "Y"
+    },
+    {
+        "name": "언제나 건강한 약국",
+        "location": "서울특별시 성북구 보문로34길 59 1F",
+        "phone": "02-5555-6666",
+        "dayOff": "화요일",
+        "petMedicine": "Y",
+        "localCurrency": "N"
+    },
+    {
+        "name": "모란 약국",
+        "location": "서울특별시 서초구 강남대로 365",
+        "phone": "02-6666-7777",
+        "dayOff": "수요일",
+        "petMedicine": "N",
+        "localCurrency": "Y"
+    }
+]
+
+
+@app.get("/pharmacy")
+async def filter_pharmacy(
+    name: Optional[str] = Query(None, description="약국명"),
+    location: str = Query(..., description="위치"),
+    phone: Optional[str] = Query(None, description="전화번호"),
+    dayOff: Optional[str] = Query(None, description="휴무일"),
+    petMedicine: Optional[str] = Query(None, description="동물약 취급 여부 ex. Y, N"),
+    localCurrency: Optional[str] = Query(None, description="지역화폐 사용여부 ex. Y, N"),
+) -> List[dict]:
+    results = []
+    for pharmacy in pharmacy_data:
+        if (
+            (pharmacy["name"] == name if name else True)
+            and pharmacy["location"] == location
+            and (pharmacy["phone"] == phone if phone else True)
+            and (pharmacy["dayOff"] == dayOff if dayOff else True)
+            and (pharmacy["petMedicine"] == petMedicine if petMedicine else True)
+            and (pharmacy["localCurrency"] == localCurrency if localCurrency else True)
+        ):
+            results.append(pharmacy)
+    return results
+
+gifticon_data = [
+    {
+        "name": "아메리카노2 + 카스테라1",
+        "exchange": "스타벅스",
+        "certDate": "2023.01.25",
+        "expDate": "2023.07.20",
+        "person": "나대리"
+    },
+    {
+        "name": "3만원 교환권",
+        "exchange": "올리브영",
+        "certDate": "2023.05.30",
+        "expDate": "2024.05.30",
+        "person": "강 부장님"
+    },
+    {
+        "name": "5만원 교환권",
+        "exchange": "올리브영",
+        "certDate": "2023.01.02",
+        "expDate": "2024.01.15",
+        "person": "여자친구"
+    },
+    {
+        "name": "2만원 상품권",
+        "exchange": "스타벅스",
+        "certDate": "2022.07.30",
+        "expDate": "2023.06.08",
+        "person": "거래처 김사장님"
+    },
+    {
+        "name": "후라이드 + 콜라1.2L",
+        "exchange": "BBQ",
+        "certDate": "2023.04.30",
+        "expDate": "2024.3.1",
+        "person": "나대리"
+    },
+    {
+        "name": "싸이버거",
+        "exchange": "맘스터치",
+        "certDate": "2022.01.22",
+        "expDate": "2022.12.25",
+        "person": "여자친구"
+    }
+]
+
+
+@app.get("/gifticon")
+async def filter_gifticon(
+    name: Optional[str] = Query(None, description="상품명"),
+    exchange: Optional[str] = Query(None, description="교환처"),
+    certDate: Optional[str] = Query(None, description="발급일"),
+    min_expDate: Optional[str] = Query(None, description="최소 만료일"),
+    max_expDate: Optional[str] = Query(None, description="최대 만료일"),
+    person: str = Query(..., description="보낸 사람"),
+) -> List[dict]:
+    results = []
+    for gifticon in gifticon_data:
+        if (
+            (gifticon["name"] == name if name else True)
+            and (gifticon["exchange"] == exchange if exchange else True)
+            and (gifticon["certDate"] == certDate if certDate else True)
+            and (
+                (gifticon["expDate"] >= min_expDate if min_expDate else True)
+                and (gifticon["expDate"] <= max_expDate if max_expDate else True)
+            )
+            and gifticon["person"] == person
+        ):
+            results.append(gifticon)
+    return results
+
+bedding_data = [
+    {
+        "brand": "믹스앤매치",
+        "name": "미드센추리 카이 먼지없는 항균 홑 커버",
+        "category": "이불 커버",
+        "price": 25000,
+        "review": "가성비 최고 이불 커버입니다."
+    },
+    {
+        "brand": "믹스앤매치",
+        "name": "나의 바다 타미아 스노우 시어서커 패드",
+        "category": "패드",
+        "price": 35000,
+        "review": "이거 산 뒤로 숙면해요."
+    },
+    {
+        "brand": "루시드슬립",
+        "name": "아멜리 알러지케어",
+        "category": "패드",
+        "price": 25000,
+        "review": "아토피 있는 와이프가 골랐는데 만족이요."
+    },
+    {
+        "brand": "루시드슬립",
+        "name": "시원보송 오션 시어서커 이불",
+        "category": "이불",
+        "price": 53000,
+        "review": "여름 이불로 딱입니다."
+    },
+    {
+        "brand": "마틸라",
+        "name": "초고밀도 순면 베게 커버",
+        "category": "베개 커버",
+        "price": 0,  # Replace with actual price
+        "review": "우리 초등학생 딸 방에 잘 어울려요"
+    },
+    {
+        "brand": "마틸라",
+        "name": "슈크림 세미워셔 차렵이불",
+        "category": "이불",
+        "price": 45000,
+        "review": "우리집 고양이가 좋아해요"
+    }
+]
+
+
+@app.get("/bedding")
+async def filter_bedding(
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="상품명"),
+    category: str = Query(..., description="카테고리"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+) -> List[dict]:
+    results = []
+    for bedding in bedding_data:
+        if (
+            (bedding["brand"] == brand if brand else True)
+            and (bedding["name"] == name if name else True)
+            and bedding["category"] == category
+            and (bedding["price"] >= min_price if min_price else True)
+            and (bedding["price"] <= max_price if max_price else True)
+        ):
+            results.append(bedding)
+    return results
+
+gukbab_data = [
+    ["88수육", "동구 진성로 9번길 52", "1989년", "6000", ["뽀얀 국물", "토렴", "양념 포함"], ["인근 수정시장 공영주차장 이용 가능", "24시간 영업"]],
+    ["밀양집", "중구 중구로 4번길 35", "1968년", "7000", ["맑은 국물", "토렴", "양념 포함"], ["부평 깡통시장 인근", "주차장 없음"]],
+    ["개미식당", "남구 용호로 110번길 17", "1991년", "5000", ["뽀얀 국물", "직화", "양념 따로", "소면 제공"], ["배달 가능", "주차 가능"]],
+    ["신창국밥", "서구 보수대로 53", "1969년", "7000", ["맑은 국물", "토렴", "양념 포함"], ["자갈치시장 옆", "주차장 없음"]],
+    ["합천식당", "진구 자유평화로 23", "1960년대 후반", "6800", ["뽀얀 국물", "토렴", "양념 포함"], ["유명 국밥집 할머니딸집의 손녀분이 운영", "아침 7시부터 저녁 10시까지만 운영"]],
+]
+
+@app.get("/gukbap")
+async def search_gukbap(
+    국밥집이름: str = Query(None, description="검색하고자 하는 국밥집의 이름"),
+    지역구: str = Query(None, description="국밥집이 위치한 지역입니다(군, 구 단위) ex) 수영구, 기장군, 동구 등"),
+    최소가격: int = Query(None, description="국밥 한 그릇의 최소 가격입니다(원화 기준)"),
+    최대가격: int = Query(None, description="국밥 한 그릇의 최대 가격입니다(원화 기준)"),
+    구성설명: str = Query(..., description="국밥의 구성 설명입니다 ex)토렴, 직화, 뽀얀 국물, 맑은 국물, 양념 포함, 양념 따로, 소면 제공"),
+    기타설명: str = Query(None, description="기타 특이사항 설명입니다(쉼표로 구분) ex) 배달 가능, 주차장 있음 등")
+):
+    filtered_data = []
+    for item in data:
+        if (
+            (국밥집이름 is None or 국밥집이름 in item[0]) and
+            (지역구 is None or 지역구 in item[1]) and
+            (최소가격 is None or int(item[3]) >= 최소가격) and
+            (최대가격 is None or int(item[3]) <= 최대가격) and
+            (구성설명 in item[4]) and
+            (기타설명 is None or any(keyword in item[5] for keyword in 기타설명.split(",")))
+        ):
+            filtered_data.append({
+                "국밥집이름": item[0],
+                "주소": item[1],
+                "개업일": item[2],
+                "가격": item[3],
+                "구성설명": item[4],
+                "기타설명": item[5]
+            })
+    return filtered_data
+
+snapshot_data = [
+    {
+        "작가이름": "로맨틱준",
+        "촬영카테고리": ["프로필", "웨딩", "데이트"],
+        "이용가능지역": ["서울시", "경기도"],
+        "가격": "250000",
+        "평점": 4.1,
+        "예약가능여부": "Y",
+        "이용후기": ["친절해요", "실력이 좋아요", "조금 올드한 느낌이 있어요"],
+        "연락처": "010-4635-5386"
+    },
+    {
+        "작가이름": "쁘띠제이",
+        "촬영카테고리": ["돌잔치", "웨딩", "데이트"],
+        "이용가능지역": ["서울시", "경기도", "충청도", "강원도"],
+        "가격": "320000",
+        "평점": 4.8,
+        "예약가능여부": "Y",
+        "이용후기": ["노하우가 있으세요", "좋아요", "색감이 좋아요"],
+        "연락처": "010-4621-5286"
+    },
+    {
+        "작가이름": "흰곰돌이",
+        "촬영카테고리": ["졸업식", "야외촬영", "데이트"],
+        "이용가능지역": ["제주도", "서울시", "인천시"],
+        "가격": "290000",
+        "평점": 4.3,
+        "예약가능여부": "N",
+        "이용후기": ["친절해요", "특별해요", "트렌디해요"],
+        "연락처": "010-4225-1186"
+    },
+    {
+        "작가이름": "케이스튜디오",
+        "촬영카테고리": ["컨셉촬영", "프로필", "바디프로필"],
+        "이용가능지역": ["대전시", "서울시"],
+        "가격": "200000",
+        "평점": 3.3,
+        "예약가능여부": "Y",
+        "이용후기": ["느낌있어요", "특별해요", "약속을 잘 지키지 않으세요"],
+        "연락처": "010-1125-1422"
+    },
+    {
+        "작가이름": "그린캔버스",
+        "촬영카테고리": ["행사촬영", "야외촬영", "돌잔치"],
+        "이용가능지역": ["부산시", "울산시"],
+        "가격": "300000",
+        "평점": 3.9,
+        "예약가능여부": "N",
+        "이용후기": ["조금 기분 나빴어요", "실력있으세요", "마음에 들어요"],
+        "연락처": "010-1717-1186"
+    }
+]
+
+@app.get("/snapshot")
+async def search_snapshot(
+    작가이름: str = Query(None, description="검색하고자 하는 사진작가의 이름"),
+    촬영카테고리: str = Query(..., description="촬영카테고리와 컨셉  ex)프로필, 웨딩, 바디프로필, 돌잔치, 데이트, 야외촬영, 졸업식 등"),
+    이용가능지역: str = Query(None, description="촬영가능지역입니다(시, 도 단위) ex) 경기도, 전라남도, 삼척시 등"),
+    최소가격: str = Query(None, description="최소 이용가입니다(원화 기준)"),
+    최대가격: str = Query(None, description="최대 이용가입니다(원화 기준)"),
+    최소평점: int = Query(None, ge=0, description="후기 기준 최소 평점입니다"),
+    최대평점: int = Query(None, le=5, description="후기 기준 최대 평점입니다"),
+    예약가능여부: str = Query(None, description="현재 예약이 가능한지 여부입니다 Y or N"),
+):
+    filtered_data = []
+    for item in snapshot_data:
+        if (
+            (작가이름 is None or 작가이름 in item["작가이름"]) and
+            (촬영카테고리 in item["촬영카테고리"]) and
+            (이용가능지역 is None or 이용가능지역 in item["이용가능지역"]) and
+            (최소가격 is None or int(item["가격"]) >= int(최소가격)) and
+            (최대가격 is None or int(item["가격"]) <= int(최대가격)) and
+            (최소평점 is None or item["평점"] >= 최소평점) and
+            (최대평점 is None or item["평점"] <= 최대평점) and
+            (예약가능여부 is None or item["예약가능여부"] == 예약가능여부)
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+sool_data = [
+    {
+        "술이름": "나루생막걸리",
+        "브랜드": "한강주조",
+        "종류": "탁주",
+        "도수": 6.0,
+        "용량": 800,
+        "가격": "7000",
+        "설명": "무감미료, 서울의 농부들이 재배하는 경복궁쌀을 이용하여 만든 막걸리",
+    },
+    {
+        "술이름": "이화주",
+        "브랜드": "술샘",
+        "종류": "탁주",
+        "도수": 8.0,
+        "용량": 100,
+        "가격": "8000",
+        "설명": "숟가락으로 떠먹는 막걸리, 요거트 같은 질감",
+    },
+    {
+        "술이름": "문배술 23도",
+        "브랜드": "문배주양조원",
+        "종류": "증류주",
+        "도수": 23.0,
+        "용량": 375,
+        "가격": "6900",
+        "설명": "5대가 가업으로 이어가고 있는 양조장, 국가 중요무형문화재 지정",
+    },
+    {
+        "술이름": "우렁이쌀 청주",
+        "브랜드": "양촌양조",
+        "종류": "청주",
+        "도수": 14.0,
+        "용량": 500,
+        "가격": "16000",
+        "설명": "무감미료, 국내산 무농약 찹쌀 100% 사용",
+    },
+    {
+        "술이름": "장수 오미자주",
+        "브랜드": "알에프",
+        "종류": "과실주",
+        "도수": 16.5,
+        "용량": 360,
+        "가격": "5400",
+        "설명": "전라북도 장수의 오미자를 착즙하고 발효한 오미자 와인",
+    },
+]
+
+@app.get("/sool")
+async def search_sool(
+    술이름: Optional[str] = Query(None, description="검색하고자 하는 전통주의 이름"),
+    브랜드: Optional[str] = Query(None, description="술의 브랜드, 양조장이나 제조사 이름입니다"),
+    최저도수: Optional[int] = Query(None, description="전통주의 최저 도수입니다(도 기준)"),
+    최고도수: Optional[int] = Query(None, description="전통주의 최고 도수입니다(도 기준)"),
+    최소가격: Optional[str] = Query(None, description="전통주 1병의 최소 가격입니다(원화 기준)"),
+    최대가격: Optional[str] = Query(None, description="전통주 1병의 최대 가격입니다(원화 기준)"),
+    종류: str = Query(..., description="전통주의 종류 ex) 증류주, 탁주, 약주 등"),
+) -> List[dict]:
+    filtered_data = []
+    for item in sool_data:
+        if (
+            (술이름 is None or 술이름.lower() in item["술이름"].lower())
+            and (브랜드 is None or 브랜드.lower() in item["브랜드"].lower())
+            and (최저도수 is None or item["도수"] >= 최저도수)
+            and (최고도수 is None or item["도수"] <= 최고도수)
+            and (최소가격 is None or int(item["가격"]) >= int(최소가격))
+            and (최대가격 is None or int(item["가격"]) <= int(최대가격))
+            and (종류 is None or 종류.lower() == item["종류"].lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+low_c_i_data = [
+    {
+        "아이스크림이름": "스키니피그 망고샤베트",
+        "브랜드": "스키니피그",
+        "종류": "샤베트",
+        "용량": 474,
+        "가격": "7900",
+        "칼로리": 260,
+        "설명": "대체감미료로 살린 단맛, 애플망고퓨레의 새콤달콤한 맛과 사르르 녹는 식감",
+    },
+    {
+        "아이스크림이름": "초콜릿 모나카",
+        "브랜드": "라라스윗",
+        "종류": "아이스밀크",
+        "용량": 560,
+        "가격": "9400",
+        "칼로리": 520,
+        "설명": "국내산 생우유와 유크림으로 만들어 더 건강한 맛, 쫀득한 식감",
+    },
+    {
+        "아이스크림이름": "프로틴 아이스 다크초콜릿",
+        "브랜드": "단백질과자점",
+        "종류": "아이스밀크",
+        "용량": 474,
+        "가격": "8000",
+        "칼로리": 475,
+        "설명": "다크초콜렛 풍미가 가득",
+    },
+    {
+        "아이스크림이름": "제로 미니바이트",
+        "브랜드": "롯데",
+        "종류": "빙과",
+        "용량": 380,
+        "가격": "6990",
+        "칼로리": 680,
+        "설명": "미니사이즈, 겉바속촉 초코코팅",
+    },
+    {
+        "아이스크림이름": "씨솔트 카라멜",
+        "브랜드": "헤일로탑",
+        "종류": "샤베트",
+        "용량": 473,
+        "가격": "13000",
+        "칼로리": 3300,
+        "설명": "단짠의 정석",
+    },
+]
+
+@app.get("/low_c_i")
+async def search_low_calorie_ice_cream(
+    아이스크림이름: str = Query(..., description="검색하고자 하는 아이스크림의 이름"),
+    브랜드: Optional[str] = Query(None, description="아이스크림의 브랜드 이름입니다"),
+    종류: Optional[str] = Query(None, description="아이스크림의 종류 ex) 아이스밀크, 샤베트 등"),
+    최소가격: Optional[str] = Query(None, description="아이스크림의 최소 가격입니다(원화 기준)"),
+    최대가격: Optional[str] = Query(None, description="아이스크림의 최대 가격입니다(원화 기준)"),
+    최저칼로리: Optional[float] = Query(None, description="검색하고자 하는 아이스크림의 최저 칼로리입니다"),
+    최고칼로리: Optional[float] = Query(None, description="검색하고자 하는 아이스크림의 최고 칼로리입니다."),
+) -> List[dict]:
+    filtered_data = []
+    for item in low_c_i_data:
+        if (
+            (아이스크림이름.lower() in item["아이스크림이름"].lower())
+            and (브랜드 is None or 브랜드.lower() in item["브랜드"].lower())
+            and (종류 is None or 종류.lower() == item["종류"].lower())
+            and (최소가격 is None or int(item["가격"]) >= int(최소가격))
+            and (최대가격 is None or int(item["가격"]) <= int(최대가격))
+            and (최저칼로리 is None or item["칼로리"] >= 최저칼로리)
+            and (최고칼로리 is None or item["칼로리"] <= 최고칼로리)
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+blacktea_data = [
+    {
+        "종류": "다즐링",
+        "원산지": "인도",
+        "가격": "21000",
+        "맛": "와인 향과 닮은 프루티한 향과 맛",
+        "설명": "히말라야 고지에서 자란 찻잎 사용",
+    },
+    {
+        "종류": "아삼",
+        "원산지": "인도",
+        "가격": "22000",
+        "맛": "짙고 강한 발효 향과 맛",
+        "설명": "인도 남부에서 주로 생산",
+    },
+    {
+        "종류": "우바",
+        "원산지": "스리랑카",
+        "가격": "22000",
+        "맛": "시트러스를 닮은 향이 강함",
+        "설명": "실론티의 대표격",
+    },
+    {
+        "종류": "딤불라",
+        "원산지": "스리랑카",
+        "가격": "24000",
+        "맛": "맛과 향이 부드럽고 조화로움",
+        "설명": "오렌지페코의 주 원료로 사용",
+    },
+    {
+        "종류": "랍상 소우총",
+        "원산지": "중국",
+        "가격": "20000",
+        "맛": "소나무 훈연향",
+        "설명": "솔잎을 태우며 차 잎을 말리는 과정을 거침",
+    },
+]
+
+@app.get("/blacktea")
+async def search_black_tea(
+    종류: Optional[str] = Query(None, description="검색하고자 하는 홍차의 종류 명칭을 말합니다"),
+    원산지: str = Query(..., description="홍차의 원산지입니다"),
+    최소가격: Optional[str] = Query(None, description="홍차의 최소 가격입니다(100g기준, 원화 기준)"),
+    최대가격: Optional[str] = Query(None, description="홍차의 최대 가격입니다(100g기준, 원화 기준)"),
+    맛: Optional[str] = Query(None, description="홍차의 맛 표현 설명을 바탕으로 검색합니다"),
+    설명: Optional[str] = Query(None, description="홍차의 기타 설명을 바탕으로 검색합니다"),
+) -> List[dict]:
+    filtered_data = []
+    for item in blacktea_data:
+        if (
+            (종류 is None or 종류.lower() == item["종류"].lower())
+            and 원산지.lower() == item["원산지"].lower()
+            and (최소가격 is None or int(item["가격"]) >= int(최소가격))
+            and (최대가격 is None or int(item["가격"]) <= int(최대가격))
+            and (맛 is None or 맛.lower() in item["맛"].lower())
+            and (설명 is None or 설명.lower() in item["설명"].lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+flower_d_data = [
+    {
+        "상품명": "6월의 탄생화",
+        "업체명": "원타이밍",
+        "가격": "43000",
+        "꽃종류": ["햇살장미", "장미", "수국"],
+        "색상": "핑크",
+        "설명": "6월 탄생화로 구성했습니다. 생일이나 기념일에 선물하기 좋은 꽃다발입니다.",
+        "이용가능지역": ["서울시", "인천시"],
+        "연락처": "02-512-1234"
+    },
+    {
+        "상품명": "화이트 팰러스",
+        "업체명": "원타이밍",
+        "가격": "140000",
+        "꽃종류": ["장미", "카네이션", "수국"],
+        "색상": "화이트",
+        "설명": "기념일, 생일, 승진, 아기의 탄생과 같은 모든 순간에 어울리는 하얀 꽃바구니입니다.",
+        "이용가능지역": ["서울시", "인천시"],
+        "연락처": "02-512-1234"
+    },
+    {
+        "상품명": "블루스카이",
+        "업체명": "컬티플라워",
+        "가격": "67000",
+        "꽃종류": ["델피늄", "장미", "수국"],
+        "색상": "블루",
+        "설명": "파란색 꽃으로 구성한 시원한 꽃다발입니다.",
+        "이용가능지역": ["서울시", "인천시", "경기도"],
+        "연락처": "02-112-1234"
+    },
+    {
+        "상품명": "레드로즈",
+        "업체명": "컬티플라워",
+        "가격": "75000",
+        "꽃종류": ["유스커스", "장미"],
+        "색상": "레드",
+        "설명": "정열적인 빨간 장미입니다. 생일이나 기념일에 선물하기 좋은 꽃다발입니다.",
+        "이용가능지역": ["서울시", "인천시", "경기도"],
+        "연락처": "02-112-1234"
+    },
+    {
+        "상품명": "여름의 추억",
+        "업체명": "꾸꾸",
+        "가격": "99000",
+        "꽃종류": ["해바라기", "장미", "수국"],
+        "색상": "옐로우",
+        "설명": "해바라기가 싱그러운 대형 꽃다발입니다.",
+        "이용가능지역": ["제주도"],
+        "연락처": "02-222-1234"
+    }
+]
+
+@app.get("/flower_d")
+async def search_flowers(
+    상품명: Optional[str] = Query(None, description="검색하고자 하는 꽃 상품의 이름입니다"),
+    업체명: Optional[str] = Query(None, description="검색하고자 하는 업체의 이름입니다"),
+    최소가격: Optional[int] = Query(None, description="꽃 상품의 최소 가격입니다(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="꽃 상품의 최대 가격입니다(원화 기준)"),
+    꽃종류: str = Query(..., description="꽃 상품에 포함된 꽃을 검색할 수 있습니다 ex) 장미, 수국 등"),
+    이용가능지역: Optional[str] = Query(None, description="이용가능지역입니다(시, 도 단위) ex) 경기도, 전라남도, 삼척시 등"),
+    색상: Optional[str] = Query(None, description="꽃 상품의 주요 색상을 바탕으로 검색합니다 ex) 핑크, 화이트, 레드 등")
+) -> List[dict]:
+    filtered_data = []
+    for item in flower_d_data:
+        if (
+            (상품명 is None or 상품명.lower() in item["상품명"].lower())
+            and (업체명 is None or 업체명.lower() in item["업체명"].lower())
+            and (최소가격 is None or int(item["가격"]) >= 최소가격)
+            and (최대가격 is None or int(item["가격"]) <= 최대가격)
+            and (꽃종류.lower() in [flower.lower() for flower in item["꽃종류"]])
+            and (이용가능지역 is None or 이용가능지역.lower() in [area.lower() for area in item["이용가능지역"]])
+            and (색상 is None or 색상.lower() == item["색상"].lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+n_a_beer_data = [
+    {
+        "맥주이름": "하이트 제로",
+        "브랜드": "하이트",
+        "가격": "1180",
+        "용량": 350,
+        "알콜유무": "N",
+        "설명": "퓨린, 알코올, 칼로리가 없는 올 프리 맥주"
+    },
+    {
+        "맥주이름": "넌, 한강",
+        "브랜드": "세븐브로이",
+        "가격": "1800",
+        "용량": 355,
+        "알콜유무": "N",
+        "설명": "오렌지향과 홉의 향이 가득한 제로알콜맥주"
+    },
+    {
+        "맥주이름": "아사히 드라이 제로",
+        "브랜드": "아사히",
+        "가격": "5000",
+        "용량": 500,
+        "알콜유무": "N",
+        "설명": "오리지널 아사히 맥주와 흡사한 맛, 가장 맥주다운 논알콜 맥주"
+    },
+    {
+        "맥주이름": "외팅어 알코홀프라이",
+        "브랜드": "외팅어",
+        "가격": "1300",
+        "용량": 500,
+        "알콜유무": "Y",
+        "설명": "가성비가 좋은 맥주. 0.5도 이하의 알코올 함유"
+    },
+    {
+        "맥주이름": "코젤 다크 넌 알코올릭",
+        "브랜드": "코젤",
+        "가격": "2600",
+        "용량": 500,
+        "알콜유무": "Y",
+        "설명": "0.5도 이하의 알코올을 함유한 흑맥주"
+    }
+]
+
+@app.get("/n_a_beer")
+async def search_n_a_beer(
+    맥주이름: Optional[str] = Query(None, description="검색하고자 하는 맥주의 이름입니다"),
+    브랜드: Optional[str] = Query(None, description="검색하고자 하는 맥주의 브랜드입니다"),
+    최소가격: Optional[int] = Query(None, description="맥주의 최소 가격입니다(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="맥주의 최대 가격입니다(원화 기준)"),
+    최소용량: Optional[float] = Query(None, description="맥주의 최소 용량입니다(ml)"),
+    최대용량: Optional[float] = Query(None, description="맥주의 최대 용량입니다(ml)"),
+    알콜유무: str = Query(..., description="완전한 무알콜과 저알콜(소량 들어간 비알코올)을 구분합니다. N 또는 Y로 표기합니다"),
+    설명: Optional[str] = Query(None, description="맥주의 맛이나 기타 설명을 바탕으로 검색합니다")
+) -> List[dict]:
+    filtered_data = []
+    for item in n_a_beer_data:
+        if (
+            (맥주이름 is None or 맥주이름.lower() in item["맥주이름"].lower())
+            and (브랜드 is None or 브랜드.lower() in item["브랜드"].lower())
+            and (최소가격 is None or int(item["가격"]) >= 최소가격)
+            and (최대가격 is None or int(item["가격"]) <= 최대가격)
+            and (최소용량 is None or item["용량"] >= 최소용량)
+            and (최대용량 is None or item["용량"] <= 최대용량)
+            and (알콜유무.lower() == item["알콜유무"].lower())
+            and (설명 is None or 설명.lower() in item["설명"].lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+aircon_c_data = [
+    {
+        "업체이름": "미소청소",
+        "에어컨종류": ["벽걸이", "스탠드"],
+        "이용가능지역": ["서울시", "인천시"],
+        "가격": "80000",
+        "평점": 4.5,
+        "예약가능여부": "Y",
+        "이용후기": ["좋아요", "꼼꼼하세요"],
+        "연락처": "010-3464-2417"
+    },
+    {
+        "업체이름": "에어컨박사",
+        "에어컨종류": ["벽걸이", "스탠드", "시스템"],
+        "이용가능지역": ["경기도", "강원도"],
+        "가격": "90000",
+        "평점": 4.8,
+        "예약가능여부": "Y",
+        "이용후기": ["최고였어요", "전문가이신 것 같아요"],
+        "연락처": "010-3221-2417"
+    },
+    {
+        "업체이름": "기업전문청소",
+        "에어컨종류": ["스탠드", "시스템"],
+        "이용가능지역": ["경기도", "서울시"],
+        "가격": "150000",
+        "평점": 4.9,
+        "예약가능여부": "N",
+        "이용후기": ["대규모 작업을 믿고 맡깁니다", "노하우가 있으세요"],
+        "연락처": "010-3111-2417"
+    },
+    {
+        "업체이름": "맑은공기청소",
+        "에어컨종류": ["벽걸이", "스탠드", "시스템"],
+        "이용가능지역": ["전라남도", "목포시"],
+        "가격": "90000",
+        "평점": 4.7,
+        "예약가능여부": "Y",
+        "이용후기": ["깔끔하게 해주세요", "최고의 전문가"],
+        "연락처": "010-6221-2417"
+    },
+    {
+        "업체이름": "에어컨전문가",
+        "에어컨종류": ["벽걸이", "스탠드"],
+        "이용가능지역": ["경기도", "의정부시"],
+        "가격": "50000",
+        "평점": 3.8,
+        "예약가능여부": "Y",
+        "이용후기": ["불만족", "잘해주세요"],
+        "연락처": "010-3221-2211"
+    },
+]
+
+@app.get("/aircon_c")
+async def search_aircon_cleaning_companies(
+    업체이름: Optional[str] = Query(None, description="검색하고자 하는 업체의 이름"),
+    에어컨종류: Optional[str] = Query(None, description="청소 가능한 에어컨 종류입니다 ex) 벽걸이, 스탠드, 시스템(천장형) 에어컨 등"),
+    이용가능지역: str = Query(..., description="예약 가능지역입니다(시, 도 단위) ex) 경기도, 전라남도, 삼척시 등"),
+    최소가격: Optional[int] = Query(None, description="최소 이용가입니다(원화 기준)"),
+    최대가격: Optional[int] = Query(None, description="최대 이용가입니다(원화 기준)"),
+    최소평점: Optional[int] = Query(None, description="후기 기준 최소 평점입니다"),
+    최대평점: Optional[int] = Query(None, description="후기 기준 최대 평점입니다"),
+    예약가능여부: Optional[str] = Query(None, description="현재 예약이 가능한지 여부입니다 Y or N")
+) -> List[dict]:
+    filtered_data = []
+    for item in aircon_c_data:
+        if (
+            (업체이름 is None or 업체이름.lower() in item["업체이름"].lower())
+            and (에어컨종류 is None or 에어컨종류.lower() in [ac.lower() for ac in item["에어컨종류"]])
+            and (이용가능지역.lower() in [loc.lower() for loc in item["이용가능지역"]])
+            and (최소가격 is None or int(item["가격"]) >= 최소가격)
+            and (최대가격 is None or int(item["가격"]) <= 최대가격)
+            and (최소평점 is None or item["평점"] >= 최소평점)
+            and (최대평점 is None or item["평점"] <= 최대평점)
+            and (예약가능여부 is None or 예약가능여부.lower() == item["예약가능여부"].lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+sunglasses_data = [
+    {
+        "brand": "젠틀몬스터",
+        "name": "RICK 01",
+        "color": "블랙",
+        "price": 269000,
+        "A/S 가능여부": "Y"
+    },
+    {
+        "brand": "RAYBAN",
+        "name": "RB4258F",
+        "color": "브라운",
+        "price": 129000,
+        "A/S 가능여부": "Y"
+    },
+    {
+        "brand": "오클리",
+        "name": "OO9245",
+        "color": "투명",
+        "price": 100000,
+        "A/S 가능여부": "N"
+    },
+    {
+        "brand": "ZARA",
+        "name": "랭",
+        "color": "옐로우",
+        "price": 17000,
+        "A/S 가능여부": "N"
+    },
+    {
+        "brand": "셀린느",
+        "name": "트리옹프",
+        "color": "블랙",
+        "price": 625000,
+        "A/S 가능여부": "Y"
+    }
+]
+
+@app.get("/sunglasses")
+async def filter_sunglasses(
+    max_price: int = Query(..., description="최대 가격"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="상품명"),
+    color: Optional[str] = Query(None, description="색상"),
+    as_possible: Optional[str] = Query(None, description="A/S 가능여부 (Y or N)")
+) -> List[dict]:
+    filtered_data = []
+    for item in sunglasses_data:
+        if (
+            item["price"] <= max_price
+            and (brand is None or item["brand"].lower() == brand.lower())
+            and (name is None or item["name"].lower() == name.lower())
+            and (color is None or item["color"].lower() == color.lower())
+            and (as_possible is None or item["A/S 가능여부"].lower() == as_possible.lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+camera_data = [
+    {
+        "brand": "삼성",
+        "name": "ST76",
+        "type": "디지털 카메라",
+        "price": 330000,
+        "color": "블랙",
+        "디스플레이_유무": "Y"
+    },
+    {
+        "brand": "로모그래피",
+        "name": "135BC",
+        "type": "필름 카메라",
+        "price": 60000,
+        "color": "레드",
+        "디스플레이_유무": "N"
+    },
+    {
+        "brand": "니콘",
+        "name": "D750",
+        "type": "DSLR",
+        "price": 430000,
+        "color": "블랙",
+        "디스플레이_유무": "N"
+    },
+    {
+        "brand": "소니",
+        "name": "A5000",
+        "type": "미러리스 카메라",
+        "price": 130000,
+        "color": "화이트",
+        "디스플레이_유무": "Y"
+    },
+    {
+        "brand": "캐논",
+        "name": "EOS 5D Mark III",
+        "type": "DSLR",
+        "price": 400000,
+        "color": "블랙",
+        "디스플레이_유무": "Y"
+    }
+]
+
+@app.get("/camera")
+async def filter_camera(
+    max_price: int = Query(..., description="최대 가격"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="상품명"),
+    camera_type: Optional[str] = Query(None, description="카메라 종류"),
+    color: Optional[str] = Query(None, description="색상"),
+    display_available: Optional[str] = Query(None, description="디스플레이 유무 (Y or N)")
+) -> List[dict]:
+    filtered_data = []
+    for item in camera_data:
+        if (
+            item["price"] <= max_price
+            and (brand is None or item["brand"].lower() == brand.lower())
+            and (name is None or item["name"].lower() == name.lower())
+            and (camera_type is None or item["type"].lower() == camera_type.lower())
+            and (color is None or item["color"].lower() == color.lower())
+            and (display_available is None or item["디스플레이_유무"].lower() == display_available.lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+clothes_data = [
+    {
+        "brand": "시티브리즈",
+        "name": "썸머 부클 반팔 가디건",
+        "type": "가디건",
+        "price": 75000,
+        "color": "핑크",
+        "gender": "여성"
+    },
+    {
+        "brand": "밀리언코르",
+        "name": "커버밴드 롱루즈 와이드 데님",
+        "type": "팬츠",
+        "price": 45000,
+        "color": "그레이",
+        "gender": "여성"
+    },
+    {
+        "brand": "톰브라운",
+        "name": "엔지니어드 저지 맨투맨",
+        "type": "맨투맨",
+        "price": 564000,
+        "color": "네이비",
+        "gender": "남성"
+    },
+    {
+        "brand": "포터리",
+        "name": "comfort shirt 02",
+        "type": "셔츠",
+        "price": 189000,
+        "color": "블루",
+        "gender": "남성"
+    },
+    {
+        "brand": "이그넬",
+        "name": "보이 모노키니",
+        "type": "비치웨어",
+        "price": 159000,
+        "color": "네이비",
+        "gender": "여성"
+    }
+]
+
+@app.get("/clothes")
+async def filter_clothes(
+    max_price: int = Query(..., description="최대 가격"),
+    brand: Optional[str] = Query(None, description="브랜드"),
+    name: Optional[str] = Query(None, description="상품명"),
+    clothes_type: Optional[str] = Query(None, description="옷 종류"),
+    color: Optional[str] = Query(None, description="색상"),
+    gender: Optional[str] = Query(None, description="성별")
+) -> List[dict]:
+    filtered_data = []
+    for item in clothes_data:
+        if (
+            item["price"] <= max_price
+            and (brand is None or item["brand"].lower() == brand.lower())
+            and (name is None or item["name"].lower() == name.lower())
+            and (clothes_type is None or item["type"].lower() == clothes_type.lower())
+            and (color is None or item["color"].lower() == color.lower())
+            and (gender is None or item["gender"].lower() == gender.lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+accommodation_data = [
+    {
+        "name": "평창라마다호텔",
+        "type": "호텔",
+        "지역": "강원도",
+        "평점": "4.3",
+        "예약가능_유무": "Y"
+    },
+    {
+        "name": "가평 조이글램핑펜션",
+        "type": "펜션",
+        "지역": "경기도",
+        "평점": "4.8",
+        "예약가능_유무": "Y"
+    },
+    {
+        "name": "부산 서면 아토",
+        "type": "모텔",
+        "지역": "부산",
+        "평점": "3.8",
+        "예약가능_유무": "N"
+    },
+    {
+        "name": "김치 게스트하우스",
+        "type": "게스트하우스",
+        "지역": "부산",
+        "평점": "3.5",
+        "예약가능_유무": "Y"
+    },
+    {
+        "name": "글로스터 호텔 청주",
+        "type": "호텔",
+        "지역": "충청북도",
+        "평점": "5",
+        "예약가능_유무": "N"
+    }
+]
+
+@app.get("/accommodation")
+async def filter_accommodation(
+    name: Optional[str] = Query(None, description="숙소명"),
+    accommodation_type: Optional[str] = Query(None, description="숙소 종류"),
+    region: Optional[str] = Query(None, description="지역"),
+    min_rating: Optional[float] = Query(None, description="최소 평점", gt=0, le=5),
+    reservation_available: Optional[str] = Query(None, description="예약 가능 유무")
+) -> List[dict]:
+    filtered_data = []
+    for item in data:
+        if (
+            (name is None or item["name"].lower() == name.lower())
+            and (accommodation_type is None or item["type"].lower() == accommodation_type.lower())
+            and (region is None or item["지역"].lower() == region.lower())
+            and (min_rating is None or float(item["평점"]) >= min_rating)
+            and (reservation_available is None or item["예약가능_유무"].lower() == reservation_available.lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+bicycle_data = [
+    {
+        "brand": "자이언트",
+        "name": "타론",
+        "type": "MTB 자전거",
+        "size": ["XS", "S", "M", "L"],
+        "price": 239000
+    },
+    {
+        "brand": "알톤",
+        "name": "코렉스",
+        "type": "미니벨로 자전거",
+        "size": ["XS", "S"],
+        "price": 195000
+    },
+    {
+        "brand": "콘스탄틴",
+        "name": "어베인",
+        "type": "픽시 자전거",
+        "size": ["XS", "S", "M", "L"],
+        "price": 820000
+    },
+    {
+        "brand": "알톤",
+        "name": "썸탈",
+        "type": "하이브리드 자전거",
+        "size": ["M", "L"],
+        "price": 330000
+    },
+    {
+        "brand": "자이언트",
+        "name": "SCR 2",
+        "type": "로드 자전거",
+        "size": ["M", "L"],
+        "price": 890000
+    }
+]
+
+@app.get("/bicycle_brand")
+async def filter_bicycle(
+    brand: Optional[str] = Query(..., description="브랜드"),
+    name: Optional[str] = Query(None, description="제품명"),
+    bicycle_type: Optional[str] = Query(None, description="자전거 종류"),
+    size: Optional[str] = Query(None, description="사이즈"),
+    max_price: Optional[int] = Query(None, description="최대 가격", ge=0)
+) -> List[dict]:
+    filtered_data = []
+    for item in bicycle_data:
+        if (
+            item["brand"].lower() == brand.lower()
+            and (name is None or item["name"].lower() == name.lower())
+            and (bicycle_type is None or item["type"].lower() == bicycle_type.lower())
+            and (size is None or size in item["size"])
+            and (max_price is None or item["price"] <= max_price)
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+gasstation_data = [
+    {
+        "이름": "대성주유소",
+        "판매_종류": ["휘발유", "경유", "고급"],
+        "가격": [1606, 1468, 1896],
+        "주소": "서울시 강서구 양천로 176",
+        "세차시설_유무": "Y"
+    },
+    {
+        "이름": "GS칼텍스 상암주유소",
+        "판매_종류": ["휘발유", "경유"],
+        "가격": [1628, 1538],
+        "주소": "경기도 고양시 덕양구 자유로 38",
+        "세차시설_유무": "Y"
+    },
+    {
+        "이름": "필동주유소",
+        "판매_종류": ["휘발유", "경유", "고급"],
+        "가격": [2359, 2209, 2609],
+        "주소": "서울시 중구 퇴계로 196",
+        "세차시설_유무": "N"
+    },
+    {
+        "이름": "중곡충전소",
+        "판매_종류": ["LPG"],
+        "가격": [1021],
+        "주소": "서울시 광진구 동일로 323",
+        "세차시설_유무": "N"
+    },
+    {
+        "이름": "창원CW",
+        "판매_종류": ["휘발유", "경유"],
+        "가격": [1535, 1355],
+        "주소": "서울시 광진구 광나루로 460",
+        "세차시설_유무": "Y"
+    }
+]
+
+@app.get("/gasstation")
+async def filter_gas_station(
+    name: Optional[str] = Query(..., description="주유소 이름"),
+    fuel_type: Optional[str] = Query(None, description="주유소에서 판매하는 에너지원 종류"),
+    max_price: Optional[int] = Query(None, description="최대 가격"),
+    city: Optional[str] = Query(None, description="지역구분_광역시도"),
+    district: Optional[str] = Query(None, description="지역구분_시군구"),
+    town: Optional[str] = Query(None, description="지역구분_읍면동"),
+    car_wash_facility: Optional[str] = Query(None, description="세차 시설 유무 Y OR N")
+) -> List[dict]:
+    filtered_data = []
+    for item in gasstation_data:
+        if (
+            item["이름"].lower() == name.lower()
+            and (fuel_type is None or fuel_type in item["판매_종류"])
+            and (max_price is None or max(item["가격"]) <= max_price)
+            and (city is None or city in item["주소"])
+            and (district is None or district in item["주소"])
+            and (town is None or town in item["주소"])
+            and (car_wash_facility is None or car_wash_facility == item["세차시설_유무"])
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+musical_data = [
+    {
+        "name": "레 미제라블",
+        "공연_시간": 180,
+        "original": "빅토르위고 <레미제라블>",
+        "초연_장소": "프랑스",
+        "초연_연도": 1980
+    },
+    {
+        "name": "위키드",
+        "공연_시간": 170,
+        "original": "그레고리 맥과이어 <위키드>",
+        "초연_장소": "미국",
+        "초연_연도": 2003
+    },
+    {
+        "name": "레베카",
+        "공연_시간": 170,
+        "original": "대프니 듀 모리에 <레베카>",
+        "초연_장소": "오스트리아",
+        "초연_연도": 2006
+    },
+    {
+        "name": "영웅",
+        "공연_시간": 160,
+        "original": "창작 뮤지컬",
+        "초연_장소": "한국",
+        "초연_연도": 2009
+    },
+    {
+        "name": "시카고",
+        "공연_시간": 150,
+        "original": "모린 달라스 왓킨스 <A Brave Little Woman>",
+        "초연_장소": "1975"
+    }
+]
+
+@app.get("/musical")
+async def filter_musical(
+    name: Optional[str] = Query(None, description="작품명"),
+    min_time: int = Query(..., description="최소 공연시간"),
+    original: Optional[str] = Query(None, description="원작"),
+    first_performance_place: Optional[str] = Query(None, description="뮤지컬이 처음 공연된 장소"),
+    first_performance_year: Optional[int] = Query(None, description="초연된 연도")
+) -> List[dict]:
+    filtered_data = []
+    for item in musical_data:
+        if (
+            (name is None or item["name"].lower() == name.lower())
+            and item["공연_시간"] >= min_time
+            and (original is None or original.lower() == item["original"].lower())
+            and (first_performance_place is None or first_performance_place.lower() == item["초연_장소"].lower())
+            and (first_performance_year is None or first_performance_year == item["초연_연도"])
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+university_data = [
+    {
+        "학교명": "인하대학교",
+        "종류": "사립 종합대학",
+        "주소": "인천광역시 미추홀구 인하로 100",
+        "학과": ["기계공학과", "수학과", "국어교육과", "행정학과"],
+        "전화번호": "032-860-7114"
+    },
+    {
+        "학교명": "한양여자대학교",
+        "종류": "사립 전문대학",
+        "주소": "서울특별시 성동구 살곶이길 200",
+        "학과": ["빅데이터과", "패션디자인과", "사회복지과", "치위생과"],
+        "전화번호": "02-2290-2114"
+    },
+    {
+        "학교명": "서울시립대학교",
+        "종류": "공립 종합대학",
+        "주소": "서울특별시 동대문구 서울시립대로 163",
+        "학과": ["사회복지학과", "화학공학과", "철학과", "음악학과"],
+        "전화번호": "02-6490-6114"
+    },
+    {
+        "학교명": "중부대학교",
+        "종류": "사립 종합대학",
+        "주소": "충청남도 금산군 추부면 대학로 201",
+        "학과": ["경찰경호학과", "식품영양학과", "물리치료학과", "동물보건학과"],
+        "전화번호": "041-750-6500"
+    },
+    {
+        "학교명": "부천대학교",
+        "종류": "사립 전문대학",
+        "주소": "경기도 부천시 심곡동 신흥로56번길 25",
+        "학과": ["건축과", "경영학과", "간호학과", "재활스포츠학과"],
+        "전화번호": "032-610-0114"
+    }
+]
+
+@app.get("/university")
+async def filter_university(
+    name: Optional[str] = Query(None, description="학교명"),
+    metropolitan: Optional[str] = Query(None, description="지역구분 광역시도"),
+    city: Optional[str] = Query(None, description="지역구분 시군구"),
+    department: Optional[str] = Query(None, description="학과"),
+    category: Optional[str] = Query(None, description="대학교 종류")
+) -> List[dict]:
+    filtered_data = []
+    for item in university_data:
+        if (
+            (name is None or item["학교명"].lower() == name.lower())
+            and (metropolitan is None or item["주소"].startswith(metropolitan))
+            and (city is None or item["주소"].endswith(city))
+            and (department is None or department in item["학과"])
+            and (category is None or item["종류"].lower() == category.lower())
+        ):
+            filtered_data.append(item)
+    return filtered_data
+
+####
+
 ###0630 작업
 # 방탈출 매장 데이터 리스트
 room_escape_list = [
