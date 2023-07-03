@@ -1693,7 +1693,7 @@ async def search_gukbap(
     기타설명: str = Query(None, description="기타 특이사항 설명입니다(쉼표로 구분) ex) 배달 가능, 주차장 있음 등")
 ):
     filtered_data = []
-    for item in data:
+    for item in gukbab_data:
         if (
             (국밥집이름 is None or 국밥집이름 in item[0]) and
             (지역구 is None or 지역구 in item[1]) and
