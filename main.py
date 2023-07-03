@@ -2455,7 +2455,7 @@ async def filter_accommodation(
     reservation_available: Optional[str] = Query(None, description="예약 가능 유무")
 ) -> List[dict]:
     filtered_data = []
-    for item in data:
+    for item in accommodation_data:
         if (
             (name is None or item["name"].lower() == name.lower())
             and (accommodation_type is None or item["type"].lower() == accommodation_type.lower())
