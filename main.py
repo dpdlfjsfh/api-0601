@@ -547,7 +547,7 @@ async def search_gym(
         if (
             gym["type"] == type
             and (gym["name"] == name if name else True)
-            and (gym["address"] == address if address else True)
+            and (address in gym["address"]  if address else True)
             and (gym["grade"] >= min_grade if min_grade is not None else True)
             and (gym["grade"] <= max_grade if max_grade is not None else True)
         ):
