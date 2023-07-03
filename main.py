@@ -941,7 +941,7 @@ async def search_cafe(
             and (cafe["price"] >= min_price if min_price else True)
             and (cafe["price"] <= max_price if max_price else True)
             and (cafe["menu"] == menu if menu else True)
-            and (cafe["rating"] == rating if rating else True)
+            and (cafe["rating"] >= rating if rating else True)
         ):
             results.append(cafe)
     return results
@@ -949,7 +949,7 @@ async def search_cafe(
 cocktail_data = [
     {
         "name": "피치블러섬",
-        "location": "7",
+        "location": "서대문구",
         "price": 8000,
         "size": 250,
         "alcohol": 7,
@@ -957,7 +957,7 @@ cocktail_data = [
     },
     {
         "name": "파우스트",
-        "location": "40",
+        "location": "은평구",
         "price": 13000,
         "size": 150,
         "alcohol": 40,
@@ -965,7 +965,7 @@ cocktail_data = [
     },
     {
         "name": "블랙러시안",
-        "location": "30",
+        "location": "종로구",
         "price": 15000,
         "size": 150,
         "alcohol": 30,
@@ -973,7 +973,7 @@ cocktail_data = [
     },
     {
         "name": "모스코 뮬",
-        "location": "30",
+        "location": "은평구",
         "price": 10000,
         "size": 200,
         "alcohol": 30,
@@ -981,7 +981,7 @@ cocktail_data = [
     },
     {
         "name": "다이키리",
-        "location": "5",
+        "location": "종로구",
         "price": 13000,
         "size": 150,
         "alcohol": 5,
