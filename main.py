@@ -671,7 +671,7 @@ async def search_cup_ramen(
     cupramen_num: Optional[int] = Query(None, description="컵라면 재고 수"),
 ) -> List[dict]:
     results = []
-    for cupramen in data:
+    for cupramen in cupramen_data:
         if (
             (cupramen["name"] == ramen_name if ramen_name else True)
             and (cupramen["producer"] == producer if producer else True)
@@ -4097,7 +4097,7 @@ async def search_national_park(
     course: Optional[str] = Query(None, description="코스명(탐방 코스를 바탕으로 검색)")
 ):
     results = []
-    for item in data:
+    for item in national_park_data:
         if ctprvNm is not None and ctprvNm != item[2]:
             continue
         if sgngNm is not None and sgngNm != item[3]:
