@@ -5103,7 +5103,7 @@ icn_dutyfree_brands = [
 
 @app.get("/icn_dutyfree")
 async def search_icn_dutyfree(
-    category: str = Query(..., description="카테고리(ex: 명품 브랜드, 향수·화장품, 주류·담배, 패션·액세서리 등)"),
+    category: Optional[str] = Query(None, description="카테고리(ex: 명품 브랜드, 향수·화장품, 주류·담배, 패션·액세서리 등)"),
     brand: Optional[str] = Query(None, description="브랜드명"),
     phone: Optional[str] = Query(None, description="연락처"),
     location: Optional[str] = Query(None, description="위치"),
