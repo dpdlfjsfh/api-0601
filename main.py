@@ -5110,7 +5110,7 @@ async def search_icn_dutyfree(
     item: Optional[str] = Query(None, description="상품명(주요 상품을 바탕으로 검색)")
 ):
     if category is None:
-        error_msg = {"detail": [{"loc": ["query", "category"], "msg": "one or more services are unavailable", "type": "value_error.missing"}]}
+        error_msg = "one or more services are unavailable"
         raise HTTPException(status_code=503, detail=error_msg)
 
 
