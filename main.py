@@ -4465,7 +4465,7 @@ def search_special_education_school(
     name: Optional[str] = Query(None, description="학교명"),
     establishment: Optional[str] = Query(None, description="설립 구분(ex: 국립, 사립, 공립)"),
     target: Optional[str] = Query(None, description="대상자(ex: 시각장애, 지적장애 등)"),
-) -> List[dict
+) -> List[dict]:
 
     if ctprvNm is None:
         error_msg = "one or more services are unavailable"
