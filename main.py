@@ -2846,8 +2846,8 @@ async def search_theme_park(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for theme_park in theme_park_list:
@@ -2923,9 +2923,15 @@ async def search_bicycle(
     color: Optional[str] = Query(None, description="색상")
 ) -> List[dict]:
 
-    if type is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if type is None and min_price is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, min_price is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_price is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for bicycle in bicycle_list:
@@ -3000,8 +3006,8 @@ async def search_seoul_bike(
 ) -> List[dict]:
 
     if gu is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter gu is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for seoul_bike in seoul_bike_list:
@@ -3075,8 +3081,8 @@ async def search_gyeonggi_bus(
 ) -> List[dict]:
 
     if type is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for bus in gyeonggi_bus_list:
@@ -3187,8 +3193,8 @@ async def search_typhoon(
 ) -> List[dict]:
 
     if num is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for typhoon in typhoon_data:
@@ -3265,8 +3271,8 @@ async def search_particulate_matter(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in particulate_matter_data:
@@ -3389,8 +3395,8 @@ async def search_convenience_device(
 ) -> List[dict]:
 
     if line is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter line is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
 
     results = []
     for data in convenience_device_data:
@@ -3447,9 +3453,15 @@ async def search_element(
     period: Optional[int] = Query(None, ge=1, le=7, description="주기"),
 ) -> List[dict]:
 
-    if num is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if period is None and group is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter period, group is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif period is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter period is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif group is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter group is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in element_data:
@@ -3533,9 +3545,15 @@ async def search_grad_project(
     language: Optional[str] = Query(None, description="사용 언어"),
 ) -> List[dict]:
 
-    if name is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if year is None and semester is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter year, semester is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif year is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter year is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif semester is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter semester is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in grad_project_data:
@@ -3615,8 +3633,8 @@ async def search_olympic(
 ) -> List[dict]:
 
     if type is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in olympic_data:
@@ -3687,9 +3705,15 @@ async def search_silver_town(
     max_households: Optional[int] = Query(None, description="최대 세대수")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if ctprvNm is None and min_households is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm, min_households is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif ctprvNm is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_households is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_households is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in silver_town_data:
@@ -3755,9 +3779,15 @@ async def search_personality_test(
     subject: Optional[str] = Query(None, description="과목명")
 ) -> List[dict]:
 
-    if company is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if company is None and min_time is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter company, min_time is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif company is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter company is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_time is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_time is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in personality_test_data:
@@ -3841,9 +3871,15 @@ async def search_air_purifier(
     max_grade: Optional[float] = Query(None, description="최대 평점"),
 ):
 
-    if brand is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if brand is None and min_contract_period is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand, min_contract_period is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif brand is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_contract_period is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_contract_period is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in air_purifier_data:
@@ -3921,8 +3957,8 @@ async def search_samsungsvc(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in samsungsvc_data:
@@ -3987,8 +4023,8 @@ async def search_waterpark(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in waterpark_data:
@@ -4067,8 +4103,8 @@ async def search_post_office(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for data in post_office_data:
@@ -4190,8 +4226,8 @@ async def search_national_park(
 ):
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in national_park_data:
@@ -4276,9 +4312,15 @@ async def search_whiskey(
     max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
 ):
 
-    if type is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if type is None and min_abv is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, min_abv is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_abv is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_abv is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in whiskey_data:
@@ -4386,8 +4428,8 @@ def search_specialized_high_school(
 ):
 
     if gu is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter gu is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in spcl_high_school_data:
@@ -4431,8 +4473,8 @@ def search_pet_youtube(
 ) -> List[dict]:
 
     if min_subscribers is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_subscribers is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in pet_youtube_data:
@@ -4474,8 +4516,8 @@ def search_special_education_school(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
 
     results = []
     for item in spcl_edu_school_data:
@@ -4560,8 +4602,8 @@ async def search_online_shopping_mall(
 ) -> List[dict]:
 
     if category is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for d in online_shopping_data:
@@ -4631,9 +4673,15 @@ async def search_cleaner(
     max_price: Optional[int] = Query(None, description="최대 가격")
 ) -> List[dict]:
 
-    if min_price is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if brand is None and min_price is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand, min_price is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif brand is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_price is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
 
     
     results = []
@@ -4709,8 +4757,8 @@ async def search_vegan_restaurant(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for d in vegan_restaurant_data:
@@ -4803,8 +4851,8 @@ async def search_festival(
 ) -> List[dict]:
 
     if name is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for d in festival_data:
@@ -4879,8 +4927,8 @@ async def search_disaster_alert(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in disaster_alert_data:
@@ -4948,8 +4996,8 @@ async def search_playlist(
 ) -> List[dict]:
 
     if min_songs is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_songs is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in playlist_data:
@@ -5023,8 +5071,8 @@ def search_subway_menu(
 ) -> List[dict]:
 
     if min_calorie is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_calorie is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in subway_data:
@@ -5115,8 +5163,8 @@ def search_earthquake(
 ) -> List[dict]:
 
     if ctprvNm is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in earthquake_data:
@@ -5190,9 +5238,15 @@ async def search_upcycling_items(
     offline: Optional[bool] = Query(None, description="오프라인 구매 가능 여부")
 ):
 
-    if min_price is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if min_price is None and offline is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price, offline is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_price is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif offline is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter offline is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
     for item in upcycling_items:
@@ -5273,8 +5327,8 @@ async def search_icn_dutyfree(
     item: Optional[str] = Query(None, description="상품명(주요 상품을 바탕으로 검색)")
 ):
     if category is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
 
 
     results = []
