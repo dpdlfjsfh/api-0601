@@ -2757,6 +2757,7 @@ room_escape_list = [
 ]
 
 
+
 @app.get("/room_escape")
 async def search_room_escape(
         theme: Optional[str] = Query(None, description="테마"),
@@ -2767,6 +2768,11 @@ async def search_room_escape(
         min_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최소 난이도"),
         max_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최대 난이도")
 ) -> List[dict]:
+
+    if theme is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+        
     results = []
     for room in room_escape_list:
         if room["theme"] and theme is not None and room["theme"] != theme:
@@ -2827,11 +2833,16 @@ theme_park_list = [
 @app.get("/themepark")
 async def search_theme_park(
     name: Optional[str] = Query(None, description="테마파크명"),
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
     max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점"),
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for theme_park in theme_park_list:
         if theme_park["name"] and name is not None and theme_park["name"] != name:
@@ -2905,6 +2916,11 @@ async def search_bicycle(
     max_price: Optional[int] = Query(None, ge=0, description="최대 가격"),
     color: Optional[str] = Query(None, description="색상")
 ) -> List[dict]:
+
+    if type is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for bicycle in bicycle_list:
         if type is not None and bicycle["type"] != type:
@@ -2976,6 +2992,11 @@ async def search_seoul_bike(
     min_smallbike: Optional[int] = Query(None, ge=0, description="최소 새싹 따릉이 수"),
     max_smallbike: Optional[int] = Query(None, ge=0, description="최대 새싹 따릉이 수"),
 ) -> List[dict]:
+
+    if gu is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for seoul_bike in seoul_bike_list:
         if gu is not None and gu != seoul_bike["gu"]:
@@ -3041,11 +3062,16 @@ gyeonggi_bus_list = [
 @app.get("/gyeonggi_bus")
 async def search_gyeonggi_bus(
     num: Optional[str] = Query(None, description="노선 번호"),
-    type: str = Query(..., description="노선 유형(ex: 공항, 광역급행, 용인시 마을 등)"),
+    type: Optional[str] = Query(None, description="노선 유형(ex: 공항, 광역급행, 용인시 마을 등)"),
     starting_point: Optional[str] = Query(None, description="기점"),
     terminal: Optional[str] = Query(None, description="종점"),
     bus_stop: Optional[str] = Query(None, description="정류장명(주요 경유지를 바탕으로 검색합니다)")
 ) -> List[dict]:
+
+    if type is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for bus in gyeonggi_bus_list:
         if num is not None and num != bus["num"]:
@@ -3153,6 +3179,11 @@ async def search_typhoon(
     endDt: Optional[str] = Query(None, description="최대 발생연도(m~n년 사이에 발생한 태풍 검색 시 사용. 발생날짜를 바탕으로 검색.)"),
     naming_cntry: Optional[str] = Query(None, description="작명 국가")
 ) -> List[dict]:
+
+    if num is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for typhoon in typhoon_data:
         if num is not None and num != typhoon["num"]:
@@ -3226,6 +3257,11 @@ async def search_particulate_matter(
     min_fine_density: Optional[float] = Query(None, gt=0, description="최소 초미세먼지 농도"),
     max_fine_density: Optional[float] = Query(None, gt=0, description="최대 초미세먼지 농도")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in particulate_matter_data:
         if ctprvNm is not None and ctprvNm != data["ctprvNm"]:
@@ -3344,7 +3380,12 @@ async def search_convenience_device(
     max_autoCamera: Optional[int] = Query(None, ge=0, description="자동사진기 수"),
     min_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
     max_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
-) -> List[dict]:
+) -> List[dict
+
+    if line is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+
     results = []
     for data in convenience_device_data:
         if line is not None and line != data["line"]:
@@ -3399,6 +3440,11 @@ async def search_element(
     group: Optional[int] = Query(None, ge=1, le=18, description="족"),
     period: Optional[int] = Query(None, ge=1, le=7, description="주기"),
 ) -> List[dict]:
+
+    if num is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in element_data:
         if num is not None and num != data["num"]:
@@ -3480,6 +3526,11 @@ async def search_grad_project(
     semester: Optional[int] = Query(None, ge=1, le=2, description="학기"),
     language: Optional[str] = Query(None, description="사용 언어"),
 ) -> List[dict]:
+
+    if name is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in grad_project_data:
         if name is not None and name != data["name"]:
@@ -3556,6 +3607,11 @@ async def search_olympic(
     strtYr: Optional[str] = Query(None, description="최소 개최 연도(개회일을 바탕으로 검색)"),
     endYr: Optional[str] = Query(None, description="최대 개최 연도(개회일을 바탕으로 검색)")
 ) -> List[dict]:
+
+    if type is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in olympic_data:
         if type is not None and type != data["type"]:
@@ -3618,12 +3674,17 @@ silver_town_data = [
 
 @app.get("/silver_town")
 async def search_silver_town(
-    ctprvNm: str = Query(..., description="시도명"),
+    ctprvNm: Optional[str] = Query(None, description="시도명"),
     sgngNm: Optional[str] = Query(None, description="시군구명"),
     name: Optional[str] = Query(None, description="시설명"),
     min_households: Optional[int] = Query(None, description="최소 세대수"),
     max_households: Optional[int] = Query(None, description="최대 세대수")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in silver_town_data:
         if ctprvNm != data["address"].split()[0]:
@@ -3679,7 +3740,7 @@ personality_test_data = [
 
 @app.get("/personality_test")
 async def search_personality_test(
-    company: str = Query(..., description="기업명"),
+    company: Optional[str] = Query(None, description="기업명"),
     name: Optional[str] = Query(None, description="시험명"),
     min_questions: Optional[int] = Query(None, description="최소 문항수"),
     max_questions: Optional[int] = Query(None, description="최대 문항수"),
@@ -3687,6 +3748,11 @@ async def search_personality_test(
     max_time: Optional[int] = Query(None, description="최대 시험시간 (단위: 분)"),
     subject: Optional[str] = Query(None, description="과목명")
 ) -> List[dict]:
+
+    if company is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in personality_test_data:
         if company != data["company"]:
@@ -3768,6 +3834,11 @@ async def search_air_purifier(
     min_grade: Optional[float] = Query(None, description="최소 평점"),
     max_grade: Optional[float] = Query(None, description="최대 평점"),
 ):
+
+    if brand is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in air_purifier_data:
         if name and name != data["name"]:
@@ -3836,12 +3907,17 @@ samsungsvc_data = [
 
 @app.get("/samsungsvc")
 async def search_samsungsvc(
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     name: Optional[str] = Query(None, description="센터명"),
     congestion: Optional[str] = Query(None, description="혼잡도"),
     item: Optional[str] = Query(None, description="제품명(수리 제품을 바탕으로 검색)"),
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in samsungsvc_data:
         if ctprvNm and ctprvNm != data["address"].split()[0]:
@@ -3898,11 +3974,16 @@ waterpark_data = [
 @app.get("/waterpark")
 async def search_waterpark(
     name: Optional[str] = Query(None, description="워터파크명"),
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     min_grade: Optional[float] = Query(None, ge=0, le=5, description="최소 평점"),
     max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in waterpark_data:
         if name and name != data["name"]:
@@ -3972,12 +4053,17 @@ post_office_data = [
 
 @app.get("/post_office")
 async def search_post_office(
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     name: Optional[str] = Query(None, description="우체국명"),
     fund_sale: Optional[bool] = Query(None, description="펀드 판매 여부"),
     atm: Optional[bool] = Query(None, description="365코너 설치 여부")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for data in post_office_data:
         if ctprvNm and ctprvNm not in data["address"]:
@@ -4090,12 +4176,17 @@ national_park_data = [
 
 @app.get("/national_park")
 async def search_national_park(
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     name: Optional[str] = Query(None, description="국립공원명"),
     num: Optional[int] = Query(None, description="호수"),
     course: Optional[str] = Query(None, description="코스명(탐방 코스를 바탕으로 검색)")
 ):
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in national_park_data:
         if ctprvNm is not None and ctprvNm != item[2]:
@@ -4178,6 +4269,11 @@ async def search_whiskey(
     min_abv: float = Query(..., description="최소 도수 (단위: %)"),
     max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
 ):
+
+    if type is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in whiskey_data:
         if name is not None and name != item["name"]:
@@ -4276,12 +4372,17 @@ spcl_high_school_data = [
 
 @app.get("/spcl_high_school")
 def search_specialized_high_school(
-    gu: str = Query(..., description="서울시 행정구역명(ex: 강남구, 중구 등)"),
+    gu: Optional[str] = Query(None, description="서울시 행정구역명(ex: 강남구, 중구 등)"),
     establishment: Optional[str] = Query(None, description="설립 구분(ex: 국립, 사립, 공립)"),
     school_type: Optional[str] = Query(None, description="유형(ex: 예술계열, 과학계열, 외국어계열, 마이스터고, 국제계열, 체육계열)"),
     gender: Optional[str] = Query(None, description="성별(ex: 공학, 여, 남)"),
     name: Optional[str] = Query(None, description="학교명"),
 ):
+
+    if gu is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in spcl_high_school_data:
         if gu and gu not in item["address"]:
@@ -4322,6 +4423,11 @@ def search_pet_youtube(
     min_videos: Optional[int] = Query(None, description="최소 영상수", gt=0),
     max_videos: Optional[int] = Query(None, description="최대 영상수", gt=0),
 ) -> List[dict]:
+
+    if min_subscribers is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in pet_youtube_data:
         if name and name.lower() not in item[0].lower():
@@ -4354,12 +4460,17 @@ spcl_edu_school_data = [
 
 @app.get("/spcl_edu_school")
 def search_special_education_school(
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     name: Optional[str] = Query(None, description="학교명"),
     establishment: Optional[str] = Query(None, description="설립 구분(ex: 국립, 사립, 공립)"),
     target: Optional[str] = Query(None, description="대상자(ex: 시각장애, 지적장애 등)"),
-) -> List[dict]:
+) -> List[dict
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+
     results = []
     for item in spcl_edu_school_data:
         if ctprvNm.lower() not in item[3].lower():
@@ -4435,12 +4546,17 @@ online_shopping_data = [
 
 @app.get("/online_shopping")
 async def search_online_shopping_mall(
-    category: str = Query(..., description="카테고리(ex: 의류, 가방 등)"),
+    category: Optional[str] = Query(None, description="카테고리(ex: 의류, 가방 등)"),
     name: Optional[str] = Query(None, description="쇼핑몰 이름"),
     style: Optional[str] = Query(None, description="스타일(ex: 심플베이직, 유니크 등)"),
     free_shipping: Optional[bool] = Query(None, description="무료배송 여부"),
     item: Optional[str] = Query(None, description="상품명(인기 상품을 바탕으로 검색)")
 ) -> List[dict]:
+
+    if category is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for d in online_shopping_data:
         if d["category"] == category:
@@ -4505,9 +4621,15 @@ async def search_cleaner(
     brand: Optional[str] = Query(None, description="브랜드"),
     category: Optional[str] = Query(None, description="카테고리"),
     wire: Optional[str] = Query(None, description="무선유선방식"),
-    min_price: int = Query(..., description="최소 가격"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
     max_price: Optional[int] = Query(None, description="최대 가격")
 ) -> List[dict]:
+
+    if min_price is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+
+    
     results = []
     for d in cleaner_data:
         if name and d["name"] != name:
@@ -4573,12 +4695,17 @@ vegan_restaurant_data = [
 
 @app.get("/vegan_restaurant")
 async def search_vegan_restaurant(
-    ctprvNm: str = Query(..., description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
+    ctprvNm: Optional[str] = Query(None, description="시도명(ex: 서울특별시, 인천광역시, 강원도, 경기도, 경상남도 등)"),
     sgngNm: Optional[str] = Query(None, description="시군구명(ex: 전주시, 강릉시, 포항시, 양평군 등)"),
     category: Optional[str] = Query(None, description="카테고리"),
     name: Optional[str] = Query(None, description="식당명"),
     menu: Optional[str] = Query(None, description="메뉴명(대표 메뉴를 바탕으로 검색)")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for d in vegan_restaurant_data:
         if ctprvNm and d["address"].startswith(ctprvNm):
@@ -4668,6 +4795,11 @@ async def search_festival(
     max_price_oneday: Optional[int] = Query(None, description="최대 1일권 가격"),
     artist: Optional[str] = Query(None, description="아티스트명(라인업을 바탕으로 검색)")
 ) -> List[dict]:
+
+    if name is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for d in festival_data:
         if name and d["name"] != name:
@@ -4734,11 +4866,16 @@ disaster_alert_data = [
 async def search_disaster_alert(
     type: Optional[str] = Query(None, description="재난 분류"),
     subclass: Optional[str] = Query(None, description="재난 상세"),
-    ctprvNm: str = Query(..., description="시도명"),
+    ctprvNm: Optional[str] = Query(None, description="시도명"),
     sgngNm: Optional[str] = Query(None, description="시군구명"),
     min_dt: Optional[str] = Query(None, description="최소 발송일"),
     max_dt: Optional[str] = Query(None, description="최대 발송일")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in disaster_alert_data:
         if type and item["type"] != type:
@@ -4798,11 +4935,16 @@ playlist_data = [
 async def search_playlist(
     title: Optional[str] = Query(None, description="플레이리스트 제목"),
     category: Optional[str] = Query(None, description="카테고리"),
-    min_songs: int = Query(..., description="최소 곡수", gt=0),
+    min_songs: Optional[int] = Query(None, description="최소 곡수", gt=0),
     max_songs: Optional[int] = Query(None, description="최대 곡수", gt=0),
     min_likes: Optional[int] = Query(None, description="최소 좋아요수", ge=0),
     max_likes: Optional[int] = Query(None, description="최대 좋아요수", ge=0)
 ) -> List[dict]:
+
+    if min_songs is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in playlist_data:
         if title and title.lower() not in item["title"].lower():
@@ -4868,11 +5010,16 @@ subway_data = [
 @app.get("/subway_menu")
 def search_subway_menu(
     name: Optional[str] = Query(None, description="메뉴명"),
-    min_calorie: float = Query(..., gt=0, description="최소 칼로리 (단위: kcal)"),
+    min_calorie: Optional[float] = Query(None, gt=0, description="최소 칼로리 (단위: kcal)"),
     max_calorie: Optional[float] = Query(None, gt=0, description="최대 칼로리 (단위: kcal)"),
     ingredient: Optional[str] = Query(None, description="재료(주 재료를 바탕으로 검색)"),
     sauce: Optional[str] = Query(None, description="소스(추천 소스를 바탕으로 검색)")
 ) -> List[dict]:
+
+    if min_calorie is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in subway_data:
         if name and name.lower() not in item["name"].lower():
@@ -4960,6 +5107,11 @@ def search_earthquake(
     min_magnitude: Optional[float] = Query(None, ge=0, description="최소 규모"),
     max_magnitude: Optional[float] = Query(None, ge=0, description="최대 규모")
 ) -> List[dict]:
+
+    if ctprvNm is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in earthquake_data:
         if ctprvNm and ctprvNm != item.get("location", "").split()[0]:
@@ -5027,10 +5179,15 @@ async def search_upcycling_items(
     category: Optional[str] = Query(None, description="카테고리"),
     name: Optional[str] = Query(None, description="제품명"),
     ingredient: Optional[str] = Query(None, description="재료"),
-    min_price: int = Query(..., description="최소 가격"),
+    min_price: Optional[int] = Query(None, description="최소 가격"),
     max_price: Optional[int] = Query(None, description="최대 가격"),
     offline: Optional[bool] = Query(None, description="오프라인 구매 가능 여부")
 ):
+
+    if min_price is None:
+        error_msg = "one or more services are unavailable"
+        raise HTTPException(status_code=503, detail=error_msg)
+    
     results = []
     for item in upcycling_items:
         if category and item["category"] != category:
