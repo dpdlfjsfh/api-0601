@@ -3448,7 +3448,7 @@ element_data = [
 async def search_element(
     num: Optional[int] = Query(None, description="원자 번호"),
     symbol: Optional[str] = Query(None, description="기호(ex: H, He, Li 등)"),
-    name: Optional[str] = Query(..., description="원소명"),
+    name: Optional[str] = Query(None, description="원소명"),
     group: Optional[int] = Query(None, ge=1, le=18, description="족"),
     period: Optional[int] = Query(None, ge=1, le=7, description="주기"),
 ) -> List[dict]:
@@ -3537,7 +3537,7 @@ grad_project_data = [
 
 @app.get("/grad_project")
 async def search_grad_project(
-    name: Optional[str] = Query(..., description="프로젝트명"),
+    name: Optional[str] = Query(None, description="프로젝트명"),
     student: Optional[str] = Query(None, description="팀원명"),
     professor: Optional[str] = Query(None, description="담당 교수명"),
     year: Optional[int] = Query(None, description="연도"),
@@ -3625,7 +3625,7 @@ olympic_data = [
 
 @app.get("/olympic")
 async def search_olympic(
-    type: Optional[str] = Query(..., description="분류"),
+    type: Optional[str] = Query(None, description="분류"),
     country: Optional[str] = Query(None, description="개최국"),
     city: Optional[str] = Query(None, description="도시"),
     strtYr: Optional[str] = Query(None, description="최소 개최 연도(개회일을 바탕으로 검색)"),
@@ -3863,7 +3863,7 @@ air_purifier_data = [
 async def search_air_purifier(
     name: Optional[str] = Query(None, description="제품명"),
     brand: Optional[str] = Query(None, description="브랜드"),
-    min_contract_period: int = Query(..., description="최소 약정 기간 (단위: 개월)"),
+    min_contract_period: Optional[int] = Query(None, description="최소 약정 기간 (단위: 개월)"),
     max_contract_period: Optional[int] = Query(None, description="최대 약정 기간 (단위: 개월)"),
     min_fee: Optional[int] = Query(None, description="최소 월 렌탈료"),
     max_fee: Optional[int] = Query(None, description="최대 월 렌탈료"),
@@ -4308,7 +4308,7 @@ async def search_whiskey(
     name: Optional[str] = Query(None, description="제품명"),
     type: Optional[str] = Query(None, description="유형(ex: Single Malt, Bourbon 등)"),
     cask: Optional[str] = Query(None, description="캐스크"),
-    min_abv: float = Query(..., description="최소 도수 (단위: %)"),
+    min_abv: Optional[float] = Query(None, description="최소 도수 (단위: %)"),
     max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
 ):
 
@@ -4845,7 +4845,7 @@ async def search_festival(
     place: Optional[str] = Query(None, description="장소"),
     min_price_full: Optional[int] = Query(None, description="최소 전일권 가격"),
     max_price_full: Optional[int] = Query(None, description="최대 전일권 가격"),
-    min_price_oneday: int = Query(..., description="최소 1일권 가격"),
+    min_price_oneday: Optional[int] = Query(None, description="최소 1일권 가격"),
     max_price_oneday: Optional[int] = Query(None, description="최대 1일권 가격"),
     artist: Optional[str] = Query(None, description="아티스트명(라인업을 바탕으로 검색)")
 ) -> List[dict]:
