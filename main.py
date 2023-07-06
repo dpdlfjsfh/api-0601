@@ -3380,7 +3380,7 @@ async def search_convenience_device(
     max_autoCamera: Optional[int] = Query(None, ge=0, description="자동사진기 수"),
     min_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
     max_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
-) -> List[dict
+) -> List[dict]:
 
     if line is None:
         error_msg = "one or more services are unavailable"
