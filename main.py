@@ -2769,9 +2769,15 @@ async def search_room_escape(
         max_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최대 난이도")
 ) -> List[dict]:
 
-    if theme is None:
-        error_msg = "one or more services are unavailable"
-        raise HTTPException(status_code=503, detail=error_msg)
+    if theme is None and min_grade is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif theme is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter theme is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif min_grade is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_grade is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
         
     results = []
     for room in room_escape_list:
