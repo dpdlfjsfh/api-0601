@@ -2845,8 +2845,8 @@ async def search_theme_park(
     max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점"),
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -2923,14 +2923,8 @@ async def search_bicycle(
     color: Optional[str] = Query(None, description="색상")
 ) -> List[dict]:
 
-    if type is None and min_price is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, min_price is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
-    elif type is None:
+    if type is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
-    elif min_price is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3005,8 +2999,14 @@ async def search_seoul_bike(
     max_smallbike: Optional[int] = Query(None, ge=0, description="최대 새싹 따릉이 수"),
 ) -> List[dict]:
 
-    if gu is None:
+    if gu is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter gu, name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif gu is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter gu is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3080,7 +3080,13 @@ async def search_gyeonggi_bus(
     bus_stop: Optional[str] = Query(None, description="정류장명(주요 경유지를 바탕으로 검색합니다)")
 ) -> List[dict]:
 
-    if type is None:
+    if num is None and type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num, type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif num is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif type is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
@@ -3192,8 +3198,14 @@ async def search_typhoon(
     naming_cntry: Optional[str] = Query(None, description="작명 국가")
 ) -> List[dict]:
 
-    if num is None:
+    if num is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num, name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif num is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3270,8 +3282,8 @@ async def search_particulate_matter(
     max_fine_density: Optional[float] = Query(None, gt=0, description="최대 초미세먼지 농도")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if grade is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter grade is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3394,8 +3406,14 @@ async def search_convenience_device(
     max_exchangeKiosk: Optional[int] = Query(None, ge=0, description="무인환전키오스크 수"),
 ) -> List[dict]:
 
-    if line is None:
+    if line is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter line, name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif line is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter line is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
 
     results = []
@@ -3705,14 +3723,8 @@ async def search_silver_town(
     max_households: Optional[int] = Query(None, description="최대 세대수")
 ) -> List[dict]:
 
-    if ctprvNm is None and min_households is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm, min_households is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
-    elif ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
-    elif min_households is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_households is missing."})
+    if name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3779,14 +3791,14 @@ async def search_personality_test(
     subject: Optional[str] = Query(None, description="과목명")
 ) -> List[dict]:
 
-    if company is None and min_time is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter company, min_time is missing."})
+    if company is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter company, name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     elif company is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter company is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif min_time is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_time is missing."})
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3871,14 +3883,14 @@ async def search_air_purifier(
     max_grade: Optional[float] = Query(None, description="최대 평점"),
 ):
 
-    if brand is None and min_contract_period is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand, min_contract_period is missing."})
+    if brand is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand, name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     elif brand is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif min_contract_period is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_contract_period is missing."})
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -3956,8 +3968,14 @@ async def search_samsungsvc(
     item: Optional[str] = Query(None, description="제품명(수리 제품을 바탕으로 검색)"),
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if name is None and congestion is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name, congestion is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif congestion is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter congestion is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4022,8 +4040,8 @@ async def search_waterpark(
     max_grade: Optional[float] = Query(None, ge=0, le=5, description="최대 평점")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4102,8 +4120,14 @@ async def search_post_office(
     atm: Optional[bool] = Query(None, description="365코너 설치 여부")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if fund_sale is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter fund_sale, name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif fund_sale is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter fund_sale is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4225,8 +4249,14 @@ async def search_national_park(
     course: Optional[str] = Query(None, description="코스명(탐방 코스를 바탕으로 검색)")
 ):
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if course is None and num is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter course, num is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif course is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter course is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif num is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter num is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4312,14 +4342,14 @@ async def search_whiskey(
     max_abv: Optional[float] = Query(None, description="최대 도수 (단위: %)")
 ):
 
-    if type is None and min_abv is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, min_abv is missing."})
+    if type is None and cask is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, cask is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     elif type is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif min_abv is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_abv is missing."})
+    elif cask is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter cask is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4427,8 +4457,14 @@ def search_specialized_high_school(
     name: Optional[str] = Query(None, description="학교명"),
 ):
 
-    if gu is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter gu is missing."})
+    if establishment is None and school_type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter establishment, school_type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif establishment is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter establishment is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif school_type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter school_type is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4472,8 +4508,8 @@ def search_pet_youtube(
     max_videos: Optional[int] = Query(None, description="최대 영상수", gt=0),
 ) -> List[dict]:
 
-    if min_subscribers is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_subscribers is missing."})
+    if name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4515,8 +4551,14 @@ def search_special_education_school(
     target: Optional[str] = Query(None, description="대상자(ex: 시각장애, 지적장애 등)"),
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if establishment is None and target is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter establishment, target is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif establishment is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter establishment is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif target is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter target is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
 
     results = []
@@ -4601,8 +4643,14 @@ async def search_online_shopping_mall(
     item: Optional[str] = Query(None, description="상품명(인기 상품을 바탕으로 검색)")
 ) -> List[dict]:
 
-    if category is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
+    if style is None and category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter style, category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif style is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter style is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ㅍ is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4673,14 +4721,14 @@ async def search_cleaner(
     max_price: Optional[int] = Query(None, description="최대 가격")
 ) -> List[dict]:
 
-    if brand is None and min_price is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand, min_price is missing."})
+    if category is None and wire is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category, wire is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif brand is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand is missing."})
+    elif category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif min_price is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
+    elif wire is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter wire is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
 
     
@@ -4756,8 +4804,14 @@ async def search_vegan_restaurant(
     menu: Optional[str] = Query(None, description="메뉴명(대표 메뉴를 바탕으로 검색)")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if category is None and menu is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category, menu is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif menu is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter menu is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4850,7 +4904,13 @@ async def search_festival(
     artist: Optional[str] = Query(None, description="아티스트명(라인업을 바탕으로 검색)")
 ) -> List[dict]:
 
-    if name is None:
+    if artist is None and name is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter artist, name is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif artist is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter artist is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif name is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter name is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
@@ -4926,8 +4986,14 @@ async def search_disaster_alert(
     max_dt: Optional[str] = Query(None, description="최대 발송일")
 ) -> List[dict]:
 
-    if ctprvNm is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+    if type is None and subclass is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type, subclass is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif type is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif subclass is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter subclass is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -4995,8 +5061,14 @@ async def search_playlist(
     max_likes: Optional[int] = Query(None, description="최대 좋아요수", ge=0)
 ) -> List[dict]:
 
-    if min_songs is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_songs is missing."})
+    if title is None and category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter title, category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif title is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter title is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -5070,8 +5142,14 @@ def search_subway_menu(
     sauce: Optional[str] = Query(None, description="소스(추천 소스를 바탕으로 검색)")
 ) -> List[dict]:
 
-    if min_calorie is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_calorie is missing."})
+    if ingredient is None and sauce is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ingredient, sauce is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif ingredient is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ingredient is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif sauce is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter sauce is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -5162,8 +5240,14 @@ def search_earthquake(
     max_magnitude: Optional[float] = Query(None, ge=0, description="최대 규모")
 ) -> List[dict]:
 
-    if ctprvNm is None:
+    if ctprvNm is None and sgngNm is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm, sgngNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif ctprvNm is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ctprvNm is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif sgngNm is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter sgngNm is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -5238,14 +5322,14 @@ async def search_upcycling_items(
     offline: Optional[bool] = Query(None, description="오프라인 구매 가능 여부")
 ):
 
-    if min_price is None and offline is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price, offline is missing."})
+    if category is None and ingredient is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category, ingredient is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif min_price is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_price is missing."})
+    elif category is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
-    elif offline is None:
-        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter offline is missing."})
+    elif ingredient is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter ingredient is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
     
     results = []
@@ -5326,8 +5410,14 @@ async def search_icn_dutyfree(
     location: Optional[str] = Query(None, description="위치"),
     item: Optional[str] = Query(None, description="상품명(주요 상품을 바탕으로 검색)")
 ):
-    if category is None:
+    if category is None and brand is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category, brand is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif category is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter category is missing."})
+        raise HTTPException(status_code=400, detail=error_msg)
+    elif brand is None:
+        error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter brand is missing."})
         raise HTTPException(status_code=400, detail=error_msg)
 
 
