@@ -7562,40 +7562,35 @@ tteokbokki_menu = [
         "menu": "기름떡볶이",
         "price": 9000,
         "calories": 1100,
-        "min_spicy": 2,
-        "max_spicy": 4.5,
-        "rating": 4
+        "spicy": 2,
+        "rating": 4.5
     },
     {
         "menu": "간장궁중떡볶이",
         "price": 5000,
         "calories": 900,
-        "min_spicy": 1,
-        "max_spicy": 4,
+        "spicy": 1,
         "rating": 4
     },
     {
         "menu": "매운떡볶이",
         "price": 5000,
         "calories": 800,
-        "min_spicy": 4,
-        "max_spicy": 3,
+        "spicy": 4,
         "rating": 3
     },
     {
         "menu": "크림떡볶이",
         "price": 13000,
         "calories": 900,
-        "min_spicy": 1,
-        "max_spicy": 4,
+        "spicy": 1,
         "rating": 4
     },
     {
         "menu": "로제떡볶이",
         "price": 12000,
         "calories": 750,
-        "min_spicy": 2,
-        "max_spicy": 5,
+        "spicy": 2,
         "rating": 5
     }
 ]
@@ -7768,35 +7763,40 @@ ktx_ticket_list = [
         "departure": "서울",
         "arrival": "부산",
         "seat": "일반실",
-        "price": 49500
+        "price": 49500,
+        "avaliable_seat": 15
     },
     {
         "date": "20230628",
         "departure": "서울",
         "arrival": "목포",
         "seat": "일반실",
-        "price": 48500
+        "price": 48500,
+        "avaliable_seat": 20
     },
     {
         "date": "20230705",
         "departure": "수원",
         "arrival": "강릉",
         "seat": "특/우등",
-        "price": 49000
+        "price": 49000,
+        "avaliable_seat": 2
     },
     {
         "date": "20230726",
         "departure": "서울",
         "arrival": "부산",
         "seat": "특/우등",
-        "price": 65500
+        "price": 65500,
+        "avaliable_seat": 10
     },
     {
         "date": "20230731",
         "departure": "서울",
         "arrival": "양양",
         "seat": "일반실",
-        "price": 22500
+        "price": 22500,
+        "avaliable_seat": 20
     }
 ]
 
@@ -7825,203 +7825,104 @@ def search_ktx(
 
     return filtered_tickets
 
-# 미용실 데이터 리스트
-hairshop_list = [
-    {
-        "shop_name": "이노헤어",
-        "price": 300000,
-        "hair_type": "염색",
-        "region": "서울 서대문구",
-        "holiday": "화-토"
-    },
-    {
-        "shop_name": "이노헤어",
-        "price": 140000,
-        "hair_type": "염색",
-        "region": "서울 광진구",
-        "holiday": "화-토"
-    },
-    {
-        "shop_name": "롱롱위캔드",
-        "price": 35000,
-        "hair_type": "커트",
-        "region": "서울 서대문구",
-        "holiday": "화-토"
-    },
-    {
-        "shop_name": "박승철",
-        "price": 300000,
-        "hair_type": "볼륨매직",
-        "region": "서울 은평구",
-        "holiday": "화-일"
-    },
-    {
-        "shop_name": "레드샵",
-        "price": 200000,
-        "hair_type": "영양",
-        "region": "서울 서대문구",
-        "holiday": "월-일"
-    }
-]
+app = FastAPI()
 
 @app.get("/hairshop")
-def search_hairshop(
-    shop_name: Optional[str] = Query(None, description="미용실명"),
-    price: Optional[int] = Query(None, description="가격"),
-    hair_type: Optional[str] = Query(None, description="헤어종류"),
-    region: Optional[str] = Query(None, description="지역"),
-    holiday: Optional[str] = Query(None, description="공휴일 영업")
+async def search_hair_shop(
+    shop_name: str = Query(None, description="미용실명"),
+    min_price: int = Query(None, description="최소 가격", ge=0),
+    max_price: int = Query(None, description="최대 가격", ge=0),
+    hair_type: str = Query(None, description="헤어종류 (ex. 볼륨매직, 펌, 스트레이트펌, 커트 등)"),
+    region: str = Query(None, description="지역"),
+    holiday: str = Query(None, description="공휴일 영업"),
 ):
+    # 미용실 정보 데이터
+    hairshops = [
+        {"shop_name": "이노헤어", "price": 300000, "hair_type": "염색", "region": "서울 서대문구", "hairdresser_count": 5, "operation_date": "화-토", "operation_time": "10:00-20:00"},
+        {"shop_name": "이노헤어", "price": 140000, "hair_type": "염색", "region": "서울 광진구", "hairdresser_count": 6, "operation_date": "화-토", "operation_time": "10:00-20:00"},
+        {"shop_name": "롱롱위캔드", "price": 35000, "hair_type": "커트", "region": "서울 서대문구", "hairdresser_count": 2, "operation_date": "화-토", "operation_time": "11:00-20:00"},
+        {"shop_name": "박승철", "price": 300000, "hair_type": "볼륨매직", "region": "서울 은평구", "hairdresser_count": 5, "operation_date": "화-일", "operation_time": "10:00-20:00"},
+        {"shop_name": "레드샵", "price": 200000, "hair_type": "영양", "region": "서울 서대문구", "hairdresser_count": 3, "operation_date": "월-일", "operation_time": "12:00-20:00"},
+    ]
+
     filtered_hairshops = []
 
-    for hairshop in hairshop_list:
-        if shop_name and shop_name != hairshop["shop_name"]:
-            continue
-        if price and price != hairshop["price"]:
-            continue
-        if hair_type and hair_type != hairshop["hair_type"]:
-            continue
-        if region and region != hairshop["region"]:
-            continue
-        if holiday and holiday != hairshop["holiday"]:
-            continue
-        filtered_hairshops.append(hairshop)
+    for hairshop in hairshops:
+        if (
+            (hairshop["shop_name"] == shop_name if shop_name else True) and
+            (hairshop["min_price"] is None or (hairshop["price"] >= min_price if min_price else True)) and
+            (hairshop["max_price"] is None or (hairshop["price"] <= max_price if max_price else True)) and
+            (hairshop["hair_type"] == hair_type if hair_type else True) and
+            (hairshop["region"] == region if region else True) and
+            (hairshop["holiday"] == holiday if holiday else True)
+        ):
+            filtered_hairshops.append(hairshop)
 
     return filtered_hairshops
 
-# 가방 데이터 리스트
-bag_list = [
-    {
-        "brand": "나이키",
-        "max_price": 79000,
-        "color": "검정",
-        "bag_type": "백팩",
-        "store": "무신사",
-        "age": "5%"
-    },
-    {
-        "brand": "히어리",
-        "max_price": 88200,
-        "color": "실버",
-        "bag_type": "핸드백",
-        "store": "29cm",
-        "age": 29
-    },
-    {
-        "brand": "레니비",
-        "max_price": 39000,
-        "color": "아이보리",
-        "bag_type": "백팩",
-        "store": "29cm",
-        "age": 20
-    },
-    {
-        "brand": "스컬프터",
-        "max_price": 112000,
-        "color": "검정",
-        "bag_type": "백팩",
-        "store": "무신사",
-        "age": "10%"
-    },
-    {
-        "brand": "퐁실구름크로스백",
-        "max_price": 30000,
-        "color": "아이보리",
-        "bag_type": "크로스백",
-        "store": "98도씨",
-        "age": 0
-    }
-]
-
 @app.get("/bag")
-def search_bag(
-    brand: Optional[str] = Query(None, description="브랜드명"),
-    max_price: Optional[int] = Query(None, description="최대 가격", gt=0, le=10000000),
-    color: Optional[str] = Query(None, description="색깔"),
-    bag_type: Optional[str] = Query(None, description="종류"),
-    store: Optional[str] = Query(None, description="판매처"),
-    age: Optional[int] = Query(None, description="나이")
+async def search_bag(
+    brand: str = Query(None, description="브랜드명"),
+    min_price: int = Query(None, description="최소 가격", ge=0),
+    max_price: int = Query(None, description="최대 가격", ge=0),
+    color: str = Query(None, description="색깔"),
+    bag_type: str = Query(None, description="종류, ex) 백팩, 핸드백"),
+    store: str = Query(None, description="판매처"),
+    purchase_age: str = Query(None, description="구매 나이대"),
 ):
+    # 가방 정보 데이터
+    bags = [
+        {"brand": "나이키", "price": 79000, "color": "검정", "bag_type": "백팩", "discount": "5%", "store": "무신사"},
+        {"brand": "히어리", "price": 88200, "color": "실버", "bag_type": "핸드백", "discount": "10%", "store": "29cm"},
+        {"brand": "레니비", "price": 39000, "color": "아이보리", "bag_type": "백팩", "discount": "20%", "store": "29cm"},
+        {"brand": "스컬프터", "price": 112000, "color": "검정", "bag_type": "백", "discount": "10%", "store": "무신사"},
+        {"brand": "퐁실구름크로스백", "price": 30000, "color": "아이보리", "bag_type": "크로스백", "discount": "0%", "store": "98도씨"},
+    ]
+
     filtered_bags = []
 
-    for bag in bag_list:
-        if brand and brand != bag["brand"]:
-            continue
-        if max_price and max_price < bag["max_price"]:
-            continue
-        if color and color != bag["color"]:
-            continue
-        if bag_type and bag_type != bag["bag_type"]:
-            continue
-        if store and store != bag["store"]:
-            continue
-        if age and age != bag["age"]:
-            continue
-        filtered_bags.append(bag)
+    for bag in bags:
+        if (
+            (bag["brand"] == brand if brand else True) and
+            (bag["min_price"] is None or (bag["price"] >= min_price if min_price else True)) and
+            (bag["max_price"] is None or (bag["price"] <= max_price if max_price else True)) and
+            (bag["color"] == color if color else True) and
+            (bag["bag_type"] == bag_type if bag_type else True) and
+            (bag["store"] == store if store else True) and
+            (bag["purchase_age"] == purchase_age if purchase_age else True)
+        ):
+            filtered_bags.append(bag)
 
     return filtered_bags
 
-# 야구 선수 데이터 리스트
-baseball_player_list = [
-    {
-        "team": "한화이글스",
-        "uniform_number": 64,
-        "position": "내야수",
-        "age": 20,
-        "name": "문현빈"
-    },
-    {
-        "team": "한화이글스",
-        "uniform_number": 22,
-        "position": "내야수",
-        "age": 35,
-        "name": "채은성"
-    },
-    {
-        "team": "두산베어스",
-        "uniform_number": 25,
-        "position": "포수",
-        "age": 38,
-        "name": "양의지"
-    },
-    {
-        "team": "키움히어로즈",
-        "uniform_number": 3,
-        "position": "내야수",
-        "age": 25,
-        "name": "김혜성"
-    },
-    {
-        "team": "키움히어로즈",
-        "uniform_number": 51,
-        "position": "외야수",
-        "age": 26,
-        "name": "이정후"
-    }
-]
-
 @app.get("/baseballplayer")
-def search_baseball_player(
-    team: Optional[str] = Query(None, description="소속팀"),
-    uniform_number: Optional[int] = Query(None, description="등번호"),
-    position: Optional[str] = Query(None, description="포지션명"),
-    age: Optional[int] = Query(None, description="나이"),
-    name: Optional[str] = Query(None, description="이름")
+async def search_baseball_player(
+    team: str = Query(None, description="소속팀"),
+    uniform_number: int = Query(None, description="등번호"),
+    position: str = Query(None, description="포지션명"),
+    age: int = Query(None, description="나이"),
+    name: str = Query(None, description="이름"),
 ):
+    # 야구 선수 정보 데이터
+    baseball_players = [
+        {"team": "한화이글스", "uniform_number": 64, "position": "내야수", "debut_year": 2023, "age": 20, "name": "문현빈"},
+        {"team": "한화이글스", "uniform_number": 22, "position": "내야수", "debut_year": 2009, "age": 35, "name": "채은성"},
+        {"team": "두산베어스", "uniform_number": 25, "position": "포수", "debut_year": 2009, "age": 38, "name": "양의지"},
+        {"team": "키움히어로즈", "uniform_number": 3, "position": "내야수", "debut_year": 2017, "age": 25, "name": "김혜성"},
+        {"team": "키움히어로즈", "uniform_number": 51, "position": "외야수", "debut_year": 2017, "age": 26, "name": "이정후"},
+    ]
+
     filtered_players = []
 
-    for player in baseball_player_list:
-        if team and team != player["team"]:
-            continue
-        if uniform_number and uniform_number != player["uniform_number"]:
-            continue
-        if position and position != player["position"]:
-            continue
-        if age and age != player["age"]:
-            continue
-        if name and name != player["name"]:
-            continue
-        filtered_players.append(player)
+    for player in baseball_players:
+        if (
+            (player["team"] == team if team else True) and
+            (player["uniform_number"] == uniform_number if uniform_number else True) and
+            (player["position"] == position if position else True) and
+            (player["age"] == age if age else True) and
+            (player["name"] == name if name else True)
+        ):
+            filtered_players.append(player)
 
     return filtered_players
 
@@ -9411,9 +9312,9 @@ async def filter_korea_earthquake(
 
     for quake in korea_earthquakes:
         if (
-            (quake["발생일자"] == 검색년도 if 검색년도 else True) and
-            (quake["발생위치"].find(시도명) != -1 if 시도명 else True) and
-            (quake["발생위치"].find(군구명) != -1 if 군구명 else True) and
+            (검색년도 in quake["발생일자"] if 검색년도 else True) and
+            (시도명 in quake["발생위치"] if 시도명 else True) and
+            (군구명 in quake["발생위치"] if 군구명 else True) and
             (quake["최대진도"] == 최대진도 if 최대진도 else True) and
             (quake["규모"] == 규모 if 규모 else True)
         ):
@@ -10044,78 +9945,6 @@ async def filter_law(
 
     return results
 
-# 보드게임 데이터 리스트
-boardgame_list = [
-    {
-        "name": "사보타지",
-        "type": "협잡",
-        "min_age": 8,
-        "최소_인원": 3,
-        "최대_인원": 10,
-        "설명": "광부들 사이에 방해꾼이 섞여 있습니다."
-    },
-    {
-        "name": "부루마불",
-        "type": "경제",
-        "min_age": 7,
-        "최소_인원": 2,
-        "최대_인원": 4,
-        "설명": "자신의 도시를 방문하면 다양한 건물을 지을 수 있습니다."
-    },
-    {
-        "name": "뱅",
-        "type": "추리",
-        "min_age": 8,
-        "최소_인원": 4,
-        "최대_인원": 7,
-        "설명": "무법자들이 보안관을 사냥하고 보안관은 무법자를 사냥합니다."
-    },
-    {
-        "name": "할리갈리",
-        "type": "순발력",
-        "min_age": 6,
-        "최소_인원": 2,
-        "최대_인원": 6,
-        "설명": "같은 과일의 개수가 보인다면 빠르게 종을 치세요."
-    },
-    {
-        "name": "클루",
-        "type": "추리",
-        "min_age": 8,
-        "최소_인원": 3,
-        "최대_인원": 6,
-        "설명": "용의자와 무기 그리고 장소를 알아내야 합니다."
-    }
-]
-
-@app.get("/boardgame")
-async def filter_boardgame(
-    name: Optional[str] = Query(None, description="보드게임 이름"),
-    game_type: Optional[str] = Query(None, description="보드게임 종류 ex) 추리, 순발력, 협잡 등"),
-    min_age: Optional[int] = Query(None, description="이용가능한 최소 연령"),
-    min_players: Optional[int] = Query(None, description="최소 인원"),
-    max_players: Optional[int] = Query(None, description="최대 인원"),
-    keyword: Optional[str] = Query(None, description="키워드")
-) -> List[dict]:
-    results = []
-
-    for game in boardgame_list:
-        if name and name != game.get("name"):
-            continue
-        if game_type and game_type != game.get("type"):
-            continue
-        if min_age and min_age > game.get("min_age"):
-            continue
-        if min_players and min_players > game.get("최소_인원"):
-            continue
-        if max_players and max_players < game.get("최대_인원"):
-            continue
-        if keyword and keyword not in game.get("설명"):
-            continue
-
-        results.append(game)
-
-    return results
 
 # 꽃 데이터 리스트
 flower_list = [
