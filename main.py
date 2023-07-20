@@ -9517,12 +9517,12 @@ async def filter_swimming_pool(
             (pool["수영장명"] == 수영장명 if 수영장명 else True) and
             (pool["지역"] == 지역 if 지역 else True) and
             (상세주소 in pool["주소"] if 상세주소 else True) and
-            (pool["최소가격"] is None or (pool["이용가격"] >= 최소가격 if 최소가격 else True)) and
-            (pool["최대가격"] is None or (pool["이용가격"] <= 최대가격 if 최대가격 else True)) and
-            (pool["최소레일수"] is None or (pool["레일수"] >= 최소레일수 if 최소레일수 else True)) and
-            (pool["최대레일수"] is None or (pool["레일수"] <= 최대레일수 if 최대레일수 else True)) and
-            (pool["최소레일길이"] is None or (pool["레일길이"] >= 최소레일길이 if 최소레일길이 else True)) and
-            (pool["최대레일길이"] is None or (pool["레일길이"] <= 최대레일길이 if 최대레일길이 else True))
+            (pool["이용가격"] is None or (pool["이용가격"] >= 최소가격 if 최소가격 else True)) and
+            (pool["이용가격"] is None or (pool["이용가격"] <= 최대가격 if 최대가격 else True)) and
+            (pool["레일수"] is None or (pool["레일수"] >= 최소레일수 if 최소레일수 else True)) and
+            (pool["레일수"] is None or (pool["레일수"] <= 최대레일수 if 최대레일수 else True)) and
+            (pool["레일길이"] is None or (pool["레일길이"] >= 최소레일길이 if 최소레일길이 else True)) and
+            (pool["레일길이"] is None or (pool["레일길이"] <= 최대레일길이 if 최대레일길이 else True))
         ):
             filtered_swimming_pools.append(pool)
 
@@ -9555,10 +9555,10 @@ async def filter_seoul_weekend_farm(
             (farm["농장명"] == 농장명 if 농장명 else True) and
             (지역구 in farm["주소"] if 지역구 else True) and
             (농장주소 in farm["주소"] if 농장주소 else True) and
-            (farm["최소분양가"] is None or (farm["분양가"] >= 최소분양가 if 최소분양가 else True)) and
-            (farm["최대분양가"] is None or (farm["분양가"] <= 최대분양가 if 최대분양가 else True)) and
-            (farm["최소분양면적"] is None or (farm["분양면적"] >= 최소분양면적 if 최소분양면적 else True)) and
-            (farm["최대분양면적"] is None or (farm["분양면적"] <= 최대분양면적 if 최대분양면적 else True)) and
+            (farm["분양가"] is None or (farm["분양가"] >= 최소분양가 if 최소분양가 else True)) and
+            (farm["분양가"] is None or (farm["분양가"] <= 최대분양가 if 최대분양가 else True)) and
+            (farm["분양면적"] is None or (farm["분양면적"] >= 최소분양면적 if 최소분양면적 else True)) and
+            (farm["분양면적"] is None or (farm["분양면적"] <= 최대분양면적 if 최대분양면적 else True)) and
             (farm["현재분양가능여부"] == 현재분양가능여부 if 현재분양가능여부 is not None else True)
         ):
             filtered_weekend_farms.append(farm)
@@ -9696,7 +9696,7 @@ async def filter_watch(
         if (
             (watch["brand"] == brand if brand else True) and
             (watch["manufacture_country"] == manufacture_country if manufacture_country else True) and
-            (watch["max_price"] is None or (watch["price"] <= max_price if max_price else True)) and
+            (watch["price"] is None or (watch["price"] <= max_price if max_price else True)) and
             (watch["material"] == material if material else True) and
             (watch["water_resistance"] == water_resistance if water_resistance is not None else True)
         ):
