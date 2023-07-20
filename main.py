@@ -9402,7 +9402,7 @@ async def filter_swimming_pool(
     for pool in swimming_pools:
         if (
             (pool["수영장명"] == 수영장명 if 수영장명 else True) and
-            (pool["지역"] == 지역 if 지역 else True) and
+            (지역 in pool["지역"] if 지역 else True) and
             (상세주소 in pool["주소"] if 상세주소 else True) and
             (pool["이용가격"] is None or (pool["이용가격"] >= 최소가격 if 최소가격 else True)) and
             (pool["이용가격"] is None or (pool["이용가격"] <= 최대가격 if 최대가격 else True)) and
