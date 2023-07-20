@@ -9673,76 +9673,36 @@ async def filter_supplements(
 
     return filtered_supplements
     
-#시계
-watch_list = [
-    {
-        "name": "Omega",
-        "size": 43.0,
-        "brand": "AQUA TERRA 150M",
-        "price": 38600000,
-        "material": "세드나 골드 및 레더 스트랩",
-        "water_resistance": "Y"
-    },
-    {
-        "name": "TAG HEUER",
-        "size": 36.0,
-        "brand": "CARRERA DATE",
-        "price": 4380000,
-        "material": "Steel",
-        "water_resistance": "Y"
-    },
-    {
-        "name": "danielwellington",
-        "size": 28.0,
-        "brand": "PETITE CORNWALL",
-        "price": 188000,
-        "material": "Steel",
-        "water_resistance": "N"
-    },
-    {
-        "name": "ALBA",
-        "size": 41.5,
-        "brand": "AG8K17X1",
-        "price": 135000,
-        "material": "Steel",
-        "water_resistance": "Y"
-    },
-    {
-        "name": "Emporio Armani",
-        "size": 43.0,
-        "brand": "SPORTIVO",
-        "price": 209000,
-        "material": "Steel",
-        "water_resistance": "Y"
-    }
-]
-
 @app.get("/watch")
 async def filter_watch(
-    brand: Optional[str] = Query(None, description="브랜드"),
-    name: Optional[str] = Query(None, description="제품명"),
-    max_price: Optional[int] = Query(None, description="최대 가격"),
-    material: Optional[str] = Query(None, description="시계 소재 ex) 티타늄, 골드, 스틸"),
-    water_resistance: Optional[str] = Query(None, description="방수기능 유무 Y or N")
-) -> List[dict]:
-    results = []
+    brand: str = Query(None, description="브랜드"),
+    manufacture_country: str = Query(None, description="제조국"),
+    max_price: int = Query(None, description="최대 가격", ge=0),
+    material: str = Query(None, description="시계 소재 ex) Steel, Gold"),
+    water_resistance: bool = Query(None, description="방수기능 유무"),
+):
+    # 시계 상품 정보 데이터
+    watches = [
+        {"brand": "Omega", "manufacture_country": "스위스", "price": 38600000, "material": "Gold", "size": "43mm", "water_resistance": True},
+        {"brand": "TAG HEUER", "manufacture_country": "스위스", "price": 4380000, "material": "Steel", "size": "36mm", "water_resistance": True},
+        {"brand": "danielwellington", "manufacture_country": "스웨덴", "price": 188000, "material": "Steel", "size": "28mm", "water_resistance": False},
+        {"brand": "ALBA", "manufacture_country": "일본", "price": 135000, "material": "Steel", "size": "41.5mm", "water_resistance": True},
+        {"brand": "Emporio Armani", "manufacture_country": "이탈리아", "price": 209000, "material": "Steel", "size": "43mm", "water_resistance": True},
+    ]
 
-    for watch in watch_list:
-        if brand and brand != watch["brand"]:
-            continue
-        if name and name != watch["name"]:
-            continue
-        if max_price and (not watch.get("price") or watch["price"] > max_price):
-            continue
-        if material and material != watch["material"]:
-            continue
-        if water_resistance and water_resistance != watch["water_resistance"]:
-            continue
+    filtered_watches = []
 
-        results.append(watch)
+    for watch in watches:
+        if (
+            (watch["brand"] == brand if brand else True) and
+            (watch["manufacture_country"] == manufacture_country if manufacture_country else True) and
+            (watch["max_price"] is None or (watch["price"] <= max_price if max_price else True)) and
+            (watch["material"] == material if material else True) and
+            (watch["water_resistance"] == water_resistance if water_resistance is not None else True)
+        ):
+            filtered_watches.append(watch)
 
-    return results
-
+    return filtered_watches
 # 서울시 주차장 시설 정보 데이터 리스트
 parking_lot_list = [
     {
