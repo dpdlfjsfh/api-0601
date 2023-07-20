@@ -9480,8 +9480,8 @@ async def filter_indi_library(
         if (
             (library["서점명"] == 서점명 if 서점명 else True) and
             (library["대표명"] == 대표명 if 대표명 else True) and
-            (library["지역"] == 지역 if 지역 else True) and
-            (library["상세주소"] == 상세주소 if 상세주소 else True) and
+            (지역 in library["주소"]  if 지역 else True) and
+            (상세주소 in library["주소"]  if 상세주소 else True) and
             (library["활동내용"] == 활동내용 if 활동내용 else True) and
             (키워드 in library["서점명"] or 키워드 in library["대표명"] or 키워드 in library["활동내용"] if 키워드 else True)
         ):
@@ -9516,7 +9516,7 @@ async def filter_swimming_pool(
         if (
             (pool["수영장명"] == 수영장명 if 수영장명 else True) and
             (pool["지역"] == 지역 if 지역 else True) and
-            (pool["상세주소"] == 상세주소 if 상세주소 else True) and
+            (상세주소 in pool["주소"] if 상세주소 else True) and
             (pool["최소가격"] is None or (pool["이용가격"] >= 최소가격 if 최소가격 else True)) and
             (pool["최대가격"] is None or (pool["이용가격"] <= 최대가격 if 최대가격 else True)) and
             (pool["최소레일수"] is None or (pool["레일수"] >= 최소레일수 if 최소레일수 else True)) and
@@ -9553,8 +9553,8 @@ async def filter_seoul_weekend_farm(
     for farm in weekend_farms:
         if (
             (farm["농장명"] == 농장명 if 농장명 else True) and
-            (farm["지역구"] == 지역구 if 지역구 else True) and
-            (farm["농장주소"] == 농장주소 if 농장주소 else True) and
+            (지역구 in farm["주소"] if 지역구 else True) and
+            (농장주소 in farm["주소"] if 농장주소 else True) and
             (farm["최소분양가"] is None or (farm["분양가"] >= 최소분양가 if 최소분양가 else True)) and
             (farm["최대분양가"] is None or (farm["분양가"] <= 최대분양가 if 최대분양가 else True)) and
             (farm["최소분양면적"] is None or (farm["분양면적"] >= 최소분양면적 if 최소분양면적 else True)) and
