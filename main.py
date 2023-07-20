@@ -9390,7 +9390,7 @@ async def filter_seoul_parks(
 
     return filtered_parks
 
-@app.get("/koraa_earthquake")
+@app.get("/korea_earthquake")
 async def filter_korea_earthquake(
     검색년도: str = Query(None, description="조회하고자 하는 지진 발생년도"),
     시도명: str = Query(None, description="조회하고자 하는 지진 발생지역 시도 이름 ex)창원시, 경기도 등"),
