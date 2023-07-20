@@ -1080,7 +1080,6 @@ async def search_pub(
 sunblock_data = [
     {
         "brand": "셀퓨전씨",
-        "name": "아쿠아티카 썬스크린 100 50ml",
         "category": "선크림",
         "price": 39000,
         "spf": 50,
@@ -1088,7 +1087,6 @@ sunblock_data = [
     },
     {
         "brand": "셀퓨전씨",
-        "name": "스틱 썬스크린 100 19g",
         "category": "선스틱",
         "price": 25000,
         "spf": 45,
@@ -1096,23 +1094,20 @@ sunblock_data = [
     },
     {
         "brand": "네이처리퍼블릭",
-        "name": "그린더마 마일드 시카 빅 선쿠션",
         "category": "선쿠션",
         "price": 12740,
         "spf": 30,
         "pa": "++"
     },
     {
-        "brand": "맑은 어성초 진정 무기자차 선크림",
-        "name": "달바",
+        "brand": "달바",
         "category": "선크림",
         "price": 20000,
         "spf": 15,
         "pa": "++++"
     },
     {
-        "brand": "엔조이 워터프루프 에어리 선스틱 20g",
-        "name": "싸이닉",
+        "brand": "싸이닝",
         "category": "선스틱",
         "price": 21000,
         "spf": 50,
@@ -1120,7 +1115,6 @@ sunblock_data = [
     },
     {
         "brand": "에뛰드",
-        "name": "순정 디렉터 수분 선크림",
         "category": "선크림",
         "price": 25000,
         "spf": 30,
@@ -1132,7 +1126,6 @@ sunblock_data = [
 @app.get("/sunblock")
 async def filter_sunblock(
     brand: Optional[str] = Query(None, description="브랜드명"),
-    name: Optional[str] = Query(None, description="상품명"),
     category: str = Query(..., description="카테고리"),
     min_price: Optional[int] = Query(None, description="최저 가격", gt=0),
     max_price: Optional[int] = Query(None, description="최대 가격"),
@@ -1143,7 +1136,6 @@ async def filter_sunblock(
     for sunblock in sunblock_data:
         if (
             (sunblock["brand"] == brand if brand else True)
-            and (sunblock["name"] == name if name else True)
             and sunblock["category"] == category
             and (sunblock["price"] >= min_price if min_price else True)
             and (sunblock["price"] <= max_price if max_price else True)
@@ -1159,42 +1151,42 @@ coupon_data = [
         "duration": "2023.01.05~2023.01.25",
         "sale": 40,
         "category": "의류",
-        "use": "Y"
+        "use": True
     },
     {
         "name": "이번달도 화이팅 쿠폰",
         "duration": "2023.05.08~2023.06.30",
         "sale": 10,
         "category": "식품",
-        "use": "Y"
+        "use": True
     },
     {
         "name": "일주일 깜짝 쿠폰",
         "duration": "2023.04.22~2023.04.29",
         "sale": 11,
         "category": "가전",
-        "use": "N"
+        "use": False
     },
     {
         "name": "고객 감사 쿠폰",
         "duration": "2023.06.20~2023.07.30",
         "sale": 30,
         "category": "가전",
-        "use": "Y"
+        "use": True
     },
     {
         "name": "쇼핑몰 5주년 맞이 대박 할인 쿠폰",
         "duration": "2023.05.01~2023.05.30",
         "sale": 25,
         "category": "식품",
-        "use": "N"
+        "use": False
     },
     {
         "name": "이벤트 리워드 쿠폰",
         "duration": "2023.03.07~2023.03.14",
         "sale": 45,
         "category": "의류",
-        "use": "Y"
+        "use": True
     }
 ]
 
@@ -1206,7 +1198,7 @@ async def filter_coupon(
     max_duration: Optional[str] = Query(None, description="최대 사용기간"),
     min_sale: Optional[int] = Query(None, description="최저 할인율", gt=0),
     category: str = Query(..., description="카테고리 ex. 스포츠, 남성의류, 여성의류, 아동용품"),
-    use: Optional[str] = Query(None, description="사용 여부"),
+    use: Optional[bool] = Query(None, description="사용 여부"),
 ) -> List[dict]:
     results = []
     for coupon in coupon_data:
@@ -1227,48 +1219,42 @@ air_conditioner_data = [
         "model": "무풍클래식 AF17B7939GZRS",
         "category": "스탠딩",
         "min_price": 1688000,
-        "max_price": "2023",
-        "min_mandate": "2023"
+        "mandate": "2023"
     },
     {
         "manufacture": "LG",
         "model": "휘센 FQ17HDKHC1",
         "category": "스탠딩",
-        "min_price": 1500000,
-        "max_price": "2022",
-        "min_mandate": "2022"
+        "price": 1500000,
+        "mandate": "2022"
     },
     {
         "manufacture": "LG",
         "model": "오브제컬렉션 FQ17HDNHC2",
         "category": "스탠딩",
-        "min_price": 2100000,
-        "max_price": "2023",
-        "min_mandate": "2023"
+        "price": 2100000,
+        "mandate": "2023"
     },
     {
         "manufacture": "삼성",
         "model": "AR06A1171HZS",
         "category": "벽걸이",
-        "min_price": 750000,
-        "max_price": "2021",
-        "min_mandate": "2021"
+        "price": 750000,
+        "mandate": "2021"
     },
     {
         "manufacture": "위니아",
         "model": "ERV06GHP",
         "category": "벽걸이",
-        "min_price": 550000,
-        "max_price": "2022",
-        "min_mandate": "2022"
+        "price": 550000,
+        "mandate": "2022"
     },
     {
         "manufacture": "캐리어",
         "model": "DRCD061FAWWSD",
         "category": "벽걸이",
-        "min_price": 700000,
-        "max_price": "2023",
-        "min_mandate": "2023"
+        "price": 700000,
+        "mandate": "2023"
     }
 ]
 
@@ -1288,9 +1274,9 @@ async def filter_air_conditioner(
             air_conditioner["manufacture"] == manufacture
             and (air_conditioner["model"] == model if model else True)
             and (air_conditioner["category"] == category if category else True)
-            and (air_conditioner["min_price"] >= min_price if min_price else True)
-            and (air_conditioner["max_price"] <= max_price if max_price else True)
-            and (air_conditioner["min_mandate"] >= min_mandate if min_mandate else True)
+            and (air_conditioner["price"] >= min_price if min_price else True)
+            and (air_conditioner["price"] <= max_price if max_price else True)
+            and (air_conditioner["mandate"] >= min_mandate if min_mandate else True)
         ):
             results.append(air_conditioner)
     return results
@@ -1301,7 +1287,7 @@ kindergarten_data = [
         "age": 5,
         "class": "햇님반",
         "birthday": "2019.12.30",
-        "time": "F",
+        "gender": "F",
         "phonNum": "010-1234-5678"
     },
     {
@@ -1309,7 +1295,7 @@ kindergarten_data = [
         "age": 5,
         "class": "구름반",
         "birthday": "2019.11.12",
-        "time": "F",
+        "gender": "F",
         "phonNum": "010-1111-2222"
     },
     {
@@ -1317,7 +1303,7 @@ kindergarten_data = [
         "age": 5,
         "class": "구름반",
         "birthday": "2019.04.03",
-        "time": "M",
+        "gender": "M",
         "phonNum": "010-2222-3333"
     },
     {
@@ -1325,7 +1311,7 @@ kindergarten_data = [
         "age": 6,
         "class": "꽃님반",
         "birthday": "2018.12.25",
-        "time": "F",
+        "gender": "F",
         "phonNum": "010-3333-4444"
     },
     {
@@ -1333,7 +1319,7 @@ kindergarten_data = [
         "age": 6,
         "class": "꽃님반",
         "birthday": "2018.08.31",
-        "time": "F",
+        "gender": "F",
         "phonNum": "010-4444-5555"
     },
     {
@@ -1341,7 +1327,7 @@ kindergarten_data = [
         "age": 7,
         "class": "파랑반",
         "birthday": "2017.09.15",
-        "time": "M",
+        "gender": "M",
         "phonNum": "010-5555-6666"
     },
     {
@@ -1349,7 +1335,7 @@ kindergarten_data = [
         "age": 7,
         "class": "초록반",
         "birthday": "2017.03.04",
-        "time": "M",
+        "gender": "M",
         "phonNum": "010-6666-7777"
     }
 ]
@@ -1373,7 +1359,7 @@ async def filter_kindergarten(
             and (child["age"] <= max_age if max_age else True)
             and (child["class"] == class_ if class_ else True)
             and (child["birthday"] == birthday if birthday else True)
-            and (child["time"] == gender if gender else True)
+            and (child["gender"] == gender if gender else True)
             and (child["phonNum"] == phonNum if phonNum else True)
         ):
             results.append(child)
@@ -1384,7 +1370,7 @@ swimsuit_data = [
         "brand": "나이키",
         "name": "레이서백 비포 선셋",
         "cut": "로우",
-        "pattern": "Y",
+        "pattern": True,
         "price": 120000,
         "sale": 0
     },
@@ -1392,7 +1378,7 @@ swimsuit_data = [
         "brand": "후그",
         "name": "여행 미드 크로스 타이백 핑크 로즈",
         "cut": "하이",
-        "pattern": "Y",
+        "pattern": True,
         "price": 82000,
         "sale": 5
     },
@@ -1400,7 +1386,7 @@ swimsuit_data = [
         "brand": "후그",
         "name": "여행 로우 크로스엑스 터널백 블루 체크",
         "cut": "1부",
-        "pattern": "N",
+        "pattern": False,
         "price": 78000,
         "sale": 25
     },
@@ -1408,7 +1394,7 @@ swimsuit_data = [
         "brand": "후그",
         "name": "빈티지 블루스 그라데이션 엑스백 탄탄이 블루블랙",
         "cut": "미들",
-        "pattern": "Y",
+        "pattern": True,
         "price": 78000,
         "sale": 30
     },
@@ -1416,7 +1402,7 @@ swimsuit_data = [
         "brand": "아레나",
         "name": "팬텀 U백 와인",
         "cut": "3부",
-        "pattern": "N",
+        "pattern": False,
         "price": 123000,
         "sale": 10
     },
@@ -1424,7 +1410,7 @@ swimsuit_data = [
         "brand": "아레나",
         "name": "스타라이트 레이서백 퍼플",
         "cut": "2부",
-        "pattern": "Y",
+        "pattern": True,
         "price": 116100,
         "sale": 15
     },
@@ -1432,7 +1418,7 @@ swimsuit_data = [
         "brand": "스웨이브",
         "name": "레이어 아치백 선라이즈 오렌지",
         "cut": "로우",
-        "pattern": "N",
+        "pattern": False,
         "price": 58000,
         "sale": 0
     }
@@ -1444,7 +1430,7 @@ async def filter_swimsuit(
     brand: str = Query(..., description="브랜드"),
     name: Optional[str] = Query(None, description="상품명"),
     cut: Optional[str] = Query(None, description="컷 스타일 ex.2부, 반신, 로우, 하이, 미들"),
-    pattern: Optional[str] = Query(None, description="패턴 유무"),
+    pattern: Optional[bool] = Query(None, description="패턴 유무"),
     min_price: Optional[int] = Query(None, description="최소 가격"),
     max_price: Optional[int] = Query(None, description="최대 가격"),
     min_sale: Optional[int] = Query(None, description="최소 할인"),
@@ -1471,48 +1457,48 @@ pharmacy_data = [
         "location": "경기도 구리시 검배로6번길 3 씨티은행",
         "phone": "031-1111-2222",
         "dayOff": "일요일",
-        "petMedicine": "Y",
-        "localCurrency": "N"
+        "petMedicine": False,
+        "localCurrency": True
     },
     {
         "name": "미소 약국",
         "location": "서울특별시 영등포구 문래로 83 아라비즈타워",
         "phone": "02-2222-3333",
         "dayOff": "월요일",
-        "petMedicine": "N",
-        "localCurrency": "N"
+        "petMedicine": False,
+        "localCurrency": False
     },
     {
         "name": "미소 약국",
         "location": "경기도 성남시 중원구 산성대로372번길 13",
         "phone": "031-3333-4444",
         "dayOff": "화요일",
-        "petMedicine": "N",
-        "localCurrency": "Y"
+        "petMedicine": False,
+        "localCurrency": True
     },
     {
         "name": "행복한 약국",
         "location": "서울특별시 영등포구 영중로 15 타임스퀘어 B1 B122",
         "phone": "02-4444-5555",
         "dayOff": "일요일",
-        "petMedicine": "Y",
-        "localCurrency": "Y"
+        "petMedicine": True,
+        "localCurrency": True
     },
     {
         "name": "언제나 건강한 약국",
         "location": "서울특별시 성북구 보문로34길 59 1F",
         "phone": "02-5555-6666",
         "dayOff": "화요일",
-        "petMedicine": "Y",
-        "localCurrency": "N"
+        "petMedicine": True,
+        "localCurrency": False
     },
     {
         "name": "모란 약국",
         "location": "서울특별시 서초구 강남대로 365",
         "phone": "02-6666-7777",
         "dayOff": "수요일",
-        "petMedicine": "N",
-        "localCurrency": "Y"
+        "petMedicine": False,
+        "localCurrency": True
     }
 ]
 
@@ -1523,8 +1509,8 @@ async def filter_pharmacy(
     location: str = Query(..., description="위치"),
     phone: Optional[str] = Query(None, description="전화번호"),
     dayOff: Optional[str] = Query(None, description="휴무일"),
-    petMedicine: Optional[str] = Query(None, description="동물약 취급 여부 ex. Y, N"),
-    localCurrency: Optional[str] = Query(None, description="지역화폐 사용여부 ex. Y, N"),
+    petMedicine: Optional[bool] = Query(None, description="동물약 취급 여부"),
+    localCurrency: Optional[bool] = Query(None, description="지역화폐 사용여부 "),
 ) -> List[dict]:
     results = []
     for pharmacy in pharmacy_data:
@@ -2264,7 +2250,7 @@ async def filter_sunglasses(
     brand: Optional[str] = Query(None, description="브랜드"),
     name: Optional[str] = Query(None, description="상품명"),
     color: Optional[str] = Query(None, description="색상"),
-    as_possible: Optional[str] = Query(None, description="A/S 가능여부 (Y or N)")
+    as_possible: Optional[bool] = Query(None, description="A/S 가능여부 ")
 ) -> List[dict]:
     filtered_data = []
     for item in sunglasses_data:
@@ -2285,7 +2271,7 @@ camera_data = [
         "type": "디지털 카메라",
         "price": 330000,
         "color": "블랙",
-        "디스플레이_유무": "Y"
+        "디스플레이_유무": True
     },
     {
         "brand": "로모그래피",
@@ -2293,7 +2279,7 @@ camera_data = [
         "type": "필름 카메라",
         "price": 60000,
         "color": "레드",
-        "디스플레이_유무": "N"
+        "디스플레이_유무": False
     },
     {
         "brand": "니콘",
@@ -2301,7 +2287,7 @@ camera_data = [
         "type": "DSLR",
         "price": 430000,
         "color": "블랙",
-        "디스플레이_유무": "N"
+        "디스플레이_유무": False
     },
     {
         "brand": "소니",
@@ -2309,7 +2295,7 @@ camera_data = [
         "type": "미러리스 카메라",
         "price": 130000,
         "color": "화이트",
-        "디스플레이_유무": "Y"
+        "디스플레이_유무": True
     },
     {
         "brand": "캐논",
@@ -2317,7 +2303,7 @@ camera_data = [
         "type": "DSLR",
         "price": 400000,
         "color": "블랙",
-        "디스플레이_유무": "Y"
+        "디스플레이_유무": True
     }
 ]
 
@@ -2414,35 +2400,35 @@ accommodation_data = [
         "type": "호텔",
         "지역": "강원도",
         "평점": "4.3",
-        "예약가능_유무": "Y"
+        "예약가능_유무": True
     },
     {
         "name": "가평 조이글램핑펜션",
         "type": "펜션",
         "지역": "경기도",
         "평점": "4.8",
-        "예약가능_유무": "Y"
+        "예약가능_유무": True
     },
     {
         "name": "부산 서면 아토",
         "type": "모텔",
         "지역": "부산",
         "평점": "3.8",
-        "예약가능_유무": "N"
+        "예약가능_유무": False
     },
     {
         "name": "김치 게스트하우스",
         "type": "게스트하우스",
         "지역": "부산",
         "평점": "3.5",
-        "예약가능_유무": "Y"
+        "예약가능_유무": True
     },
     {
         "name": "글로스터 호텔 청주",
         "type": "호텔",
         "지역": "충청북도",
         "평점": "5",
-        "예약가능_유무": "N"
+        "예약가능_유무": False
     }
 ]
 
@@ -2452,7 +2438,7 @@ async def filter_accommodation(
     accommodation_type: Optional[str] = Query(None, description="숙소 종류"),
     region: Optional[str] = Query(None, description="지역"),
     min_rating: Optional[float] = Query(None, description="최소 평점", gt=0, le=5),
-    reservation_available: Optional[str] = Query(None, description="예약 가능 유무")
+    reservation_available: Optional[bool] = Query(None, description="예약 가능 유무")
 ) -> List[dict]:
     filtered_data = []
     for item in accommodation_data:
@@ -2530,35 +2516,35 @@ gasstation_data = [
         "판매_종류": ["휘발유", "경유", "고급"],
         "가격": [1606, 1468, 1896],
         "주소": "서울시 강서구 양천로 176",
-        "세차시설_유무": "Y"
+        "세차시설_유무": True
     },
     {
         "이름": "GS칼텍스 상암주유소",
         "판매_종류": ["휘발유", "경유"],
         "가격": [1628, 1538],
         "주소": "경기도 고양시 덕양구 자유로 38",
-        "세차시설_유무": "Y"
+        "세차시설_유무": True
     },
     {
         "이름": "필동주유소",
         "판매_종류": ["휘발유", "경유", "고급"],
         "가격": [2359, 2209, 2609],
         "주소": "서울시 중구 퇴계로 196",
-        "세차시설_유무": "N"
+        "세차시설_유무": False
     },
     {
         "이름": "중곡충전소",
         "판매_종류": ["LPG"],
         "가격": [1021],
         "주소": "서울시 광진구 동일로 323",
-        "세차시설_유무": "N"
+        "세차시설_유무": False
     },
     {
         "이름": "창원CW",
         "판매_종류": ["휘발유", "경유"],
         "가격": [1535, 1355],
         "주소": "서울시 광진구 광나루로 460",
-        "세차시설_유무": "Y"
+        "세차시설_유무": True
     }
 ]
 
@@ -2570,7 +2556,7 @@ async def filter_gas_station(
     city: Optional[str] = Query(None, description="지역구분_광역시도"),
     district: Optional[str] = Query(None, description="지역구분_시군구"),
     town: Optional[str] = Query(None, description="지역구분_읍면동"),
-    car_wash_facility: Optional[str] = Query(None, description="세차 시설 유무 Y OR N")
+    car_wash_facility: Optional[bool] = Query(None, description="세차 시설 유무 Y OR N")
 ) -> List[dict]:
     filtered_data = []
     for item in gasstation_data:
