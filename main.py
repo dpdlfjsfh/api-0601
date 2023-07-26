@@ -619,7 +619,7 @@ cupramen_data = [
         "convience_store": "CU",
         "name": "너구리",
         "price": 1500,
-        "event": "N",
+        "event": False,
         "producer": "농심",
         "calories": 520
     },
@@ -627,7 +627,7 @@ cupramen_data = [
         "convience_store": "GS25",
         "name": "불닭볶음면",
         "price": 1500,
-        "event": "N",
+        "event": False,
         "producer": "삼양",
         "calories": 530
     },
@@ -635,7 +635,7 @@ cupramen_data = [
         "convience_store": "CU",
         "name": "새우탕",
         "price": 1600,
-        "event": "Y(2+1)",
+        "event": True,
         "producer": "농심",
         "calories": 480
     },
@@ -643,7 +643,7 @@ cupramen_data = [
         "convience_store": "세븐일레븐",
         "name": "삼양라면",
         "price": 1500,
-        "event": "N",
+        "event": False,
         "producer": "삼양",
         "calories": 500
     },
@@ -651,7 +651,7 @@ cupramen_data = [
         "convience_store": "GS25",
         "name": "진라면순한맛",
         "price": 1200,
-        "event": "N",
+        "event": False,
         "producer": "오뚜기",
         "calories": 490
     }
@@ -693,7 +693,7 @@ handcream_data = [
         "manufacture": "록시땅",
         "provider": "록시땅",
         "size": 30,
-        "purchase": "Y"
+        "purchase": True
     },
     {
         "name": "W.DRESSROOM 퍼퓸드 핸드크림 5종 택 1",
@@ -701,7 +701,7 @@ handcream_data = [
         "manufacture": "더블유드레스룸",
         "provider": "올리브영",
         "size": 50,
-        "purchase": "Y"
+        "purchase": True
     },
     {
         "name": "시어버터드라이스킨핸드크림",
@@ -709,7 +709,7 @@ handcream_data = [
         "manufacture": "록시땅",
         "provider": "록시땅",
         "size": 30,
-        "purchase": "Y"
+        "purchase": True
     },
     {
         "name": "탬버린즈 미니퍼퓸 핸드크림",
@@ -717,7 +717,7 @@ handcream_data = [
         "manufacture": "탬버린즈",
         "provider": "카카오톡선물하기",
         "size": 30,
-        "purchase": "Y"
+        "purchase": True
     },
     {
         "name": "레저렉션 아로마틱 핸드 밤",
@@ -725,7 +725,7 @@ handcream_data = [
         "manufacture": "이솝",
         "provider": "이솝",
         "size": 75,
-        "purchase": "Y"
+        "purchase": True
     }
 ]
 
@@ -737,7 +737,7 @@ async def search_handcream(
     max_price: Optional[int] = Query(None, description="최대가격", gt=1000, lt=300000),
     size: Optional[int] = Query(None, description="용량 (단위: ml)"),
     manufacture: Optional[str] = Query(None, description="제조사명"),
-    discount: Optional[str] = Query(None, description="할인여부"),
+    purchase: Optional[bool] = Query(None, description="판매가능여부"),
 ) -> List[dict]:
     results = []
     for handcream in handcream_data:
@@ -747,7 +747,7 @@ async def search_handcream(
             and (handcream["price"] <= max_price if max_price else True)
             and (handcream["size"] == size if size else True)
             and (handcream["manufacture"] == manufacture if manufacture else True)
-            and (handcream["purchase"] == discount if discount else True)
+            and (handcream["purchase"] == purchase if purchase else True)
         ):
             results.append(handcream)
     return results
@@ -1368,7 +1368,6 @@ async def filter_kindergarten(
 swimsuit_data = [
     {
         "brand": "나이키",
-        "name": "레이서백 비포 선셋",
         "cut": "로우",
         "pattern": True,
         "price": 120000,
@@ -1376,7 +1375,6 @@ swimsuit_data = [
     },
     {
         "brand": "후그",
-        "name": "여행 미드 크로스 타이백 핑크 로즈",
         "cut": "하이",
         "pattern": True,
         "price": 82000,
@@ -1384,7 +1382,6 @@ swimsuit_data = [
     },
     {
         "brand": "후그",
-        "name": "여행 로우 크로스엑스 터널백 블루 체크",
         "cut": "1부",
         "pattern": False,
         "price": 78000,
@@ -1392,7 +1389,6 @@ swimsuit_data = [
     },
     {
         "brand": "후그",
-        "name": "빈티지 블루스 그라데이션 엑스백 탄탄이 블루블랙",
         "cut": "미들",
         "pattern": True,
         "price": 78000,
@@ -1400,7 +1396,6 @@ swimsuit_data = [
     },
     {
         "brand": "아레나",
-        "name": "팬텀 U백 와인",
         "cut": "3부",
         "pattern": False,
         "price": 123000,
@@ -1408,7 +1403,6 @@ swimsuit_data = [
     },
     {
         "brand": "아레나",
-        "name": "스타라이트 레이서백 퍼플",
         "cut": "2부",
         "pattern": True,
         "price": 116100,
@@ -1416,7 +1410,6 @@ swimsuit_data = [
     },
     {
         "brand": "스웨이브",
-        "name": "레이어 아치백 선라이즈 오렌지",
         "cut": "로우",
         "pattern": False,
         "price": 58000,
@@ -1428,7 +1421,6 @@ swimsuit_data = [
 @app.get("/swimsuit")
 async def filter_swimsuit(
     brand: str = Query(..., description="브랜드"),
-    name: Optional[str] = Query(None, description="상품명"),
     cut: Optional[str] = Query(None, description="컷 스타일 ex.2부, 반신, 로우, 하이, 미들"),
     pattern: Optional[bool] = Query(None, description="패턴 유무"),
     min_price: Optional[int] = Query(None, description="최소 가격"),
@@ -1440,7 +1432,6 @@ async def filter_swimsuit(
     for swimsuit in swimsuit_data:
         if (
             swimsuit["brand"] == brand
-            and (swimsuit["name"] == name if name else True)
             and (swimsuit["cut"] == cut if cut else True)
             and (swimsuit["pattern"] == pattern if pattern else True)
             and (min_price is None or swimsuit["price"] >= min_price)
@@ -2209,38 +2200,38 @@ async def search_aircon_cleaning_companies(
 sunglasses_data = [
     {
         "brand": "젠틀몬스터",
-        "name": "RICK 01",
+        "size": "L",
         "color": "블랙",
         "price": 269000,
-        "A/S 가능여부": "Y"
+        "A/S 가능여부": True
     },
     {
         "brand": "RAYBAN",
-        "name": "RB4258F",
+        "size": "S",
         "color": "브라운",
         "price": 129000,
-        "A/S 가능여부": "Y"
+        "A/S 가능여부": True
     },
     {
         "brand": "오클리",
-        "name": "OO9245",
+        "size": "XL",
         "color": "투명",
         "price": 100000,
-        "A/S 가능여부": "N"
+        "A/S 가능여부": False
     },
     {
         "brand": "ZARA",
-        "name": "랭",
+        "size": "M",
         "color": "옐로우",
         "price": 17000,
-        "A/S 가능여부": "N"
+        "A/S 가능여부": False
     },
     {
         "brand": "셀린느",
-        "name": "트리옹프",
+        "size": "M",
         "color": "블랙",
         "price": 625000,
-        "A/S 가능여부": "Y"
+        "A/S 가능여부": True
     }
 ]
 
@@ -2267,7 +2258,7 @@ async def filter_sunglasses(
 camera_data = [
     {
         "brand": "삼성",
-        "name": "ST76",
+        "country": "한국",
         "type": "디지털 카메라",
         "price": 330000,
         "color": "블랙",
@@ -2275,7 +2266,7 @@ camera_data = [
     },
     {
         "brand": "로모그래피",
-        "name": "135BC",
+        "country": "중국",
         "type": "필름 카메라",
         "price": 60000,
         "color": "레드",
@@ -2283,7 +2274,7 @@ camera_data = [
     },
     {
         "brand": "니콘",
-        "name": "D750",
+        "country": "일본",
         "type": "DSLR",
         "price": 430000,
         "color": "블랙",
@@ -2291,7 +2282,7 @@ camera_data = [
     },
     {
         "brand": "소니",
-        "name": "A5000",
+        "country": "일본",
         "type": "미러리스 카메라",
         "price": 130000,
         "color": "화이트",
@@ -2299,7 +2290,7 @@ camera_data = [
     },
     {
         "brand": "캐논",
-        "name": "EOS 5D Mark III",
+        "country": "일본",
         "type": "DSLR",
         "price": 400000,
         "color": "블랙",
@@ -2311,7 +2302,7 @@ camera_data = [
 async def filter_camera(
     max_price: int = Query(..., description="최대 가격"),
     brand: Optional[str] = Query(None, description="브랜드"),
-    name: Optional[str] = Query(None, description="상품명"),
+    country: Optional[str] = Query(None, description="국가"),
     camera_type: Optional[str] = Query(None, description="카메라 종류"),
     color: Optional[str] = Query(None, description="색상"),
     display_available: Optional[str] = Query(None, description="디스플레이 유무 (Y or N)")
@@ -2321,7 +2312,7 @@ async def filter_camera(
         if (
             item["price"] <= max_price
             and (brand is None or item["brand"].lower() == brand.lower())
-            and (name is None or item["name"].lower() == name.lower())
+            and (country is None or item["country"].lower() == country.lower())
             and (camera_type is None or item["type"].lower() == camera_type.lower())
             and (color is None or item["color"].lower() == color.lower())
             and (display_available is None or item["디스플레이_유무"].lower() == display_available.lower())
@@ -2332,7 +2323,7 @@ async def filter_camera(
 clothes_data = [
     {
         "brand": "시티브리즈",
-        "name": "썸머 부클 반팔 가디건",
+        "number": 854128,
         "type": "가디건",
         "price": 75000,
         "color": "핑크",
@@ -2340,7 +2331,7 @@ clothes_data = [
     },
     {
         "brand": "밀리언코르",
-        "name": "커버밴드 롱루즈 와이드 데님",
+        "number": 985412,
         "type": "팬츠",
         "price": 45000,
         "color": "그레이",
@@ -2348,7 +2339,7 @@ clothes_data = [
     },
     {
         "brand": "톰브라운",
-        "name": "엔지니어드 저지 맨투맨",
+        "number": 327415,
         "type": "맨투맨",
         "price": 564000,
         "color": "네이비",
@@ -2356,7 +2347,7 @@ clothes_data = [
     },
     {
         "brand": "포터리",
-        "name": "comfort shirt 02",
+        "number": 987100,
         "type": "셔츠",
         "price": 189000,
         "color": "블루",
@@ -2364,7 +2355,7 @@ clothes_data = [
     },
     {
         "brand": "이그넬",
-        "name": "보이 모노키니",
+        "number": 000856,
         "type": "비치웨어",
         "price": 159000,
         "color": "네이비",
@@ -2376,7 +2367,7 @@ clothes_data = [
 async def filter_clothes(
     max_price: int = Query(..., description="최대 가격"),
     brand: Optional[str] = Query(None, description="브랜드"),
-    name: Optional[str] = Query(None, description="상품명"),
+    number: Optional[int] = Query(None, description="상품코드"),
     clothes_type: Optional[str] = Query(None, description="옷 종류"),
     color: Optional[str] = Query(None, description="색상"),
     gender: Optional[str] = Query(None, description="성별")
@@ -2386,7 +2377,7 @@ async def filter_clothes(
         if (
             item["price"] <= max_price
             and (brand is None or item["brand"].lower() == brand.lower())
-            and (name is None or item["name"].lower() == name.lower())
+            and (number is None or item["number"] == number)
             and (clothes_type is None or item["type"].lower() == clothes_type.lower())
             and (color is None or item["color"].lower() == color.lower())
             and (gender is None or item["gender"].lower() == gender.lower())
@@ -2455,35 +2446,35 @@ async def filter_accommodation(
 bicycle_data = [
     {
         "brand": "자이언트",
-        "name": "타론",
+        "gear": "16단",
         "type": "MTB 자전거",
         "size": ["XS", "S", "M", "L"],
         "price": 239000
     },
     {
         "brand": "알톤",
-        "name": "코렉스",
+        "gear": "1단",
         "type": "미니벨로 자전거",
         "size": ["XS", "S"],
         "price": 195000
     },
     {
         "brand": "콘스탄틴",
-        "name": "어베인",
+        "gear": "7단",
         "type": "픽시 자전거",
         "size": ["XS", "S", "M", "L"],
         "price": 820000
     },
     {
         "brand": "알톤",
-        "name": "썸탈",
+        "gear": "24단",
         "type": "하이브리드 자전거",
         "size": ["M", "L"],
         "price": 330000
     },
     {
         "brand": "자이언트",
-        "name": "SCR 2",
+        "gear": "16단",
         "type": "로드 자전거",
         "size": ["M", "L"],
         "price": 890000
@@ -2493,7 +2484,7 @@ bicycle_data = [
 @app.get("/bicycle_brand")
 async def filter_bicycle(
     brand: Optional[str] = Query(..., description="브랜드"),
-    name: Optional[str] = Query(None, description="제품명"),
+    gear: Optional[str] = Query(None, description="기어"),
     bicycle_type: Optional[str] = Query(None, description="자전거 종류"),
     size: Optional[str] = Query(None, description="사이즈"),
     max_price: Optional[int] = Query(None, description="최대 가격", ge=0)
@@ -2502,7 +2493,7 @@ async def filter_bicycle(
     for item in bicycle_data:
         if (
             item["brand"].lower() == brand.lower()
-            and (name is None or item["name"].lower() == name.lower())
+            and (gear is None or item["gear"].lower() == gear.lower())
             and (bicycle_type is None or item["type"].lower() == bicycle_type.lower())
             and (size is None or size in item["size"])
             and (max_price is None or item["price"] <= max_price)
@@ -2614,8 +2605,8 @@ async def filter_musical(
     name: Optional[str] = Query(None, description="작품명"),
     min_time: int = Query(..., description="최소 공연시간"),
     original: Optional[str] = Query(None, description="원작"),
-    first_performance_place: Optional[str] = Query(None, description="뮤지컬이 처음 공연된 장소"),
-    first_performance_year: Optional[int] = Query(None, description="초연된 연도")
+    초연_장소: Optional[str] = Query(None, description="뮤지컬이 처음 공연된 장소"),
+    초연_연도: Optional[int] = Query(None, description="초연된 연도")
 ) -> List[dict]:
     filtered_data = []
     for item in musical_data:
@@ -2623,8 +2614,8 @@ async def filter_musical(
             (name is None or item["name"].lower() == name.lower())
             and item["공연_시간"] >= min_time
             and (original is None or original.lower() == item["original"].lower())
-            and (first_performance_place is None or first_performance_place.lower() == item["초연_장소"].lower())
-            and (first_performance_year is None or first_performance_year == item["초연_연도"])
+            and (초연_장소 is None or 초연_장소.lower() == item["초연_장소"].lower())
+            and (초연_연도 is None or 초연_연도 == item["초연_연도"])
         ):
             filtered_data.append(item)
     return filtered_data
