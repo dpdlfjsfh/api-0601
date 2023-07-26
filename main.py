@@ -7811,7 +7811,6 @@ def search_ktx(
 
     return filtered_tickets
 
-app = FastAPI()
 
 @app.get("/hairshop")
 async def search_hair_shop(
