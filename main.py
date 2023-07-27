@@ -16,9 +16,24 @@ async def create_item(item: Item):
     inventory.append(item)
     return {"message": "Item created successfully"}
 
-@app.get("/items/")
-async def get_items():
-    return inventory
+class school_meal(BaseModel):
+    universityName: str
+    location: str
+    date: str
+    menuName: List[str]
+    price: Optional[int] = None
+
+school_meals = [{"universityName": "서울대학교", "location": "학생회관", "date": "2023-07-03", "menuName": ["베이컨김치볶음밥"], "price": 5000},
+{"universityName": "서울대학교", "location": "학생회관", "date": "2023-07-21", "menuName": ["제육불고기"], "price": 3000},
+{"universityName": "숙명여자대학교", "location": "명신관", "date": "2023-07-04", "menuName": ["순대국밥", "순두부찌개"], "price": 4500},
+{"universityName": "숙명여자대학교", "location": "교직원식당", "date": "2023-07-19", "menuName": ["뚝배기소불고기", "미역국", "잡곡밥", "잡채", "배추김치"], "price": 6500},
+{"universityName": "고려대학교", "location": "교우회관", "date": "2023-07-21", "menuName": ["초계국수", "어묵볶음", "배추김치"], "price": 5000}]  # 임시로 아이템을 저장하는 리스트
+
+@app.post("/school_meal")
+async def create_item(item: school_meal):
+    school_meals.append(item)
+    return school_meals
+
 #########
 
 ###0702 작업
