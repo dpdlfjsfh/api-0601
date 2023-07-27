@@ -2370,7 +2370,7 @@ clothes_data = [
     },
     {
         "brand": "이그넬",
-        "number": 000856,
+        "number": 100856,
         "type": "비치웨어",
         "price": 159000,
         "color": "네이비",
