@@ -4,6 +4,35 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+#0804 테스트
+
+board_writing = [
+    {
+        "title": "배고프다",
+        "time": "2017-07-21T17:00:00Z"
+    },
+    {
+        "title": "목마르다",
+        "time": "2017-07-21T18:00:00Z"
+    }
+]
+
+@app.get("/board_writing")
+async def search_lens(
+    title: Optional[str] = Query(None, description="글 제목"),
+    time: Optional[str] = Query(None, description="글 작성시간"),
+) -> List[dict]:
+
+    results = []
+    for board in board_writing:
+        if (
+            (title is None or lens["title"].lower() == title.lower()) and
+            (time is None or lens["time"].lower() == time.lower())
+        ):
+            results.append(board)
+    return results
+
+
 ###########
 class Item(BaseModel):
     name: str
