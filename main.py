@@ -18,7 +18,7 @@ board_writing = [
 ]
 
 @app.get("/board_writing")
-async def search_lens(
+async def search_writing(
     title: Optional[str] = Query(None, description="글 제목"),
     time: Optional[str] = Query(None, description="글 작성시간"),
 ) -> List[dict]:
@@ -26,8 +26,8 @@ async def search_lens(
     results = []
     for board in board_writing:
         if (
-            (title is None or board_writing["title"].lower() == title.lower()) and
-            (time is None or board_writing["time"].lower() == time.lower())
+            (title is None or board["title"].lower() == title.lower()) and
+            (time is None or board["time"].lower() == time.lower())
         ):
             results.append(board)
     return results
