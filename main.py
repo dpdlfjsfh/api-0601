@@ -26,8 +26,8 @@ async def search_lens(
     results = []
     for board in board_writing:
         if (
-            (title is None or lens["title"].lower() == title.lower()) and
-            (time is None or lens["time"].lower() == time.lower())
+            (title is None or board_writing["title"].lower() == title.lower()) and
+            (time is None or board_writing["time"].lower() == time.lower())
         ):
             results.append(board)
     return results
