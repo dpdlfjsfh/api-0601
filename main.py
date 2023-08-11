@@ -171,7 +171,7 @@ school_meals = [{"universityName": "서울대학교", "location": "학생회관"
 @app.post("/school_meal")
 async def create_item(item: school_meal):
     school_meals.append(item)
-    return school_meals
+    return {"message": "Item created successfully"} #school_meals
 
 #########
 
