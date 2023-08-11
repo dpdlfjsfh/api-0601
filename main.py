@@ -98,7 +98,7 @@ async def search_reviews(
 
     return matching_reviews
 
-@app.post("/search_reviews_get")
+@app.get("/search_reviews_get")
 async def search_reviews(
     keyword: str,
     min_rating: int = Query(None, ge=1, le=5),
@@ -134,27 +134,6 @@ async def search_reviews(
             if min_rating_room is not None and review.rating_room < min_rating_room:
                 continue
             
-            matching_reviews.append(review)
-
-    if not matching_reviews:
-        raise HTTPException(status_code=404, detail="No matching reviews found.")
-
-    return matching_reviews
-
-
-
-
-
-@app.post("/search_reviews/")
-async def search_reviews(query: str, min_rating: Optional[int] = None, max_rating: Optional[int] = None):
-    matching_reviews = []
-
-    for review in fake_database:
-        if query.lower() in review.content.lower():
-            if min_rating is not None and review.rating < min_rating:
-                continue
-            if max_rating is not None and review.rating > max_rating:
-                continue
             matching_reviews.append(review)
 
     if not matching_reviews:
