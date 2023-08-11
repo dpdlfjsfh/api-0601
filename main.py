@@ -76,9 +76,9 @@ async def search_reviews(
                 continue
             if max_rating is not None and review.rating > max_rating:
                 continue
-            if review_date is not Nene and review.review_date == review_date:
+            if review_date is not None and review.review_date == review_date:
                 continue
-            if hotel_name is not Nene and review.hotel_name == hotel_name:
+            if hotel_name is not None and review.hotel_name == hotel_name:
                 continue
             if max_bad is not None and review.bad_cnt > max_bad:
                 continue
@@ -119,9 +119,9 @@ async def search_reviews(
                 continue
             if max_rating is not None and review.rating > max_rating:
                 continue
-            if review_date is not Nene and review.review_date == review_date:
+            if review_date is not None and review.review_date == review_date:
                 continue
-            if hotel_name is not Nene and review.hotel_name == hotel_name:
+            if hotel_name is not None and review.hotel_name == hotel_name:
                 continue
             if max_bad is not None and review.bad_cnt > max_bad:
                 continue
