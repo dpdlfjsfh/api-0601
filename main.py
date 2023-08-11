@@ -4,33 +4,164 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-#0804 테스트
+#0811 테스트
 
-board_writing = [
-    {
-        "title": "배고프다",
-        "time": "2017-07-21T17:00:00Z"
-    },
-    {
-        "title": "목마르다",
-        "time": "2017-07-21T18:00:00Z"
-    }
+fake_database = []
+
+class Review(BaseModel):
+    review_id: int
+    review_date: str
+    reviewer: str
+    rating: int
+    content: str
+    hotel_name: str
+    room_name: str
+    good_cnt: int
+    bad_cnt: int
+    rating_service: int
+    rating_clean: int
+    rating_room: int
+
+example_reviews = [
+    Review(
+        review_id=1,
+        review_date="20230811",
+        reviewer="JohnDoe",
+        rating=4,
+        content="호텔은 좋은데 이상한 냄새가 납니다.",
+        hotel_name="Luxury Hotel",
+        room_name="Deluxe Suite",
+        good_cnt=10,
+        bad_cnt=2,
+        rating_service=5,
+        rating_clean=4,
+        rating_room=4
+    ),
+    Review(
+        review_id=2,
+        review_date="20230810",
+        reviewer="JaneSmith",
+        rating=5,
+        content="방 안에 커피포트도 없고 주위에 커피를 파는곳도 없어요. 그거 빼고는 다 만족합니다.",
+        hotel_name="Grand Resort",
+        room_name="Ocean View Room",
+        good_cnt=15,
+        bad_cnt=0,
+        rating_service=5,
+        rating_clean=5,
+        rating_room=5
+    )
 ]
 
-@app.get("/board_writing")
-async def search_writing(
-    title: Optional[str] = Query(None, description="글 제목"),
-    time: Optional[str] = Query(None, description="글 작성시간"),
-) -> List[dict]:
+fake_database.extend(example_reviews)
 
-    results = []
-    for board in board_writing:
-        if (
-            (title is None or board["title"].lower() == title.lower()) and
-            (time is None or board["time"].lower() == time.lower())
-        ):
-            results.append(board)
-    return results
+@app.post("/search_reviews_post")
+async def search_reviews(
+    keyword: str,
+    min_rating: int = Query(None, ge=1, le=5),
+    max_rating: int = Query(None, ge=1, le=5),
+    review_date: str = Qeury(None),
+    hotel_name: str = Qeury(None),
+    min_good: int = Query(None, ge=1, le=5),
+    max_bad: int = Query(None, ge=1, le=5),
+    min_rating_service: int = Query(None, ge=1, le=5),
+    min_rating_clean: int = Query(None, ge=1, le=5),
+    min_rating_room: int = Query(None, ge=1, le=5),
+):
+    matching_reviews = []
+
+    for review in fake_database:
+        if keyword.lower() in review.content.lower():
+            if min_rating is not None and review.rating < min_rating:
+                continue
+            if max_rating is not None and review.rating > max_rating:
+                continue
+            if review_date is not Nene and review.review_date == review_date
+                continue
+            if hotel_name is not Nene and review.hotel_name == hotel_name
+                continue
+            if max_bad is not None and review.bad_cnt > max_bad:
+                continue
+            if min_good is not None and review.good_cnt < min_good:
+                continue
+            if min_rating_service is not None and review.rating_service < min_rating_service:
+                continue
+            if min_rating_clean is not None and review.rating_clean < min_rating_clean:
+                continue
+            if min_rating_room is not None and review.rating_room < min_rating_room:
+                continue
+            
+            matching_reviews.append(review)
+
+    if not matching_reviews:
+        raise HTTPException(status_code=404, detail="No matching reviews found.")
+
+    return matching_reviews
+
+@app.post("/search_reviews_get")
+async def search_reviews(
+    keyword: str,
+    min_rating: int = Query(None, ge=1, le=5),
+    max_rating: int = Query(None, ge=1, le=5),
+    review_date: str = Qeury(None),
+    hotel_name: str = Qeury(None),
+    min_good: int = Query(None, ge=1, le=5),
+    max_bad: int = Query(None, ge=1, le=5),
+    min_rating_service: int = Query(None, ge=1, le=5),
+    min_rating_clean: int = Query(None, ge=1, le=5),
+    min_rating_room: int = Query(None, ge=1, le=5),
+):
+    matching_reviews = []
+
+    for review in fake_database:
+        if keyword.lower() in review.content.lower():
+            if min_rating is not None and review.rating < min_rating:
+                continue
+            if max_rating is not None and review.rating > max_rating:
+                continue
+            if review_date is not Nene and review.review_date == review_date
+                continue
+            if hotel_name is not Nene and review.hotel_name == hotel_name
+                continue
+            if max_bad is not None and review.bad_cnt > max_bad:
+                continue
+            if min_good is not None and review.good_cnt < min_good:
+                continue
+            if min_rating_service is not None and review.rating_service < min_rating_service:
+                continue
+            if min_rating_clean is not None and review.rating_clean < min_rating_clean:
+                continue
+            if min_rating_room is not None and review.rating_room < min_rating_room:
+                continue
+            
+            matching_reviews.append(review)
+
+    if not matching_reviews:
+        raise HTTPException(status_code=404, detail="No matching reviews found.")
+
+    return matching_reviews
+
+
+
+
+
+@app.post("/search_reviews/")
+async def search_reviews(query: str, min_rating: Optional[int] = None, max_rating: Optional[int] = None):
+    matching_reviews = []
+
+    for review in fake_database:
+        if query.lower() in review.content.lower():
+            if min_rating is not None and review.rating < min_rating:
+                continue
+            if max_rating is not None and review.rating > max_rating:
+                continue
+            matching_reviews.append(review)
+
+    if not matching_reviews:
+        raise HTTPException(status_code=404, detail="No matching reviews found.")
+
+    return matching_reviews
+
 
 
 ###########
