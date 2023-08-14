@@ -6,6 +6,22 @@ app = FastAPI()
 
 #0811 테스트
 
+
+class store(BaseModel):
+    storeName: str
+    location: str
+    phone_num: str
+    menuName: List[str]
+    min_order_amount: Optional[int] = None
+
+store_info = []
+
+@app.post("/store")
+async def create_item(item: store):
+    store_info.append(item)
+    return {"message": "Item created successfully"} 
+
+
 stores_db = [
     {
         "store_name": "나라 분식집",
