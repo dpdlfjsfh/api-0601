@@ -6,6 +6,106 @@ app = FastAPI()
 
 #0811 테스트
 
+stores_db = [
+    {
+        "store_name": "나라 분식집",
+        "category": "분식",
+        "menu": ["치즈 라면", "참치 라면", "김밥", "우동", "떡볶이"],
+        "address": "서울시 강남구",
+        "reviews": ["맛있어요!", "배송이 빠르네요"],
+        "phone_number": "010-1234-5678",
+        "min_order_amount": 15000
+    },
+    {
+        "store_name": "정성 분식집",
+        "category": "분식",
+        "menu": ["돈까스", "치즈 돈까스", "라면", "김밥", "치즈 김밥"],
+        "address": "서울시 마포구",
+        "reviews": ["양이 많아요!", "맛있어서 자주 시킵니다"],
+        "phone_number": "010-9876-5432",
+        "min_order_amount": 12000
+    },
+    {
+        "store_name": "참좋은 분식집",
+        "category": "분식",
+        "menu": ["치즈 라면", "참치 라면", "김밥", "우동", "떡볶이"],
+        "address": "서울시 영등포구",
+        "reviews": ["맛있어요!", "배송이 빠르네요"],
+        "phone_number": "010-1234-1234",
+        "min_order_amount": 15000
+    },
+    {
+        "store_name": "맛있는 분식집",
+        "category": "분식",
+        "menu": ["돈까스", "치즈 돈까스", "라면", "김밥", "치즈 김밥"],
+        "address": "서울시 마포구",
+        "reviews": ["양이 많아요!", "맛있어서 자주 시킵니다"],
+        "phone_number": "010-9876-4321",
+        "min_order_amount": 12000
+    },
+    {
+        "store_name": "영희네 분식집",
+        "category": "분식",
+        "menu": ["치즈 라면", "참치 라면", "김밥", "우동", "떡볶이"],
+        "address": "서울시 강남구",
+        "reviews": ["맛있어요!", "배송이 빠르네요"],
+        "phone_number": "010-1234-3333",
+        "min_order_amount": 15000
+    },
+    {
+        "store_name": "철수네 분식집",
+        "category": "분식",
+        "menu": ["돈까스", "치즈 돈까스", "라면", "김밥", "치즈 김밥"],
+        "address": "서울시 마포구",
+        "reviews": ["양이 많아요!", "맛있어서 자주 시킵니다"],
+        "phone_number": "010-9876-2424",
+        "min_order_amount": 12000
+    }
+]
+
+class Item(BaseModel):
+    store_name: str
+    category: str
+    menu: list[str]
+    address: str
+    reviews: list[str]
+    phone_number: str
+    min_order_amount: int
+
+@app.get("/restaurants/")
+async def get_restaurants(
+    min_order_amount: int = Query(None, description="최소 주문 금액 필터"),
+    category: str = Query(None, description="가게 카테고리 필터"),
+    store_name: str = Query(None, description="가게명 필터"),
+    food_search: str = Query(None, description="음식 검색 필터"),
+    address_search: str = Query(None, description="주소 검색 필터"),
+    review_keyword: str = Query(None, description="리뷰 키워드 검색 필터")
+):
+    filtered_stores = []
+
+    for store in stores_db:
+        if min_order_amount and store["min_order_amount"] < min_order_amount:
+            continue
+        if category and store["category"] != category:
+            continue
+        if store_name and store["store_name"] != store_name:
+            continue
+        if food_search and not any(food_search.lower() in menu.lower() for menu in store["menu"]):
+            continue
+        if address_search and address_search.lower() not in store["address"].lower():
+            continue
+        if review_keyword and not any(review_keyword.lower() in review.lower() for review in store["reviews"]):
+            continue
+
+        filtered_stores.append(store)
+
+    return filtered_stores
+
+
+
+
+
+
 fake_database = []
 
 class Review(BaseModel):
