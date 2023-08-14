@@ -255,7 +255,7 @@ async def search_reviews(
                 continue
             if min_rating_room is not None and review.rating_room < min_rating_room:
                 continue
-            if adress is not None and adress.lower() in review.adress.lower():
+            if address is not None and address.lower() in review.address.lower():
                 continue
         
             matching_reviews.append(review)
@@ -301,7 +301,7 @@ async def search_reviews(
                 continue
             if min_rating_room is not None and review.rating_room < min_rating_room:
                 continue
-            if adress is not None and adress.lower() in review.adress.lower():
+            if address is not None and address.lower() in review.address.lower():
                 continue
                
             matching_reviews.append(review)
