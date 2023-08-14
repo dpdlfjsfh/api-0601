@@ -15,6 +15,7 @@ class Review(BaseModel):
     rating: int
     content: str
     hotel_name: str
+    address: str
     room_name: str
     good_cnt: int
     bad_cnt: int
@@ -109,6 +110,7 @@ async def search_reviews(
     max_rating: int = Query(None, ge=1, le=5),
     review_date: str = Query(None),
     hotel_name: str = Query(None),
+    address: str = Query(None),
     min_good: int = Query(None, ge=1, le=5),
     max_bad: int = Query(None, ge=1, le=5),
     min_rating_service: int = Query(None, ge=1, le=5),
@@ -137,7 +139,9 @@ async def search_reviews(
                 continue
             if min_rating_room is not None and review.rating_room < min_rating_room:
                 continue
-            
+            if adress is not None and adress.lower() in review.adress.lower():
+                continue
+        
             matching_reviews.append(review)
 
     if not matching_reviews:
@@ -152,6 +156,7 @@ async def search_reviews(
     max_rating: int = Query(None, ge=1, le=5),
     review_date: str = Query(None),
     hotel_name: str = Query(None),
+    address: str = Query(None),
     min_good: int = Query(None, ge=1, le=5),
     max_bad: int = Query(None, ge=1, le=5),
     min_rating_service: int = Query(None, ge=1, le=5),
@@ -180,7 +185,9 @@ async def search_reviews(
                 continue
             if min_rating_room is not None and review.rating_room < min_rating_room:
                 continue
-            
+            if adress is not None and adress.lower() in review.adress.lower():
+                continue
+               
             matching_reviews.append(review)
 
     if not matching_reviews:
