@@ -4,6 +4,120 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+
+fake_rental_cars = [
+    {
+        "location": "제주",
+        "model_name": "클래식",
+        "car_type": "세단",
+        "max_passengers": 5,
+        "rental_fee": 50000,
+        "fuel_efficiency": 25,
+        "color": "파랑"
+    },
+    {
+    "location": "제주",
+    "model_name": "프리미엄",
+    "car_type": "SUV",
+    "max_passengers": 7,
+    "rental_fee": 75000,
+    "fuel_efficiency": 20,
+    "color": "흰색"
+    },
+    {
+    "location": "제주",
+    "model_name": "컴팩트",
+    "car_type": "세단",
+    "max_passengers": 4,
+    "rental_fee": 45000,
+    "fuel_efficiency": 30,
+    "color": "빨강"
+    },
+    {
+    "location": "제주",
+    "model_name": "럭셔리",
+    "car_type": "세단",
+    "max_passengers": 5,
+    "rental_fee": 80000,
+    "fuel_efficiency": 22,
+    "color": "검정"
+    },
+    {
+    "location": "제주",
+    "model_name": "스포티",
+    "car_type": "SUV",
+    "max_passengers": 2,
+    "rental_fee": 60000,
+    "fuel_efficiency": 18,
+    "color": "은색"
+    },
+    {
+    "location": "제주",
+    "model_name": "미니",
+    "car_type": "세단",
+    "max_passengers": 4,
+    "rental_fee": 40000,
+    "fuel_efficiency": 28,
+    "color": "노랑"
+    },
+    {
+    "location": "제주",
+    "model_name": "프리미엄",
+    "car_type": "SUV",
+    "max_passengers": 7,
+    "rental_fee": 70000,
+    "fuel_efficiency": 19,
+    "color": "은색"
+    },
+    {
+    "location": "제주",
+    "model_name": "스포티",
+    "car_type": "SUV",
+    "max_passengers": 2,
+    "rental_fee": 65000,
+    "fuel_efficiency": 17,
+    "color": "빨강"
+    },
+    {
+    "location": "제주",
+    "model_name": "컴팩트",
+    "car_type": "세단",
+    "max_passengers": 4,
+    "rental_fee": 42000,
+    "fuel_efficiency": 29,
+    "color": "파랑"
+    }
+]
+
+@app.get("/rental-cars/")
+async def get_rental_cars(
+    location: Optional[str] = Query(None, description="Location of the rental car"),
+    model_name: Optional[str] = Query(None, description="Model name of the rental car"),
+    car_type: Optional[str] = Query(None, description="Type of the rental car"),
+    passengers: Optional[str] = Query(None, description="Range of passengers (e.g., min-max)"),
+    max_rental_fee: Optional[float] = Query(None, description="Maximum rental fee"),
+    min_fuel_efficiency: Optional[float] = Query(None, description="Minimum fuel efficiency")
+) -> List[dict]:
+    filtered_cars = fake_rental_cars
+
+    if location:
+        filtered_cars = [car for car in filtered_cars if car["location"] == location]
+    if model_name:
+        filtered_cars = [car for car in filtered_cars if car["model_name"] == model_name]
+    if car_type:
+        filtered_cars = [car for car in filtered_cars if car["car_type"] == car_type]
+    if passengers:
+        min_passengers, max_passengers = map(int, passengers.split("-"))
+        filtered_cars = [car for car in filtered_cars if min_passengers <= car["max_passengers"] <= max_passengers]
+    if max_rental_fee:
+        filtered_cars = [car for car in filtered_cars if car["rental_fee"] <= max_rental_fee]
+    if min_fuel_efficiency:
+        filtered_cars = [car for car in filtered_cars if car["fuel_efficiency"] >= min_fuel_efficiency]
+
+    return filtered_cars
+
+
+
 #0811 테스트
 
 
