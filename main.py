@@ -214,6 +214,51 @@ example_reviews = [
         rating_service=3,
         rating_clean=4,
         rating_room=4
+    ),
+     Review(
+        review_id=6,
+        review_date="20230813",
+        reviewer="JoeMonet",
+        rating=5,
+        content="인생샷 건지기 좋은 곳 그 자체에요,, 친구랑 왔다가 시간 가는 줄 모르고 즐기다가 왔네요 룸 컨디션부터 부대시설까지 완벽했습니다 ",
+        hotel_name="NestHotel",
+        address ="인천광역시 중구 운서동 2877-1",
+        room_name="Superial Twin Room Mountain View",
+        good_cnt=15,
+        bad_cnt=2,
+        rating_service=5,
+        rating_clean=5,
+        rating_room=5
+    ),
+    Review(
+        review_id=7,
+        review_date="20230811",
+        reviewer="Michael",
+        rating=3,
+        content="근처에 버스정류장도 있고 편의점도 있어서 접근성은 좋았어요 방도 나쁘지 않은 편이구요 가격도 부담스럽지 않아서 좋았어요 근데 프론트에서 전화를 잘 안받으세요ㅠㅠ 에어컨이 고장났는데 너무 답답했어요ㅠ",
+        hotel_name="City Resort",
+        address ="대구광역시 수성구 113-1",
+        room_name="Double Room with Balcony",
+        good_cnt=6,
+        bad_cnt=6,
+        rating_service=2,
+        rating_clean=3,
+        rating_room=3
+    ),
+    Review(
+        review_id=8,
+        review_date="20230814",
+        reviewer="Ashley",
+        rating=4,
+        content="설악산이 멀리 보이는 풍경이었어요~ 숲캉스 제대로 즐기다 갑니다 ㅎㅎ 다만 이불에 먼지가 좀 남아있어서 그건 아쉬웠지만.. 조식도 맛있고 위치도 좋으니 만족입니다~~",
+        hotel_name="Sokcho Hotel",
+        address ="강원도 속초시 1102-3",
+        room_name="Ocean View",
+        good_cnt=8,
+        bad_cnt=0,
+        rating_service=5,
+        rating_clean=3,
+        rating_room=4
     )
 ]
 
