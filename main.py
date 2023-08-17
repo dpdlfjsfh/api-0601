@@ -107,8 +107,7 @@ async def get_rental_cars(
     if car_type:
         filtered_cars = [car for car in filtered_cars if car["car_type"] == car_type]
     if passengers:
-        min_passengers, max_passengers = map(int, passengers.split("-"))
-        filtered_cars = [car for car in filtered_cars if min_passengers <= car["max_passengers"] <= max_passengers]
+        filtered_cars = [car for car in filtered_cars if passengers <= car["max_passengers"] ]
     if max_rental_fee:
         filtered_cars = [car for car in filtered_cars if car["rental_fee"] <= max_rental_fee]
     if min_fuel_efficiency:
