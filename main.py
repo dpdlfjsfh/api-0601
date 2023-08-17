@@ -97,11 +97,14 @@ async def get_rental_cars(
     passengers: Optional[int] = Query(None, description="Range of passengers (e.g., min-max)"),
     max_rental_fee: Optional[float] = Query(None, description="Maximum rental fee"),
     min_fuel_efficiency: Optional[float] = Query(None, description="Minimum fuel efficiency")
+    color: Optional[str] = Query(None, description="Clolor of the rental car"),
 ) -> List[dict]:
     filtered_cars = fake_rental_cars
 
     if location:
         filtered_cars = [car for car in filtered_cars if car["location"] == location]
+    if color:
+        filtered_cars = [car for car in filtered_cars if car["color"] == color]
     if model_name:
         filtered_cars = [car for car in filtered_cars if car["model_name"] == model_name]
     if car_type:
