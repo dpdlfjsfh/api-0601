@@ -422,9 +422,6 @@ async def search_reviews(
         
             matching_reviews.append(review)
 
-    if not matching_reviews:
-        raise HTTPException(status_code=404, detail="No matching reviews found.")
-
     return matching_reviews
 
 @app.get("/search_reviews_get")
@@ -468,9 +465,6 @@ async def search_reviews(
             continue
                
             matching_reviews.append(review)
-
-    if not matching_reviews:
-        raise HTTPException(status_code=404, detail="No matching reviews found.")
 
     return matching_reviews
 
