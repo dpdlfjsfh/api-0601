@@ -429,7 +429,7 @@ async def search_reviews(
 
 @app.get("/search_reviews_get")
 async def search_reviews(
-    keyword: str,
+    keyword: str = Query(None),
     min_rating: int = Query(None, ge=1, le=5),
     max_rating: int = Query(None, ge=1, le=5),
     review_date: str = Query(None),
@@ -444,27 +444,28 @@ async def search_reviews(
     matching_reviews = []
 
     for review in fake_database:
-        if keyword.lower() in review.content.lower():
-            if min_rating is not None and review.rating < min_rating:
-                continue
-            if max_rating is not None and review.rating > max_rating:
-                continue
-            if review_date is not None and review.review_date == review_date:
-                continue
-            if hotel_name is not None and review.hotel_name == hotel_name:
-                continue
-            if max_bad is not None and review.bad_cnt > max_bad:
-                continue
-            if min_good is not None and review.good_cnt < min_good:
-                continue
-            if min_rating_service is not None and review.rating_service < min_rating_service:
-                continue
-            if min_rating_clean is not None and review.rating_clean < min_rating_clean:
-                continue
-            if min_rating_room is not None and review.rating_room < min_rating_room:
-                continue
-            if address is not None and address.lower() in review.address.lower():
-                continue
+        if keyword is not None and keyword.lower() in review.content.lower():
+            continue
+        if min_rating is not None and review.rating < min_rating:
+            continue
+        if max_rating is not None and review.rating > max_rating:
+            continue
+        if review_date is not None and review.review_date == review_date:
+            continue
+        if hotel_name is not None and review.hotel_name == hotel_name:
+            continue
+        if max_bad is not None and review.bad_cnt > max_bad:
+            continue
+        if min_good is not None and review.good_cnt < min_good:
+            continue
+        if min_rating_service is not None and review.rating_service < min_rating_service:
+            continue
+        if min_rating_clean is not None and review.rating_clean < min_rating_clean:
+            continue
+        if min_rating_room is not None and review.rating_room < min_rating_room:
+            continue
+        if address is not None and address.lower() in review.address.lower():
+            continue
                
             matching_reviews.append(review)
 
