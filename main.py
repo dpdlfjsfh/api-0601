@@ -450,7 +450,10 @@ async def search_reviews(review: ReviewSearchQuery = Body(...)):
 
         matching_reviews.append(review_data)
 
-    return matching_reviews
+    if matching_reviews = []:
+        return "찾을 수 없습니다."
+    else:
+        return matching_reviews
 
 @app.get("/search_reviews_get")
 async def search_reviews(
