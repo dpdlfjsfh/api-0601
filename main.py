@@ -5,42 +5,21 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
-call_number = [
-    {
-        "TeamName": "인사팀",
-        "call": "02-123-1111"
-    },
-    {
-        "TeamName": "총무팀",
-        "call": "02-123-1112"
-    },
-    {
-        "TeamName": "감사팀",
-        "call": "02-123-1113"
-    },
-    {
-        "TeamName": "경영팀",
-        "call": "02-123-1115"
-    }
-]
+team_phone_numbers = {
+    "인사팀": "111-1111",
+    "총무팀": "222-2222",
+    "경영팀": "333-3333",
+}
 
-class Item(BaseModel):
-    TeamName: str
-    call: str
-
+class TeamInfo(BaseModel):
+    team_name: str
 
 @app.post("/telephone_num")
-async def get_callnum(
-    team_name: str = Query(..., description="팀이름"),
-):
-    filtered_stores = []
+def telephone_num(team_info: TeamInfo):
+    team_name = team_info.team_name
+    if team_name in team_phone_numbers:
+        return {"team": team_name, "phone_number": team_phone_numbers[team_name]}
 
-    for team in call_number:
-        if team_name and team_name not in team["TeamName"]:
-            continue
-        filtered_stores.append(team)
-
-    return filtered_stores
 
 
 
