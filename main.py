@@ -29,8 +29,8 @@ class Item(BaseModel):
     call: str
 
 
-@app.get("/telephone_num")
-async def get_restaurants(
+@app.post("/telephone_num")
+async def get_callnum(
     team_name: str = Query(..., description="팀이름"),
 ):
     filtered_stores = []
