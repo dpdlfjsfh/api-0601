@@ -425,15 +425,15 @@ async def search_reviews(review: ReviewSearchQuery = Body(...)):
     matching_reviews = []
 
     for review_data in fake_database:
-        if review.keyword is not None and review.keyword.lower() in review_data.content.lower():
+        if review.keyword is not None and review.keyword.lower() not in review_data.content.lower():
             continue
         if review.min_rating is not None and review_data.rating < review.min_rating:
             continue
         if review.max_rating is not None and review_data.rating > review.max_rating:
             continue
-        if review.review_date is not None and review_data.review_date == review.review_date:
+        if review.review_date is not None and review_data.review_date != review.review_date:
             continue
-        if review.hotel_name is not None and review_data.hotel_name == review.hotel_name:
+        if review.hotel_name is not None and review_data.hotel_name != review.hotel_name:
             continue
         if review.max_bad is not None and review_data.bad_cnt > review.max_bad:
             continue
@@ -445,7 +445,7 @@ async def search_reviews(review: ReviewSearchQuery = Body(...)):
             continue
         if review.min_rating_room is not None and review_data.rating_room < review.min_rating_room:
             continue
-        if review.address is not None and review.address.lower() in review_data.address.lower():
+        if review.address is not None and review.address.lower() not in review_data.address.lower():
             continue
 
         matching_reviews.append(review_data)
