@@ -7,19 +7,19 @@ app = FastAPI()
 
 call_number = [
     {
-        "TeamName": "인사팀"
+        "TeamName": "인사팀",
         "call": "02-123-1111"
     },
     {
-        "TeamName": "총무팀"
+        "TeamName": "총무팀",
         "call": "02-123-1112"
     },
     {
-        "TeamName": "감사팀"
+        "TeamName": "감사팀",
         "call": "02-123-1113"
     },
     {
-        "TeamName": "경영팀"
+        "TeamName": "경영팀",
         "call": "02-123-1115"
     }
 ]
