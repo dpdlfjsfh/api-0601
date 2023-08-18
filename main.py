@@ -267,19 +267,19 @@ async def get_restaurants(
 fake_database = []
 
 class Review(BaseModel):
-    id: int
+    review_id: int
     review_date: str
-    author: str
+    reviewer: str
     rating: float
-    review_text: str
+    content: str
     hotel_name: str
-    hotel_address: str
+    address: str
     room_name: str
-    recommend_count: int
-    not_recommend_count: int
-    service_rating: float
-    room_rating: float
-    cleanliness_rating: float
+    good_cnt: int
+    bad_cnt: int
+    rating_service: float
+    rating_clean: float
+    rating_room: float
 
 example_reviews = [
     Review(
@@ -412,11 +412,12 @@ class ReviewSearchQuery(BaseModel):
     max_rating: float = Query(5.0, title="Maximum rating")
     review_date: str = Query(None, title="Review date")
     hotel_name: str = Query(None, title="Hotel name")
-    min_recommend_count: int = Query(0, title="Minimum recommend count")
-    max_not_recommend_count: int = Query(None, title="Maximum not recommend count")
-    min_service_rating: float = Query(0.0, title="Minimum service rating")
-    min_room_rating: float = Query(0.0, title="Minimum room rating")
-    min_cleanliness_rating: float = Query(0.0, title="Minimum cleanliness rating")
+    min_good: int = Query(0, title="Minimum recommend count")
+    max_bad: int = Query(None, title="Maximum not recommend count")
+    min_rating_service: float = Query(0.0, title="Minimum service rating")
+    min_rating_clean: float = Query(0.0, title="Minimum room rating")
+    min_rating_clean: float = Query(0.0, title="Minimum cleanliness rating")
+    address: str = Query(None, title="Hotel address")
 
 
 @app.post("/search_reviews_post")
