@@ -268,19 +268,19 @@ fake_database = []
 
 class Review(BaseModel):
     keyword: str = None
-    review_id: int
-    review_date: str
-    reviewer: str
-    rating: int
-    content: str
-    hotel_name: str
-    address: str
-    room_name: str
-    good_cnt: int
-    bad_cnt: int
-    rating_service: int
-    rating_clean: int
-    rating_room: int
+    review_id: Optional[int]
+    review_date: Optional[str]
+    reviewer: Optional[str]
+    rating: Optional[int]
+    content: Optional[str]
+    hotel_name: Optional[str]
+    address: Optional[str]
+    room_name: Optional[str]
+    good_cnt: Optional[int]
+    bad_cnt: Optional[int]
+    rating_service: Optional[int]
+    rating_clean: Optional[int]
+    rating_room: Optional[int]
 
 example_reviews = [
     Review(
