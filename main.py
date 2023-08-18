@@ -5,6 +5,54 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
+call_number = [
+    {
+        "TeamName": "인사팀"
+        "call": "02-123-1111"
+    },
+    {
+        "TeamName": "총무팀"
+        "call": "02-123-1112"
+    },
+    {
+        "TeamName": "감사팀"
+        "call": "02-123-1113"
+    },
+    {
+        "TeamName": "경영팀"
+        "call": "02-123-1115"
+    }
+]
+
+class Item(BaseModel):
+    TeamName: str
+    call: str
+
+
+@app.get("/telephone_num")
+async def get_restaurants(
+    team_name: str = Query(..., description="팀이름"),
+):
+    filtered_stores = []
+
+    for team in call_number:
+        if team_name and team_name in team["TeamName"]:
+            continue
+
+        filtered_stores.append(team)
+
+    return filtered_stores
+
+
+
+
+
+
+
+
+
+
+
 fake_rental_cars = [
     {
         "location": "제주",
