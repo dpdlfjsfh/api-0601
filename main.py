@@ -416,7 +416,7 @@ class ReviewSearchQuery(BaseModel):
     max_bad: int = Query(None, title="Maximum not recommend count")
     min_rating_service: float = Query(0.0, title="Minimum service rating")
     min_rating_clean: float = Query(0.0, title="Minimum room rating")
-    min_rating_clean: float = Query(0.0, title="Minimum cleanliness rating")
+    min_rating_room: float = Query(0.0, title="Minimum cleanliness rating")
     address: str = Query(None, title="Hotel address")
 
 
