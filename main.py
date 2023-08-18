@@ -267,6 +267,7 @@ async def get_restaurants(
 fake_database = []
 
 class Review(BaseModel):
+    keyword: str
     review_id: int
     review_date: str
     reviewer: str
