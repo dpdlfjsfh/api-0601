@@ -267,20 +267,19 @@ async def get_restaurants(
 fake_database = []
 
 class Review(BaseModel):
-    keyword: str = None
-    review_id: Optional[int]
-    review_date: Optional[str]
-    reviewer: Optional[str]
-    rating: Optional[int]
-    content: Optional[str]
-    hotel_name: Optional[str]
-    address: Optional[str]
-    room_name: Optional[str]
-    good_cnt: Optional[int]
-    bad_cnt: Optional[int]
-    rating_service: Optional[int]
-    rating_clean: Optional[int]
-    rating_room: Optional[int]
+    id: int
+    review_date: str
+    author: str
+    rating: float
+    review_text: str
+    hotel_name: str
+    hotel_address: str
+    room_name: str
+    recommend_count: int
+    not_recommend_count: int
+    service_rating: float
+    room_rating: float
+    cleanliness_rating: float
 
 example_reviews = [
     Review(
@@ -407,8 +406,21 @@ example_reviews = [
 
 fake_database.extend(example_reviews)
 
+class ReviewSearchQuery(BaseModel):
+    keyword: str = Query(None, title="Keyword for search")
+    min_rating: float = Query(0.0, title="Minimum rating")
+    max_rating: float = Query(5.0, title="Maximum rating")
+    review_date: str = Query(None, title="Review date")
+    hotel_name: str = Query(None, title="Hotel name")
+    min_recommend_count: int = Query(0, title="Minimum recommend count")
+    max_not_recommend_count: int = Query(None, title="Maximum not recommend count")
+    min_service_rating: float = Query(0.0, title="Minimum service rating")
+    min_room_rating: float = Query(0.0, title="Minimum room rating")
+    min_cleanliness_rating: float = Query(0.0, title="Minimum cleanliness rating")
+
+
 @app.post("/search_reviews_post")
-async def search_reviews(review: Review = Body(...)):
+async def search_reviews(review: ReviewSearchQuery = Body(...)):
     matching_reviews = []
 
     for review_data in fake_database:
