@@ -36,9 +36,8 @@ async def get_callnum(
     filtered_stores = []
 
     for team in call_number:
-        if team_name and team_name in team["TeamName"]:
+        if team_name and team_name not in team["TeamName"]:
             continue
-
         filtered_stores.append(team)
 
     return filtered_stores
