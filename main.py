@@ -628,75 +628,6 @@ async def search_lens(
     return results
 
 
-wine_data = [
-    {
-        "name": "랑송, 노블 브뤼",
-        "type": "스파클링",
-        "variety": ["샤르도네", "피노 누아"],
-        "country": "프랑스",
-        "sweetness": 1,
-        "body": 3,
-        "pairing": ["치킨", "해산물", "초밥"]
-    },
-    {
-        "name": "엘레트라, 소비뇽 블랑",
-        "type": "화이트",
-        "variety": ["소비뇽 블랑"],
-        "country": "이탈리아",
-        "sweetness": 1,
-        "body": 2,
-        "pairing": ["건육", "해산물", "오일파스타"]
-    },
-    {
-        "name": "비노블스 포레, 샤또 레 아르두앵",
-        "type": "레드",
-        "variety": ["메를로", "카베르네 소비뇽"],
-        "country": "프랑스",
-        "sweetness": 3,
-        "body": 3,
-        "pairing": ["붉은육류", "그릴요리", "베이컨"]
-    },
-    {
-        "name": "보스타반, 메를로 인 페이퍼 세미 스위트",
-        "type": "레드",
-        "variety": ["메를로"],
-        "country": "몰도바",
-        "sweetness": 3,
-        "body": 4,
-        "pairing": ["치즈"]
-    },
-    {
-        "name": "디히터트라움 아이스와인젝트",
-        "type": "스파클링",
-        "variety": ["실바너"],
-        "country": "독일",
-        "sweetness": 5,
-        "body": 4,
-        "pairing": ["샐러드"]
-    }
-]
-
-
-@app.get("/wine")
-async def search_wine(
-    name: Optional[str] = Query(None, description="제품명"),
-    type: str = Query(..., description="종류(ex: 레드, 화이트 등)"),
-    variety: Optional[str] = Query(None, description="주요 품종(ex: 카베르네 소비뇽, 샤르도네 등)"),
-    country: Optional[str] = Query(None, description="국가"),
-    food: Optional[str] = Query(None, description="음식명(음식 매칭을 바탕으로 검색)"),
-) -> List[dict]:
-    results = []
-    for wine in wine_data:
-        if (
-            (name is None or wine["name"].lower() == name.lower()) and
-            (wine["type"].lower() == type.lower()) and
-            (variety is None or variety.lower() in [v.lower() for v in wine["variety"]]) and
-            (country is None or wine["country"].lower() == country.lower()) and
-            (food is None or food.lower() in [f.lower() for f in wine["pairing"]])
-        ):
-            results.append(wine)
-    return results
-
 wedding_halls = [
     {
         "name": "빌라드지디 수서",
@@ -9618,13 +9549,11 @@ async def filter_catsitters(
 
 @app.get("/dogsitter")
 async def filter_dogsitters(
-    도그워커이름: str = Query(None, description="검색하고자 하는 도그워커의 이름"),
-    이용가능지역: str = Query(None, description="이용하고자 하는 지역의 시, 군, 구 이름 ex) 성남시, 진안군, 강남구 등"),
-    최소가격: int = Query(None, description="가격의 최소치"),
-    최대가격: int = Query(None, description="가격의 최대치"),
-    최소평점: float = Query(None, description="검색하고자 하는 최소 평점"),
-    최대평점: float = Query(None, description="검색하고자 하는 최대 평점"),
-    예약가능여부: bool = Query(None, description="현재 예약이 가능한지 여부"),
+    name: str = Query(None, description="검색하고자 하는 도그워커의 이름"),
+    location: str = Query(None, description="이용하고자 하는 지역의 시, 군, 구 이름 ex) 성남시, 진안군, 강남구 등"),
+    gradeLowerLimit: float = Query(None, description="검색하고자 하는 최소 평점"),
+    gradeUpperLimit: float = Query(None, description="검색하고자 하는 최대 평점"),
+    reservable: bool = Query(None, description="현재 예약이 가능한지 여부"),
 ):
     # 도그워커 정보 데이터
     dogsitters = [
@@ -9639,34 +9568,32 @@ async def filter_dogsitters(
 
     for dogsitter in dogsitters:
         if (
-            (dogsitter[0] == 도그워커이름 if 도그워커이름 else True) and
-            (dogsitter[1] == 이용가능지역 if 이용가능지역 else True) and
-            (dogsitter[2] >= 최소가격 if 최소가격 else True) and
-            (dogsitter[2] <= 최대가격 if 최대가격 else True) and
-            (dogsitter[3] >= 최소평점 if 최소평점 else True) and
-            (dogsitter[3] <= 최대평점 if 최대평점 else True) and
-            (dogsitter[4] == 예약가능여부 if 예약가능여부 is not None else True)
+            (dogsitter[0] == name if name else True) and
+            (dogsitter[1] == location if location else True) and
+            (dogsitter[4] >= gradeLowerLimit if gradeLowerLimit else True) and
+            (dogsitter[4] <= gradeUpperLimit if gradeUpperLimit else True) and
+            (dogsitter[4] == reservable if reservable is not None else True)
         ):
             filtered_dogsitters.append({
-                "도그워커이름": dogsitter[0],
-                "이용가능지역": dogsitter[1],
-                "가격": dogsitter[2],
-                "평점": dogsitter[3],
-                "예약가능여부": dogsitter[4],
-                "이용후기": dogsitter[5],
-                "연락처": dogsitter[6]
+                "name": dogsitter[0],
+                "location": dogsitter[1],
+                "price": dogsitter[2],
+                "grade": dogsitter[3],
+                "reservable": dogsitter[4],
+                "review": dogsitter[5],
+                "phone": dogsitter[6]
             })
 
     return filtered_dogsitters
 
 @app.get("/webtoon_search")
 async def filter_webtoons(
-    작품명: str = Query(None, description="검색하고자 하는 웹툰의 작품 이름"),
-    작가명: str = Query(None, description="검색하고자 하는 웹툰의 작가 이름"),
-    연재플랫폼: str = Query(None, description="검색하고자 하는 웹툰의 연재 플랫폼"),
-    장르: str = Query(None, description="검색하고자 하는 웹툰의 장르 ex) 판타지, 액션, 일상, 스릴러, 개그, 드라마, 무협 등"),
-    이용가능연령: str = Query(None, description="이용가능연령 ex) 전체이용가, 12세이상, 15세이상, 18세이상"),
-    키워드: str = Query(None, description="작품의 이름, 설명, 플랫폼, 장르, 이용가능 연령, 완결여부의 설명을 모두 포함해 검색하는 키워드"),
+    title: str = Query(None, description="검색하고자 하는 웹툰의 작품 이름"),
+    writerNm: str = Query(None, description="검색하고자 하는 웹툰의 작가 이름"),
+    platform: str = Query(None, description="검색하고자 하는 웹툰의 연재 플랫폼"),
+    genre: str = Query(None, description="검색하고자 하는 웹툰의 장르 ex) 판타지, 액션, 일상, 스릴러, 개그, 드라마, 무협 등"),
+    ageLimit: str = Query(None, description="이용가능연령 ex) 전체이용가, 12세이상, 15세이상, 18세이상"),
+    status: str = Query(None, description="작품의 상태"),
 ):
     # 웹툰 정보 데이터
     webtoons = [
@@ -9681,72 +9608,32 @@ async def filter_webtoons(
 
     for webtoon in webtoons:
         if (
-            (webtoon[0] == 작품명 if 작품명 else True) and
-            (webtoon[1] == 작가명 if 작가명 else True) and
-            (webtoon[2] == 연재플랫폼 if 연재플랫폼 else True) and
-            (webtoon[3] == 장르 if 장르 else True) and
-            (webtoon[4] == 이용가능연령 if 이용가능연령 else True) and
-            (키워드 in webtoon if 키워드 else True)
+            (webtoon[0] == title if 작품명 else True) and
+            (webtoon[1] == writerNm if 작가명 else True) and
+            (webtoon[2] == platform if 연재플랫폼 else True) and
+            (webtoon[3] == genre if 장르 else True) and
+            (webtoon[4] == ageLimit if 이용가능연령 else True) and
+            (webtoon[5] == status if status else True)
         ):
             filtered_webtoons.append({
-                "작품명": webtoon[0],
-                "작가명": webtoon[1],
-                "연재플랫폼": webtoon[2],
-                "장르": webtoon[3],
-                "이용가능연령": webtoon[4],
-                "완결여부": webtoon[5]
+                "title": webtoon[0],
+                "writerNm": webtoon[1],
+                "platform": webtoon[2],
+                "genre": webtoon[3],
+                "ageLimit": webtoon[4],
+                "status": webtoon[5]
             })
 
     return filtered_webtoons
 
-@app.get("/seoul_public")
-async def filter_seoul_public_sports_centers(
-    센터명: str = Query(None, description="조회하고자 하는 체육센터의 이름"),
-    지역구: str = Query(None, description="조회하고자 하는 구 이름 ex)은평구, 서초구, 마포구 등"),
-    상세주소: str = Query(None, description="조회하고자 하는 센터의 상세 주소 ex) 중랑구 신내로21길, 방이1동 방이동 439-8 등"),
-    주요시설: str = Query(None, description="센터 내 주요 시설 ex) 헬스장, 기구필라테스, 수영장 등"),
-    주요강습: str = Query(None, description="센터 내 주요 강습 프로그램 ex) 수영, 아쿠아로빅, 배드민턴, 요가, 필라테스 등"),
-):
-    # 서울시 공공 체육센터 정보 데이터
-    seoul_public_centers = [
-        ["흑석체육센터", "동작구", "서울특별시 동작구 현충로 73", "헬스장", "헬스", "06:00 ~ 22:00", "법정공휴일 및 일요일", "02-823-2273"],
-        ["목동다목적체육관", "중랑구", "서울특별시 중랑구 숙선옹주로 66", "기구필라테스", "필라테스", "07:00 ~ 20:00", "법정공휴일 및 토요일과 일요일", "02-949-5577"],
-        ["신월문화체육센터", "양천구", "서울특별시 양천구 지양로 47", "수영장", "수영", "05:00 ~ 19:00", "법정공휴일", "02-2605-4093~5"],
-        ["성북구민체육관", "성북구", "서울특별시 성북구 화랑로13길 144", "배드민턴장", "배드민턴", "06:00 ~ 22:00", "법정공휴일 및 일요일", "02-909-3497~8"],
-        ["대현산체육관", "성동구", "서울특별시 성동구 독서당로63길 44", "수영장", "아쿠아로빅", "09:00 ~ 22:00", "휴무 없음", "02-2204-7681"],
-    ]
-
-    filtered_centers = []
-
-    for center in seoul_public_centers:
-        if (
-            (center[0] == 센터명 if 센터명 else True) and
-            (center[1] == 지역구 if 지역구 else True) and
-            (center[2] == 상세주소 if 상세주소 else True) and
-            (center[3] == 주요시설 if 주요시설 else True) and
-            (center[4] == 주요강습 if 주요강습 else True)
-        ):
-            filtered_centers.append({
-                "센터명": center[0],
-                "지역구": center[1],
-                "상세주소": center[2],
-                "주요시설": center[3],
-                "주요강습": center[4],
-                "운영시간": center[5],
-                "휴관일": center[6],
-                "연락처": center[7]
-            })
-
-    return filtered_centers
 
 @app.get("/seoul_park")
 async def filter_seoul_parks(
-    공원명: str = Query(None, description="조회하고자 하는 공원의 이름"),
-    지역구: str = Query(None, description="조회하고자 하는 구 이름 ex)은평구, 서초구, 마포구 등"),
-    상세주소: str = Query(None, description="조회하고자 하는 공원의 상세 주소 ex) 중랑구 신내로21길, 방이1동 방이동 439-8 등"),
-    주요시설: str = Query(None, description="공원 내 주요 시설 ex) 캠핑장, 배드민턴장, 잔디쉼터 등"),
-    최소면적: int = Query(None, description="찾고자 하는 공원 면적의 최소치"),
-    최대면적: int = Query(None, description="찾고자 하는 공원 면적의 최대치"),
+    parkNm: str = Query(None, description="조회하고자 하는 공원의 이름"),
+    seoulGu: str = Query(None, description="조회하고자 하는 구 이름 ex)은평구, 서초구, 마포구 등"),
+    facility: str = Query(None, description="공원 내 주요 시설 ex) 캠핑장, 배드민턴장, 잔디쉼터 등"),
+    areaNarrowest: int = Query(None, description="찾고자 하는 공원 면적의 최소치"),
+    areaWidest: int = Query(None, description="찾고자 하는 공원 면적의 최대치"),
 ):
     # 서울시 공원 정보 데이터
     seoul_parks = [
@@ -9761,198 +9648,23 @@ async def filter_seoul_parks(
 
     for park in seoul_parks:
         if (
-            (park[0] == 공원명 if 공원명 else True) and
-            (park[1] == 지역구 if 지역구 else True) and
-            (park[2] == 상세주소 if 상세주소 else True) and
-            (park[3] == 주요시설 if 주요시설 else True) and
-            (최소면적 is None or (park[4] >= 최소면적)) and
-            (최대면적 is None or (park[4] <= 최대면적))
+            (park[0] == parkNm if parkNm else True) and
+            (park[1] == seoulGu if seoulGu else True) and
+            (park[3] == facility if facility else True) and
+            (areaNarrowest is None or (park[4] >= areaNarrowest)) and
+            (areaWidest is None or (park[4] <= areaWidest))
         ):
             filtered_parks.append({
-                "공원명": park[0],
-                "지역구": park[1],
-                "상세주소": park[2],
-                "주요시설": park[3],
-                "면적": park[4],
-                "문의연락처": park[5]
+                "parkNm": park[0],
+                "seoulGu": park[1],
+                "address": park[2],
+                "facility": park[3],
+                "area": park[4],
+                "phone": park[5]
             })
 
     return filtered_parks
 
-@app.get("/korea_earthquake")
-async def filter_korea_earthquake(
-    검색년도: str = Query(None, description="조회하고자 하는 지진 발생년도"),
-    시도명: str = Query(None, description="조회하고자 하는 지진 발생지역 시도 이름 ex)창원시, 경기도 등"),
-    군구명: str = Query(None, description="조회하고자 하는 지진 발생지역 군구 이름 ex)고성군, 무안군, 마포구 등"),
-    최대진도: int = Query(None, description="최대진도의 표기(로마 숫자가 아닌 일반 숫자로 검색) ex) 1, 2, 3 등", ge=1, le=12),
-    규모: float = Query(None, description="지진의 규모", ge=0),
-):
-    # 과거 국내 지진 정보 데이터
-    korea_earthquakes = [
-        {"발생일자": "2023-07-19", "발생시각": "08:30:45", "발생위치": "전북 완주군 남쪽 15km 지역", "최대진도": 1, "규모": 2.5},
-        {"발생일자": "2023-07-19", "발생시각": "13:50:12", "발생위치": "경기도 안양시 동쪽 5km 지역", "최대진도": 2, "규모": 3.1},
-        {"발생일자": "2023-07-18", "발생시각": "22:15:03", "발생위치": "경북 경산시 북쪽 10km 지역", "최대진도": 3, "규모": 3.8},
-        {"발생일자": "2023-07-18", "발생시각": "03:22:30", "발생위치": "서울특별시 강남구 서쪽 3km 지역", "최대진도": 2, "규모": 3.0},
-        {"발생일자": "2023-07-17", "발생시각": "19:12:56", "발생위치": "경남 창원시 북쪽 20km 지역", "최대진도": 1, "규모": 2.2},
-    ]
-
-    filtered_earthquakes = []
-
-    for quake in korea_earthquakes:
-        if (
-            (검색년도 in quake["발생일자"] if 검색년도 else True) and
-            (시도명 in quake["발생위치"] if 시도명 else True) and
-            (군구명 in quake["발생위치"] if 군구명 else True) and
-            (quake["최대진도"] == 최대진도 if 최대진도 else True) and
-            (quake["규모"] == 규모 if 규모 else True)
-        ):
-            filtered_earthquakes.append(quake)
-
-    return filtered_earthquakes
-
-@app.get("/peach_farm")
-async def filter_peach_farm(
-    농장명: str = Query(None, description="검색하고자 하는 농장의 이름"),
-    대표명: str = Query(None, description="검색하고자 하는 농장의 대표명"),
-    복숭아품종명: str = Query(None, description="예약하고자 하는 복숭아 품종의 이름"),
-    최소가격: int = Query(None, description="가격의 최소치", ge=0),
-    최대가격: int = Query(None, description="가격의 최대치"),
-    예약가능여부: bool = Query(None, description="현재 예약이 가능한지 여부"),
-    키워드: str = Query(None, description="농장명, 대표명, 복숭아품종명, 가격을 통틀어 검색하는 키워드"),
-):
-    # 복숭아 예약 농장 정보 데이터
-    peach_farms = [
-        {"농장명": "현철이네", "대표명": "신현철", "복숭아품종명": "신비복숭아", "가격": 60000, "예약가능여부": True, "연락처": "010-5290-5959"},
-        {"농장명": "피치팜팜", "대표명": "노승환", "복숭아품종명": "납작복숭아", "가격": 72000, "예약가능여부": True, "연락처": "010-6289-6620"},
-        {"농장명": "복자네", "대표명": "이복희", "복숭아품종명": "망고복숭아", "가격": 60000, "예약가능여부": True, "연락처": "010-5775-8909"},
-        {"농장명": "별빛도원", "대표명": "권태환", "복숭아품종명": "마도카복숭아", "가격": 58000, "예약가능여부": False, "연락처": "010-6151-6807"},
-        {"농장명": "청암농원", "대표명": "최정화", "복숭아품종명": "양홍장", "가격": 50000, "예약가능여부": True, "연락처": "010-9344-9628"},
-    ]
-
-    filtered_peach_farms = []
-
-    for farm in peach_farms:
-        if (
-            (farm["농장명"] == 농장명 if 농장명 else True) and
-            (farm["대표명"] == 대표명 if 대표명 else True) and
-            (farm["복숭아품종명"] == 복숭아품종명 if 복숭아품종명 else True) and
-            (farm["가격"] >= 최소가격 if 최소가격 is not None else True) and
-            (farm["가격"] <= 최대가격 if 최대가격 is not None else True) and
-            (farm["예약가능여부"] == 예약가능여부 if 예약가능여부 is not None else True) and
-            (키워드 in farm["농장명"] or 키워드 in farm["대표명"] or 키워드 in farm["복숭아품종명"] or 키워드 in str(farm["가격"]) if 키워드 else True)
-        ):
-            filtered_peach_farms.append(farm)
-
-    return filtered_peach_farms
-
-@app.get("/indi_library")
-async def filter_indi_library(
-    서점명: str = Query(None, description="검색하고자 하는 서점의 이름"),
-    대표명: str = Query(None, description="검색하고자 하는 서점의 대표명"),
-    지역: str = Query(None, description="서점이 위치한 지역 시,도를 검색시에 사용합니다 ex) 서울시, 경기도"),
-    상세주소: str = Query(None, description="서점의 상세 주소입니다(도로명 표기)"),
-    활동내용: str = Query(None, description="서점에서 진행하는 활동 설명입니다 ex) 독서모임, 낭독회, 전시 등"),
-    키워드: str = Query(None, description="서점명, 대표명, 활동내용을 통틀어 검색하는 키워드"),
-):
-    # 전국 독립서점 정보 데이터
-    indi_libraries = [
-        {"서점명": "책방연희", "대표명": "이지현", "주소": "서울특별시 마포구 와우산로35길 3 (서교동) 지하 1층", "활동내용": "독서모임", "운영시간": "12:00 ~ 19:00", "휴무일": "일요일과 법정 공휴일 휴무", "웹사이트": "https://www.instagram.com/chaegbangyeonhui/"},
-        {"서점명": "다다르다", "대표명": "김승헌", "주소": "대전광역시 중구 중교로73번길 6 (은행동) 2층", "활동내용": "낭독회", "운영시간": "12:00 ~ 22:00", "휴무일": "일요일과 월요일 휴무", "웹사이트": "http://www.citytraveller.co.kr/"},
-        {"서점명": "조용한흥분색", "대표명": "이신재", "주소": "전라북도 군산시 옥구읍 옥구남로 11 (선제리)", "활동내용": "전시", "운영시간": "11:00 ~ 20:00", "휴무일": "화요일 휴무", "웹사이트": "https://www.instagram.com/colors.ordinaryday/"},
-        {"서점명": "책다방 밭", "대표명": "박지원", "주소": "전라북도 순창군 동계면 동계로 17-1 (동계면)", "활동내용": "독서모임", "운영시간": "11:00 ~ 18:00", "휴무일": "토요일과 일요일 휴무", "웹사이트": "https://www.instagram.com/batt_bookshop/"},
-        {"서점명": "안녕책방", "대표명": "백아라", "주소": "제주특별자치도 제주시 인다13길 60 (아라일동) 1층", "활동내용": "공간대여", "운영시간": "11:00~17:00", "휴무일": "일요일과 월요일 휴무", "웹사이트": "https://www.instagram.com/hihi_books/"},
-    ]
-
-    filtered_indi_libraries = []
-
-    for library in indi_libraries:
-        if (
-            (library["서점명"] == 서점명 if 서점명 else True) and
-            (library["대표명"] == 대표명 if 대표명 else True) and
-            (지역 in library["주소"]  if 지역 else True) and
-            (상세주소 in library["주소"]  if 상세주소 else True) and
-            (library["활동내용"] == 활동내용 if 활동내용 else True) and
-            (키워드 in library["서점명"] or 키워드 in library["대표명"] or 키워드 in library["활동내용"] if 키워드 else True)
-        ):
-            filtered_indi_libraries.append(library)
-
-    return filtered_indi_libraries
-
-@app.get("/swimming_pool")
-async def filter_swimming_pool(
-    수영장명: str = Query(None, description="검색하고자 하는 수영장의 이름"),
-    지역: str = Query(None, description="수영장이 위치한 지역 시,도를 검색시에 사용합니다 ex) 서울시, 고양시"),
-    상세주소: str = Query(None, description="수영장의 상세 주소입니다(도로명 표기)"),
-    최소가격: int = Query(None, description="수영장 일일권 이용 최소 가격입니다(원화 기준)"),
-    최대가격: int = Query(None, description="수영장 일일권 이용 최대가격입니다(원화 기준)"),
-    최소레일수: int = Query(None, description="수영장의 최소 레일 개수입니다"),
-    최대레일수: int = Query(None, description="수영장의 최대 레일 개수입니다"),
-    최소레일길이: int = Query(None, description="수영장의 최소 레일 길이입니다(미터 기준)"),
-    최대레일길이: int = Query(None, description="수영장의 최대 레일 길이입니다(미터 기준)"),
-):
-    # 전국 수영장 정보 데이터
-    swimming_pools = [
-        {"수영장명": "여의도실내수영장", "주소": "서울시 영등포구 국제금융로 79(여의도동 42-1)", "이용가격": 5000, "레일수": 7, "레일길이": 25, "연락처": "02-786-0955"},
-        {"수영장명": "홍제스포츠센터", "주소": "서울시 서대문구 홍은중앙로 13(홍은1동 48)", "이용가격": 4000, "레일수": 5, "레일길이": 25, "연락처": "02-395-4422"},
-        {"수영장명": "안양월드스포츠센터", "주소": "경기도 안양 만안구 안양로 329번길 108(만안구 안양3동 900-10)", "이용가격": 6000, "레일수": 6, "레일길이": 20, "연락처": "031-441-4310"},
-        {"수영장명": "세종국민체육센터", "주소": "세종시 조치원읍 새내8길 115(조치원읍 명리 24-1)", "이용가격": 4200, "레일수": 6, "레일길이": 30, "연락처": "044-868-9885"},
-        {"수영장명": "제주종합경기장 실내수영장", "주소": "제주시 서광로2길 24(오라1동 1165)", "이용가격": 8000, "레일수": 8, "레일길이": 50, "연락처": "064-728-3290"},
-    ]
-
-    filtered_swimming_pools = []
-
-    for pool in swimming_pools:
-        if (
-            (pool["수영장명"] == 수영장명 if 수영장명 else True) and
-            (지역 in pool["지역"] if 지역 else True) and
-            (상세주소 in pool["주소"] if 상세주소 else True) and
-            (pool["이용가격"] is None or (pool["이용가격"] >= 최소가격 if 최소가격 else True)) and
-            (pool["이용가격"] is None or (pool["이용가격"] <= 최대가격 if 최대가격 else True)) and
-            (pool["레일수"] is None or (pool["레일수"] >= 최소레일수 if 최소레일수 else True)) and
-            (pool["레일수"] is None or (pool["레일수"] <= 최대레일수 if 최대레일수 else True)) and
-            (pool["레일길이"] is None or (pool["레일길이"] >= 최소레일길이 if 최소레일길이 else True)) and
-            (pool["레일길이"] is None or (pool["레일길이"] <= 최대레일길이 if 최대레일길이 else True))
-        ):
-            filtered_swimming_pools.append(pool)
-
-    return filtered_swimming_pools
-
-@app.get("/weekend_farm")
-async def filter_seoul_weekend_farm(
-    농장명: str = Query(None, description="검색하고자 하는 농장의 이름"),
-    지역구: str = Query(None, description="농장이 위치한 지역구를 검색시에 사용합니다 ex) 강동구, 도봉구"),
-    농장주소: str = Query(None, description="농장의 상세 주소입니다(도로명 표기)"),
-    최소분양가: int = Query(None, description="농장의 최소 분양가입니다(원화 기준)"),
-    최대분양가: int = Query(None, description="농장의 최대 분양가입니다(원화 기준)"),
-    최소분양면적: float = Query(None, description="농장의 최소분양면적입니다(제곱미터 단위)"),
-    최대분양면적: float = Query(None, description="농장의 최대분양면적입니다(제곱미터 단위)"),
-    현재분양가능여부: bool = Query(None, description="현재 분양이 가능한지 여부입니다"),
-):
-    # 서울시 주말농장 정보 데이터
-    weekend_farms = [
-        {"농장명": "고덕주말농장", "주소": "서울시 강동구 고덕1동 479", "분양가": 120000, "분양면적": 15, "현재분양가능여부": False, "연락처": "010-4214-9347"},
-        {"농장명": "황금주말농장", "주소": "서울시 강서구 개화동 497-2", "분양가": 100000, "분양면적": 16.5, "현재분양가능여부": True, "연락처": "010-3790-1005"},
-        {"농장명": "천수텃밭농원", "주소": "서울시 노원구 중계로8길 56", "분양가": 450000, "분양면적": 14, "현재분양가능여부": True, "연락처": "010-6426-2153"},
-        {"농장명": "웰빙주말농장", "주소": "서울시 도봉구 두봉1동 468", "분양가": 110000, "분양면적": 13, "현재분양가능여부": True, "연락처": "010-6271-3264"},
-        {"농장명": "청계주말농장", "주소": "서울시 서초구 원지동530", "분양가": 200000, "분양면적": 10, "현재분양가능여부": True, "연락처": "010-6273-1234"},
-    ]
-
-    filtered_weekend_farms = []
-
-    for farm in weekend_farms:
-        if (
-            (farm["농장명"] == 농장명 if 농장명 else True) and
-            (지역구 in farm["주소"] if 지역구 else True) and
-            (농장주소 in farm["주소"] if 농장주소 else True) and
-            (farm["분양가"] is None or (farm["분양가"] >= 최소분양가 if 최소분양가 else True)) and
-            (farm["분양가"] is None or (farm["분양가"] <= 최대분양가 if 최대분양가 else True)) and
-            (farm["분양면적"] is None or (farm["분양면적"] >= 최소분양면적 if 최소분양면적 else True)) and
-            (farm["분양면적"] is None or (farm["분양면적"] <= 최대분양면적 if 최대분양면적 else True)) and
-            (farm["현재분양가능여부"] == 현재분양가능여부 if 현재분양가능여부 is not None else True)
-        ):
-            filtered_weekend_farms.append(farm)
-
-    return filtered_weekend_farms
 
 # 향수 상품 데이터 리스트
 perfume_list = [
@@ -10165,78 +9877,6 @@ async def filter_parking_lot(
 
     return results
 
-# 화장품 데이터 리스트
-cosmetics_list = [
-    {
-        "name": "비플레인",
-        "type": "토너",
-        "brand": "시카테롤 토너",
-        "price": 24000,
-        "유통기한": 250523,
-        "성분": "병풀추출물"
-    },
-    {
-        "name": "에스네이처",
-        "type": "선크림",
-        "brand": "아쿠아 365 유브이 선크림",
-        "price": 11900,
-        "유통기한": 250206,
-        "성분": "판테놀"
-    },
-    {
-        "name": "삐아",
-        "type": "쿠션",
-        "brand": "네버 다이 쿠션",
-        "price": 10750,
-        "유통기한": 240809,
-        "성분": "아데노신"
-    },
-    {
-        "name": "이즈앤트리",
-        "type": "크림",
-        "brand": "히알루론산 아쿠아 젤크림",
-        "price": 13900,
-        "유통기한": 26012,
-        "성분": "소듐피씨에이"
-    },
-    {
-        "name": "컬러그램",
-        "type": "틴트",
-        "brand": "쥬시 젤리 틴트",
-        "price": 9800,
-        "유통기한": 241230,
-        "성분": "석류추출물"
-    }
-]
-
-@app.get("/cosmetics")
-async def filter_cosmetics(
-    brand: Optional[str] = Query(None, description="브랜드"),
-    name: Optional[str] = Query(None, description="화장품 명"),
-    cosmetic_type: Optional[str] = Query(None, description="화장품 종류 ex) 토너, 바디로션, 립스틱, 파운데이션"),
-    expiration_date: Optional[int] = Query(None, description="유통기한 데이터 형식 yymmdd"),
-    min_price: Optional[int] = Query(None, description="최소 가격"),
-    max_price: Optional[int] = Query(None, description="최대 가격")
-) -> List[dict]:
-    results = []
-
-    for cosmetics in cosmetics_list:
-        if brand and brand != cosmetics.get("brand"):
-            continue
-        if name and name != cosmetics.get("name"):
-            continue
-        if cosmetic_type and cosmetic_type != cosmetics.get("type"):
-            continue
-        if expiration_date and expiration_date != cosmetics.get("유통기한"):
-            continue
-        if min_price and (not cosmetics.get("price") or cosmetics.get("price") < min_price):
-            continue
-        if max_price and (not cosmetics.get("price") or cosmetics.get("price") > max_price):
-            continue
-
-        results.append(cosmetics)
-
-    return results
 
 # 애견동반 가능시설 데이터 리스트
 pets_list = [
