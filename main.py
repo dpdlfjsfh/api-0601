@@ -184,6 +184,22 @@ async def create_item(item: store):
     return {"message": "Item created successfully"} 
 
 
+
+class store2(BaseModel):
+    storeName: str
+    location: str
+    phone_num: str
+    menuName: List
+    min_order_amount: Optional[int] = None
+
+store_info2 = []
+
+@app.post("/store2")
+async def create_item(item: store2):
+    store_info2.append(item)
+    return {"message": "Item created successfully"} 
+
+
 stores_db = [
     {
         "store_name": "나라 분식집",
