@@ -5,6 +5,26 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
+# Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
+class User(BaseModel):
+    username: str
+    age: int
+    is_active: bool
+    address: dict
+    favorite_numbers: list
+
+# 사용자 정보를 저장할 임시 데이터베이스 대신 리스트를 사용합니다.
+user_db = []
+
+@app.post("/users/")
+async def create_user(user: User):
+    user_db.append(user.dict())
+    return {"message": "사용자가 추가되었습니다."}
+
+
+
+
+
 team_phone_numbers = {
     "인사팀": "111-1111",
     "총무팀": "222-2222",
