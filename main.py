@@ -153,7 +153,7 @@ class store(BaseModel):
     storeName: str
     location: str
     phone_num: str
-    menuName: List[str]
+    menuName: str
     min_order_amount: Optional[int] = None
 
 store_info = []
