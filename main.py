@@ -47,9 +47,9 @@ class NicknameInput(BaseModel):
     nickname: str
 
 class InformationInput(BaseModel):
-    age: int
-    height: float
-    weight: float
+    age: Optional[int] = None
+    height: Optional[float] = None
+    weight: Optional[float] = None
 
 @app.post("/address")
 async def get_address(address_input: AddressInput):
@@ -69,7 +69,16 @@ async def get_information(info_input: InformationInput):
     height = info_input.height
     weight = info_input.weight
     # 여기에서 나이, 키, 몸무게에 대한 처리를 수행합니다.
-    return {"message": f"Age: {age}, Height: {height} cm, Weight: {weight} kg"}
+    if age is None and height is None and weight is None:
+        return {"message": "No information provided."}
+    info_message = []
+    if age is not None:
+        info_message.append(f"Age: {age}")
+    if height is not None:
+        info_message.append(f"Height: {height} cm")
+    if weight is not None:
+        info_message.append(f"Weight: {weight} kg")
+    return {"message": ", ".join(info_message)}
 
 
 
