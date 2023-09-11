@@ -40,6 +40,36 @@ def telephone_num(team_info: TeamInfo):
     if team_name in team_phone_numbers:
         return {"team": team_name, "phone_number": team_phone_numbers[team_name]}
 
+class AddressInput(BaseModel):
+    address: str
+
+class NicknameInput(BaseModel):
+    nickname: str
+
+class InformationInput(BaseModel):
+    age: int
+    height: float
+    weight: float
+
+@app.post("/address")
+async def get_address(address_input: AddressInput):
+    address = address_input.address
+    # 여기에서 주소에 대한 처리를 수행합니다.
+    return {"message": f"You entered the address: {address}"}
+
+@app.post("/nickname")
+async def get_nickname(nickname_input: NicknameInput):
+    nickname = nickname_input.nickname
+    # 여기에서 닉네임에 대한 처리를 수행합니다.
+    return {"message": f"Your nickname is: {nickname}"}
+
+@app.post("/information")
+async def get_information(info_input: InformationInput):
+    age = info_input.age
+    height = info_input.height
+    weight = info_input.weight
+    # 여기에서 나이, 키, 몸무게에 대한 처리를 수행합니다.
+    return {"message": f"Age: {age}, Height: {height} cm, Weight: {weight} kg"}
 
 
 
