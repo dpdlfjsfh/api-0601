@@ -7,10 +7,22 @@ app = FastAPI()
 
 #Connect X echo
 
+@app.get("/echo/")
+async def echo_params(
+    param1: str = Query(None, description="첫 번째 파라미터"),
+    param2: str = Query(None, description="두 번째 파라미터"),
+):
+    """
+    입력된 파라미터를 그대로 반환하는 API
 
-@app.get("/echo")
-async def echo(params: dict):
+    Args:
+        param1 (str): 첫 번째 파라미터
+        param2 (str): 두 번째 파라미터
 
+    Returns:
+        dict: 입력된 파라미터와 값들을 포함하는 딕셔너리
+    """
+    params = {key: value for key, value in locals().items() if key != "self" and value is not None}
     return params
 
 # Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
