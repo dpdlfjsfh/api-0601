@@ -9,7 +9,8 @@ app = FastAPI()
 
 
 @app.get("/echo")
-async def echo(params: Dict[str, str]):
+async def echo(params: dict):
+
     return params
 
 # Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
