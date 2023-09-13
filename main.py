@@ -5,6 +5,15 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
+#Connect X echo
+
+class RequestParams(BaseModel):
+    params: List[Union[str, None]]
+
+@app.post("/echo")
+async def echo(params: RequestParams):
+    return {"params": params.params}
+
 # Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
 class User(BaseModel):
     username: str
