@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query, HTTPException, Body
-from typing import List, Optional, Union
+from typing import List, Optional, Dict
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -7,12 +7,10 @@ app = FastAPI()
 
 #Connect X echo
 
-class RequestParams(BaseModel):
-    params: List[Union[str, None]]
 
-@app.post("/echo")
-async def echo(params: RequestParams):
-    return {"params": params.params}
+@app.get("/echo/")
+async def echo(params: Dict[str, str]):
+    return params
 
 # Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
 class User(BaseModel):
