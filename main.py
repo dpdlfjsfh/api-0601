@@ -8,7 +8,7 @@ app = FastAPI()
 #Connect X echo
 
 
-@app.get("/echo/")
+@app.get("/echo")
 async def echo(params: Dict[str, str]):
     return params
 
