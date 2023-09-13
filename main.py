@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, HTTPException, Body
+from fastapi import FastAPI, Query, HTTPException, Body, Request
 from typing import List, Optional, Dict
 from pydantic import BaseModel
 
@@ -7,14 +7,13 @@ app = FastAPI()
 
 #Connect X echo
 
-@app.get("/echo/")
-async def echo_parameters(params: dict = Query(...)):
-    """
-    임의의 파라미터와 값을 그대로 리턴해주는 API 엔드포인트
-    :param params: 파라미터와 값이 들어있는 딕셔너리
-    :return: 입력된 파라미터와 값을 그대로 반환
-    """
-    return params
+@app.get("/example")
+async def get_example(request: Request):
+    # 모든 쿼리 파라미터를 가져옴
+    query_params = request.query_params
+    # 쿼리 파라미터를 딕셔너리로 변환
+    parameters = {key: query_params[key] for key in query_params.keys()}
+    return parameters
 
 # Pydantic 모델을 사용하여 데이터 유효성 검사 및 파싱
 class User(BaseModel):
