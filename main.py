@@ -7,7 +7,7 @@ app = FastAPI()
 
 #Connect X echo
 
-@app.get("/example")
+@app.get("/serviceAPI")
 async def get_example(request: Request):
     # 모든 쿼리 파라미터를 가져옴
     query_params = request.query_params
