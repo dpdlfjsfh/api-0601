@@ -590,7 +590,7 @@ async def search_reviews(
                
         matching_reviews.append(review)
 
-    return matching_reviews
+    return {"hotels": matching_reviews} 
 
 
 
