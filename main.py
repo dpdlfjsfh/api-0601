@@ -3285,7 +3285,7 @@ async def search_room_escape(
     error_msg = ''
     if theme is None and min_grade is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."}'
-        return error_msg
+        raise HTTPException(status_code=200, detail=error_msg)
     elif theme is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme is missing."}'
         return error_msg
@@ -3439,7 +3439,7 @@ async def search_bicycle(
 
     if type is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter type is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
+        raise HTTPException(status_code=200, detail=error_msg)
     
     results = []
     for bicycle in bicycle_list:
