@@ -3284,13 +3284,13 @@ async def search_room_escape(
 
     if theme is None and min_grade is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
+        return error_msg
     elif theme is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter theme is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
+        return error_msg
     elif min_grade is None:
         error_msg = str({"status": 400,"error": "Bad Request","message": "Required parameter min_grade is missing."})
-        raise HTTPException(status_code=400, detail=error_msg)
+        return error_msg
         
     results = []
     for room in room_escape_list:
