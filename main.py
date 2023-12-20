@@ -3285,10 +3285,10 @@ async def search_room_escape(
     error_msg = ''
     if theme is None and min_grade is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."}'
-        raise HTTPException(status_code=200, detail=error_msg)
+        raise HTTPException(status_code=200, detail='No theme, min_grade')
     elif theme is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme is missing."}'
-        raise HTTPException(status_code=200, detail=error_msg)
+        raise HTTPException(status_code=200, detail='theme, min_grade is missing')
     elif min_grade is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter min_grade is missing."}'
         raise HTTPException(status_code=200, detail=error_msg)
