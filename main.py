@@ -3282,14 +3282,15 @@ async def search_room_escape(
         max_difficulty: Optional[int] = Query(None, ge=0, le=10, description="최대 난이도")
 ) -> List[dict]:
 
+    error_msg = ''
     if theme is None and min_grade is None:
         error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."}'
         return error_msg
     elif theme is None:
-        error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."}'
+        error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme is missing."}'
         return error_msg
     elif min_grade is None:
-        error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter theme, min_grade is missing."}'
+        error_msg = '{"status": 400,"error": "Bad Request","message": "Required parameter min_grade is missing."}'
         return error_msg
         
     results = []
