@@ -94,6 +94,1844 @@ async def aicc(
     else:
         return '정의 되지 않은 상담 영역입니다.'
 
+
+@app.get("/zoo_animal")
+def read_zoo_animal():
+    return []
+
+@app.post("/zoo_animal")
+def create_zoo_animal():
+    return []
+
+@app.get("/apartment_complex")
+def read_zoo_anima1l():
+    return []
+
+@app.post("/apartment_complex")
+def create_zoo_animal1():
+    return []
+
+@app.get("/spread_jam_search")
+def read_zoo_animal2():
+    return []
+
+@app.post("/spread_jam_search")
+def create_zoo_anima2l():
+    return []
+
+@app.get("/terrace_cafe_search")
+def read_zoo_animal3():
+    return []
+
+@app.post("/terrace_cafe_search")
+def create_zoo_anima3l():
+    return []
+
+@app.get("/naeil_baeum_card")
+def read_zoo_animal4():
+    return []
+
+@app.post("/naeil_baeum_card")
+def create_zoo_animal4():
+    return []
+
+@app.get("/yoga_pilates_class_reservation")
+def read_zoo_animal5():
+    return []
+
+@app.post("/yoga_pilates_class_reservation2")
+def create_zoo_animal5():
+    return []
+
+#지하철역 이름
+@app.get("/find_station")
+async def find_station(
+    landmark : Optional[str] = Query(
+        None,
+    )
+):
+    # 데이터에서 검색 조건에 맞는 항목 필터링
+    filtered_data = [{"station_name":"정자역"}]
+    return filtered_data
+
+@app.get("/station_time")
+async def station_time(
+    station_name : Optional[str] = Query(
+        None,
+    )
+):
+    # 데이터에서 검색 조건에 맞는 항목 필터링
+    filtered_data = []
+    if station_name == '정자역':
+        filtered_data = [{"station_name":"정자역", "time": ['17:00','17:10']}]
+    return filtered_data
+
+
+#벌크 테스트
+strawberry_data = [
+  {
+    "food_name": "빈츠 딸기 프로마쥬",
+    "food_type": "과자",
+    "food_brand": "롯데제과",
+    "food_keywords": [
+      "딸기",
+      "초콜릿",
+      "쿠키",
+      "2024년",
+      "핑크",
+      "봄",
+      "빈츠"
+    ],
+    "food_price": 4500,
+    "release_date": "2024-02-10",
+    "review_rating": 4.3
+  },
+  {
+    "food_name": "몽쉘 딸기 생크림 케이크",
+    "food_type": "과자",
+    "food_brand": "롯데제과",
+    "food_keywords": [
+      "딸기",
+      "초콜릿",
+      "케이크",
+      "2024년",
+      "딸기잼",
+      "봄",
+      "몽쉘"
+    ],
+    "food_price": 6500,
+    "release_date": "2024-02-12",
+    "review_rating": 4.5
+  },
+  {
+    "food_name": "딸기라떼 카스타드",
+    "food_type": "과자",
+    "food_brand": "롯데제과",
+    "food_keywords": [
+      "딸기",
+      "딸기라떼",
+      "케이크",
+      "2024년",
+      "카스타드",
+      "봄"
+    ],
+    "food_price": 5500,
+    "release_date": "2024-02-11",
+    "review_rating": 4.4
+  },
+  {
+    "food_name": "딸기라떼 명가 찰떡파이",
+    "food_type": "과자",
+    "food_brand": "롯데제과",
+    "food_keywords": [
+      "딸기",
+      "찰떡",
+      "찰떡파이",
+      "딸기라떼",
+      "2024년",
+      "핑크",
+      "봄"
+    ],
+    "food_price": 7650,
+    "release_date": "2024-02-06",
+    "review_rating": 4.3
+  },
+  {
+    "food_name": "팔도 봄 에디션 딸기 비빔면",
+    "food_type": "라면",
+    "food_brand": "팔도",
+    "food_keywords": [
+      "딸기",
+      "비빔면",
+      "딸기맛",
+      "2024년",
+      "상큼",
+      "봄"
+    ],
+    "food_price": 5500,
+    "release_date": "2024-02-05",
+    "review_rating": 4.2
+  },
+  {
+    "food_name": "딸기 블라썸 붕어싸만코",
+    "food_type": "빙과",
+    "food_brand": "빙그레",
+    "food_keywords": [
+      "딸기",
+      "벚꽃",
+      "붕어싸만코",
+      "2024년",
+      "아이스크림",
+      "봄",
+      "핑크",
+      "편의점신상"
+    ],
+    "food_price": 2200,
+    "release_date": "2024-03-02",
+    "review_rating": 4.7
+  },
+  {
+    "food_name": "딸기 글레이즈드 도넛",
+    "food_type": "베이커리",
+    "food_brand": "크리스피크림",
+    "food_keywords": [
+      "딸기",
+      "도넛",
+      "2024년",
+      "핑크",
+      "봄"
+    ],
+    "food_price": 2500,
+    "release_date": "2024-03-15",
+    "review_rating": 4.9
+  },
+  {
+    "food_name": "상큼한 딸기크림을 토핑한 스트로베리 피그 도넛",
+    "food_type": "베이커리",
+    "food_brand": "크리스피크림",
+    "food_keywords": [
+      "딸기",
+      "초콜릿",
+      "딸기크림",
+      "도넛",
+      "동물모양",
+      "2024년",
+      "핑크",
+      "봄"
+    ],
+    "food_price": 3900,
+    "release_date": "2024-03-13",
+    "review_rating": 4.1
+  },
+  {
+    "food_name": "생딸기 마스카포네 도넛",
+    "food_type": "베이커리",
+    "food_brand": "노티드",
+    "food_keywords": [
+      "딸기",
+      "생딸기",
+      "도넛",
+      "2024년",
+      "크림치즈",
+      "봄",
+      "마스카포네"
+    ],
+    "food_price": 5200,
+    "release_date": "2024-03-21",
+    "review_rating": 4.6
+  },
+  {
+    "food_name": "스트로베리 자스민티",
+    "food_type": "음료",
+    "food_brand": "노티드",
+    "food_keywords": [
+      "딸기",
+      "자스민",
+      "차",
+      "2024년",
+      "핑크",
+      "봄",
+      "허브티",
+      "아이스티",
+      "논카페인"
+    ],
+    "food_price": 6800,
+    "release_date": "2024-03-06",
+    "review_rating": 4.3
+  }
+]
+
+@app.get("/limited_edition_strawberry_food_search")
+async def searchLimitedEditionStrawberryFood(
+    food_name: Optional[str] = Query(
+        None,
+    ),
+    food_type: Optional[str] = Query(
+        None,
+        description="과자, 라면, 빙과, 베이커리, 음료 중 하나를 선택하세요"
+    ),
+    food_brand: Optional[str] = Query(
+        None,
+    ),
+    food_keywords: List[str] = Query(
+        None,
+        description="한글로 띄어쓰기 없이 제품키워드를 입력하세요"
+    )
+):
+    # 데이터에서 검색 조건에 맞는 항목 필터링
+    filtered_data = []
+    for item in strawberry_data:
+        if (food_name is None or food_name == item["food_name"]) \
+                and (food_type is None or food_type == item["food_type"]) \
+                and (food_brand is None or food_brand == item["food_brand"]) \
+                and (food_keywords is None or all(keyword in item["food_keywords"] for keyword in food_keywords)):
+            filtered_data.append(item)
+    return filtered_data
+
+# 무형문화제 데이터
+intangible_cultural_heritage_data = [    {
+        "name": "판소리",
+        "main_category": "전통공연",
+        "subcategory": "음악",
+        "designated_date": "1964.12.28",
+        "location": "기타",
+        "introduction": "판소리는 한 명의 소리꾼이 고수(북치는 사람)의 장단에 맞추어 창(소리), 말(아니리), 몸짓(너름새)을 섞어가며 긴 이야기를 엮어가는 것을 말한다."
+    },
+    {
+        "name": "양주별산대놀이",
+        "main_category": "전통공연",
+        "subcategory": "연희",
+        "designated_date": "1964.12.07",
+        "location": "경기도 양주시",
+        "introduction": "양주별산대놀이는 경기도 양주군 주내면 유양리 지역에서 전승되는 산대놀이 계통의 탈놀이다."
+    },
+    {
+        "name": "자수장",
+        "main_category": "전통기술",
+        "subcategory": "공예",
+        "designated_date": "1984.10.15",
+        "location": "부산광역시 금정구",
+        "introduction": "자수(刺繡)는 여러 색깔의 실을 바늘에 꿰어 바탕천에 무늬를 수놓아 나타내는 조형활동이다."
+    },
+    {
+        "name": "주철장",
+        "main_category": "전통기술",
+        "subcategory": "공예",
+        "designated_date": "2001.03.12",
+        "location": "충청북도 진천군",
+        "introduction": "주철장이란 인류가 오랫동안 사용하였던 쇠를 녹여서 각종 기물을 만드는 장인을 말한다."
+    },
+    {
+        "name": "사직대제",
+        "main_category": "의례의식",
+        "subcategory": "그 밖의 의식의례",
+        "designated_date": "2000.10.19",
+        "location": "서울특별시 종로구",
+        "introduction": "사직대제는 땅과 곡식의 신에게 드리는 국가적인 제사로, 사(社)는 땅의 신, 직(稷)은 곡식의 신을 의미한다. 예로부터 나라를 세우면 먼저 조상에게 제사를 지내고 이와 함께 땅과 곡식의 신에게 백성이 편안하게 살 수 있도록 풍요를 기원하는 사직제를 올렸다."
+    },
+    {
+        "name": "강강술래",
+        "main_category": "전통공연",
+        "subcategory": "음악",
+        "designated_date": "1966.02.15",
+        "location": "전라남도 진도군",
+        "introduction": "강강술래는 노래와 춤이 하나로 어우러진 부녀자들의 집단놀이이다."
+    },
+    {
+        "name": "강릉단오제",
+        "main_category": "전통놀이",
+        "subcategory": "축제",
+        "designated_date": "1967.01.16",
+        "location": "강원도 강릉시",
+        "introduction": "강릉단오제는 우리나라에서 가장 역사가 깊은 축제로, 마을을 지켜주는 대관령 산신을 제사하고, 마을의 평안과 농사의 번영, 집안의 태평을 기원한다."
+    },
+    {
+        "name": "한산모시짜기",
+        "main_category": "전통기술",
+        "subcategory": "공예",
+        "designated_date": "1967.01.16",
+        "location": "충청남도 서천군",
+        "introduction": "한산모시는 우리나라의 미를 상징하는 여름 전통옷감으로 역사적 가치가 높아 제작기술을 보호하고자 국가무형유산으로 지정했다."
+    },
+    {
+        "name": "북청사자놀음",
+        "main_category": "전통공연",
+        "subcategory": "연희",
+        "designated_date": "1967.03.31",
+        "location": "서울특별시",
+        "introduction": "북청사자놀음은 대사의 묘미나 풍자적인 측면보다는 사자춤의 묘기와 흥겨움이 중심이 되어 다른 사자춤사위보다 교묘하고 힘찬 동작이 특징이다."
+    },
+    {
+        "name": "줄타기",
+        "main_category": "전통공연",
+        "subcategory": "연희",
+        "designated_date": "1976.06.16",
+        "location": "경기도 과천시",
+        "introduction": "줄타기는 공중에 맨 줄 위에서 재미있는 이야기와 발림을 섞어가며 여러 가지 재주를 보여주는 놀이이다."
+    },
+    {
+        "name": "종묘제례",
+        "main_category": "의례의식",
+        "subcategory": "그 밖의 의식의례",
+        "designated_date": "1975.05.09",
+        "location": "서울특별시 종로구",
+        "introduction": "종묘제례란 조선시대 역대 왕과 왕비의 신위를 모셔 놓은 사당(종묘)에서 지내는 제사를 말한다."
+    },
+    {
+        "name": "제주민요",
+        "main_category": "전통공연",
+        "subcategory": "음악",
+        "designated_date": "1989.12.01",
+        "location": "제주특별자치도 서귀포시",
+        "introduction": "제주민요는 일하면서 부르는 노동요가 많고 부녀자들이 부르는 민요가 흔하다는 점에서 주목된다. 노랫말도 특이한 제주도 사투리를 많이 사용하고 있으며, 경기지역 민요보다 구슬프다."
+    },
+    {
+        "name": "영산줄다리기",
+        "main_category": "전통놀이",
+        "subcategory": "놀이",
+        "designated_date": "1969.02.11",
+        "location": "경상남도 창녕군",
+        "introduction": "영산줄다리기는 경상남도 창녕군 영산면에서 전승되는 민속놀이로 현재는 3·1문화제 행사의 하나로 줄다리기를 하고 있다."
+    },
+    {
+        "name": "연등회",
+        "main_category": "전통놀이",
+        "subcategory": "축제",
+        "designated_date": "2012.04.06",
+        "location": "서울특별시 종로구",
+        "introduction": "연등회는 관불의식, 연등행렬, 회향의 형식으로 진행되며 연등행렬 때 동원되는 등(燈)이 다양하고 다채롭다."
+    },
+    {
+        "name": "번와장",
+        "main_category": "전통기술",
+        "subcategory": "건축",
+        "designated_date": "2008.10.21",
+        "location": "기타",
+        "introduction": "번와장'이란 지붕의 기와를 잇는 장인을 말한다."
+    }
+]
+
+@app.get("/intangible_cultural_heritage")
+async def filterIntangibleCulturalHeritage(
+    name: Optional[str] = Query(
+        None,
+        description="문화재명을 한글로 적어주세요 (ex. 판소리, 양주별산대놀이, 주철장)"
+    ),
+    main_category: str = Query(
+        ...,
+        description="대분류를 한글로 적어주세요 (ex. 전통공연, 전통기술, 의례의식)"
+    ),
+    subcategory: Optional[str] = Query(
+        None,
+        description="소분류를 한글로 적어주세요 (ex. 음악, 공예, 그 밖의 의식의례)"
+    ),
+    designated_date: Optional[str] = Query(
+        None,
+        description="지정일을 1964.12.28 형식으로 적어주세요"
+    ),
+    location: Optional[str] = Query(
+        None,
+        description="소재지를 한글로 적어주세요 (ex. 기타, 경기도 양주시, 부산광역시 금정구, 충청북도 진천군)"
+    )
+):
+    # 데이터에서 검색 조건에 맞는 항목 필터링
+    filtered_data = []
+    for item in intangible_cultural_heritage_data:
+        if (name is None or name == item["name"]) \
+                and main_category == item["main_category"] \
+                and (subcategory is None or subcategory == item["subcategory"]) \
+                and (designated_date is None or designated_date == item["designated_date"]) \
+                and (location is None or location == item["location"]):
+            filtered_data.append(item)
+    return filtered_data
+
+cooking_receipe_data = [  {
+    "creator": "뇨리사",
+    "food_classification": [
+      "음료"
+    ],
+    "cook_name": "셀러리 주스",
+    "ingredients": [
+      "셀러리",
+      "물",
+      "바나나",
+      "사과",
+      "레몬"
+    ],
+    "time": 5,
+    "receipe": "1. 셀러리는 깨끗하게 씻어서 잎은 떼어내고 줄기만  갈기 좋은 크기로 자릅니다. 2. 사과는 껍질을 벗긴 후 역시 갈리 좋은 크기로 잘라둡니다. 3. 믹서 용기에 물을 붓고 잘라둔 셀러리와 사과를 넣어요. 그 위에 바나나도 뚝뚝 잘라 넣습니다. 4. 레몬은 껍질은 벗기고 씨를 발라낸 후 과육만 넣어요. 5. 재료들이 곱게 갈릴 때까지 믹서를 돌린 후 컵에 담아요. ",
+    "views": 12902
+  },
+  {
+    "creator": "히트주부",
+    "food_classification": [
+      "죽"
+    ],
+    "cook_name": "버섯 굴죽",
+    "ingredients": [
+      "쌀",
+      "굴",
+      "버섯",
+      "물",
+      "참기름",
+      "국간장",
+      "소금",
+      "후추"
+    ],
+    "time": 30,
+    "receipe": "1. 굴은 굵은 소금을 뿌려서 껍질을 골라내고 살살 씻어서 건져둡니다. 2. 냄비에 참기름과 쌀, 물 한큰술을 넣고 기름이 잘 섞이도록 살살 볶아요. 찹쌀을 섞거나 쌀알을 다져서 넣으면 더 촉촉한 느낌이 납니다. 3. 물 5컵을 넣고 쌀알이 완전히 떠오를때까지 끓여요. 4. 물기를 뺀 굴과 다진 버섯을 냄비에 넣고 물 1컵을 추가해서 살짝 더 끓여요. 5. 국간장으로는 색만 내고 소금, 후추로 간해요.   ",
+    "views": 14319
+  },
+  {
+    "creator": "프로쿠커",
+    "food_classification": [
+      "매일반찬"
+    ],
+    "cook_name": "두부 조림",
+    "ingredients": [
+      "두부",
+      "대파",
+      "실고추",
+      "들기름"
+    ],
+    "time": 15,
+    "receipe": "1. 두부를 3 ×4.5 ×0.8㎝ 정도로 잘라서 소금을 뿌려 물기를 잠시 뺀 후 면보나 키친타올로 닦아서 준비해요.  2. 두부 물기가 빠질 동안 양념 재료를 섞고 실고추와 채썬 대파를 1~2㎝ 길이로 잘라둡니다.  3. 팬에 기름을 두른 후 두부를 넣고 한쪽이 완전히 노릇노릇하게 될때까지 중간불에 두었다 뒤집어요. 빨리 뒤집지말고 한쪽면이 단단해질때까지 기다려야 부서지지않아요.  4. 두부에 양념장을 조금씩 올리고 약불~중불에서 천천히 조려요.  5. 수분이 반정도 줄어들면 실고추와 채썬 파를 올려요. 처음부터 넣으면 색이 이쁘지않아요. 6. 센불로 잠깐 올려서 남은 수분을 날려줍니다",
+    "views": 24031
+  },
+  {
+    "creator": "금손곰손",
+    "food_classification": [
+      "매일반찬"
+    ],
+    "cook_name": "고기전",
+    "ingredients": [
+      "쇠고기 다짐육",
+      "양파",
+      "당근",
+      "밀가루",
+      "달걀",
+      "식용유",
+      "마늘",
+      "국간장",
+      "참기름"
+    ],
+    "time": 35,
+    "receipe": "1. 채소는 다져서 준비해요. 2. 식용유를 제외한 채소, 고기, 양념, 달걀, 밀가루를 모두 섞어요.  3. 팬에 기름을 두르고 데운 후 재료를 한수저씩 떠서 팬에 놓아요. 중간에 한번 뒤집어주세요. 4. 고기가 주재료라 약한 불에서 천천히 익혀야 타지않고 보기좋아요.",
+    "views": 13714
+  },
+  {
+    "creator": "라이프쿠커",
+    "food_classification": [
+      "저장음식",
+      "매일반찬"
+    ],
+    "cook_name": "두릅장아찌",
+    "ingredients": [
+      "두릅",
+      "물",
+      "국간장",
+      "식초",
+      "설탕",
+      "소주",
+      "청양고추"
+    ],
+    "time": 10,
+    "receipe": "1. 두릅의 딱딱한 끝부분을 잘라내고 겉껍질을 떼어낸 후 씻어요. 2. 소금을 약간 넣은 끓는 물에 두릅의 줄기부터 넣어 30초 정도 먼저 데쳐요. 3. 두릅을 모두 넣고 줄기를 먼저 넣은 시간부터 총 3분 정도 데쳐줍니다.4. 건져서 찬물에 빨리 헹궈야 숨이 죽지 않고 아삭해요. 5. 두릅의 물기를 빼고 꼭 짜두세요. 6. 소스를 끓여서 한 김 식혀둡니다. 7. 용기에 두릅을 담고 소스를 넣어 3일간 숙성시킨 후 먹어요. 용기가 넓으면 소스가 더 필요하니 유념하세요.",
+    "views": 4908
+  },
+  {
+    "creator": "마카롱언니",
+    "food_classification": [
+      "가족",
+      "초대요리",
+      "매일반찬"
+    ],
+    "cook_name": "치킨 너겟",
+    "ingredients": [
+      "닭 안심살",
+      "마요네즈",
+      "시리얼",
+      "마늘",
+      "소금",
+      "후추",
+      "생각가루"
+    ],
+    "time": 50,
+    "receipe":"1. 고기는 물에 한번 씻어서 물기를 빼두세요. 안심은 기름이 거의 없어 냄새가 나지않아 우유에 담가두지 않아도 괜찮아요.  2. 안심을 2등분 합니다. 이때 힘줄이 보이면 잘라내 줍니다. 힘줄을 제거하면 더 부드럽게 먹을 수 있어요. 3. 한입 크기로 자른 고기에 소금, 후추, 생강가루로 밑간을 합니다. 4. 마요네즈에 다진 마늘을 섞은 후 고기에 버무립니다.  5. 시리얼을 지퍼백에 넣고 방망이나 병으로 성글게 밀어요. 조금 크게 부숴야 바삭하게 씹히는 느낌이 좋아요. 6. 마요네즈에 버무린 고기에다 부순 시리얼을  골고루  묻혀요.  7. 오븐팬에 고기끼리 닿지않게 놓아요. 8. 200℃로 예열한 오븐에서 20분간 구워요. 중간에 한번 뒤집어주어야 앞뒤로 바삭하게 구워져요.",
+    "views":54336
+  },
+  {"creator": "빨간모자",
+    "food_classification": [
+      "국",
+      "가족"
+    ],
+    "cook_name": "버섯 들깨탕",
+    "ingredients": [
+      "느타리버섯",
+      "말린 표고버섯",
+      "대파",
+      "멸치다시마",
+      "국간장",
+      "들깨가루",
+      "쌀가루",
+      "소금",
+      "멸치",
+      "다시마"
+    ],
+    "time": 30,
+    "receipe": "1. 물 5~6컵에 멸치를 넣어 육수를 만든 후 다시마를 넣어요. 2. 5분 후 불을 끄고 다시마는 건져내고 육수 4컵을 준비해요. 3. 말린 표고버섯은 물에 불려서 썰고 느타리버섯은 가늘게 찢어요. 표고버섯은 말린 후 물에 불리는게 향과 맛이 더 좋지만 말린게 없으면 생표고를 사용해도 됩니다. 4. 육수 4컵에 국간장을 넣어 간을 미리 맞추고 버섯을 넣어요. 혹시, 싱거우면 소금을 넣어주세요.  5. 들깨가루와 쌀가루를 국물에 섞어요. 채를 사용하면 뭉치지않게 잘 풀어집니다. 쌀가루를 넣으면 영양면에서도 보완이 되고 식사대용으로 먹을 수 있습니다. 쌀가루를 넣은 후에는 타지않게 바닥을 저어주는게 좋아요. 6. 한소큼 끓으면 어슷하게 썬 대파를 넣어줍니다.",
+    "views": 73456
+  },
+  {
+    "creator": "지갑텅명",
+    "food_classification": [
+      "가족",
+      "초대요리",
+      "매일반찬"
+    ],
+    "cook_name": "새우 춘권",
+    "ingredients": [
+      "춘권피",
+      "달걀",
+      "식용유",
+      "새우살",
+      "양파",
+      "당근",
+      "풋고추",
+      "녹말가루",
+      "소금",
+      "후추"
+    ],
+    "time": 120,
+    "receipe": "1. 춘권피는 냉동실에서 꺼내 살짝 녹여두고 달걀은 잘 풀어둡니다. 2. 춘권피 가장자리에 붓이나 손으로 달걀물을 바른 후 중간에 속재료를 넣고 한쪽 모서리로 덮어요. 3. 잘 말아준 뒤 잠시 잘 붙도록 둡니다. 5. 170~180℃로 데운 기름에 춘권을 튀긴 후 키친타월에 밭쳐 기름을 빼요. 6. 초간장이나 스위트칠리소스, 해선장 등을 곁들이면 잘 어울려요.",
+    "views": 36434
+  },
+  {
+    "creator": "사랑맘",
+    "food_classification": [
+      "찌개",
+      "가족"
+    ],
+    "cook_name": "참치 김치찌개",
+    "ingredients": [
+      "참치캔",
+      "김치",
+      "고추장",
+      "참기름",
+      "참치액",
+      "두부"
+    ],
+    "time": 18,
+    "receipe": "1. 김치를 먹기좋게 자르고 고추장과 기름을 넣어서 중간불에서 잘 어우러지게 볶아요. 2. 참치캔의 기름은 버리고 참치만 건져둬요. 올리브유에 담긴 참치는 그 기름으로 볶으세요. 3. 김치에 고추장과 기름이 잘 섞였으면 물을 붓고 끓여요. 4. 김치가 완전히 익으면 참치를 넣고 맛이 어우러지게 5분 정도만 더 끓여요. 5. 혹, 싱거우면 김칫국물 (참치액이나 조미료) 등으로 간을 맞춰주세요.",
+    "views": 3923
+  },
+  {
+    "creator": "유지누나",
+    "food_classification": [
+      "국",
+      "미역"
+    ],
+    "cook_name": "들깨 미역국",
+    "ingredients": [
+      "미역",
+      "들기름",
+      "물",
+      "국간장",
+      "들깨가루",
+      "마늘"
+    ],
+    "time": 10,
+    "receipe": "1. 불린 미역은 먹기 좋게 잘라요.  2. 냄비에 미역과 들기름, 국간장, 마늘을 넣고 중간불에서 양념이 섞이도록 잠시 볶아요.  3. 뜨물(물)을 넣고 10분 정도 미역이 부드러워질때까지 끓여요. 뜨물을 넣으면 육수를 따로 내지않아도 맛있어요. 4. 소금으로 간을 맞춰요.  5. 거피한 들깨가루를 체에 걸러 국물에 풀어주세요. 걸쭉한게 좋으면 들깨가루를 더 넣어도 됩니다.  ",
+    "views": 342284
+  },
+  {
+    "creator": "빵덕후",
+    "food_classification": [
+      "간식"
+    ],
+    "cook_name": "전 남친 토스트",
+    "ingredients": [
+      "식삥",
+      "크림치즈",
+      "블루베리잼"
+    ],
+    "time": 2,
+    "receipe": "1. 먼저 식빵을 토스터나 프라이팬에 노릇노릇하게 구워줍니다. 2. 구워진 식빵에 크림치즈를 골고루 펴발라줍니다. 3. 크림치즈에 위에 블루베리잼을 바릅니다. 4. 전자렌지에 넣어 10초간 돌려 완성합니다.",
+    "views": 645453
+  },
+  {
+    "creator": "카랑카랑",
+    "food_classification": [
+      "간식"
+    ],
+    "cook_name": "소떡소떡",
+    "ingredients": [
+      "떡볶이떡",
+      "비엔나 소시지",
+      "꼬치",
+      "식용유",
+      "허니머스터드",
+      "케첩",
+      "고추장",
+      "물엿",
+      "맛술",
+      "핫소스"
+    ],
+    "time": 20,
+    "receipe": "1. 단단한 떡볶이 떡은 끓는 물에 데쳐서 부드럽게 만들어요. 소시지도 데쳐서 기름기를 빼는게 좋아요. 2. 떡과 소시지를 체에 밭쳐 물기를 말려요.  3. 나무 꼬치에 소시지와 떡을 차례로 끼워요. 4. 기름을 넉넉하게 넣은 팬에서 튀기듯이 앞뒤를 구워요. 떡을 튀기면 튀어올라 화상을 입을 수 있으니 굽는게 안전합니다.  5. 소스를 팬에서 졸이거나 전자레인지에 1분 정도 돌려서 걸쭉하게 만들어요.6. 취향에 따라 소스와 허니머스터드 소스를 발라서 먹어요.",
+    "views": 132221
+  },
+  {
+    "creator": "두시의쿠킹",
+    "food_classification": [
+      "간식"
+    ],
+    "cook_name": "감말랭이",
+    "ingredients": [
+      "감"
+    ],
+    "time": 300,
+    "receipe": "1. 감의 껍질을 벗긴 후 반으로 갈라요. 2. 꼭지를 떼어주고 씨도 보이는대로 빼줍니다. 3. 말리기 좋은 크기로 잘라줍니다. 4. 감을 건조기에 고루 깔아주세요.감끼리 겹쳐지지않게 놓아야 더 빨리 마릅니다. 5. 온도는 70℃로 맞춰놓고 시간은 10~20시간 사이로 감의 양에 따라 조절해요. 8. 감이 다 마르면 건조기를 끈 다음 감말랭이가 식으면 그릇이나 지퍼백에 담아 냉동실에 보관해요.",
+    "views": 6654
+  },
+  {
+    "creator": "이선주요리교실",
+    "food_classification": [
+      "기타",
+      "소스"
+    ],
+    "cook_name": "발사믹 양파조림",
+    "ingredients": [
+      "양파",
+      "포도씨오일",
+      "발사믹비니거",
+      "소금",
+      "후추"
+    ],
+    "time": 40,
+    "receipe": "1. 양파를 최대한 가늘게 썰어줍니다. 두께가 비슷해야 익는 속도가 같아지니 채칼을 사용하면 편해요. 2. 포도씨유를 두르고 약불에서 한동안 볶아 부드럽게 숨을 죽여요. 3. 양파가 부드럽게 볶아졌으면 발사믹비니거를 넣고 더 볶아줍니다.(총 40분 정도 소요됨) 4. 소금, 후추로 간해요. 5. 불을 끈 후 덜어내지말고 그대로 두고 뜸을 더 들인 후 용기에 담는게 좋아요.",
+    "views": 248543
+  },
+  {
+    "creator": "하사랑",
+    "food_classification": [
+      "저장음식"
+    ],
+    "cook_name": "동치미",
+    "ingredients": [
+      "총각무",
+      "쪽파",
+      "마늘",
+      "생강",
+      "지고추"
+    ],
+    "time": 100,
+    "receipe": "1. 김장때 나오는 작은 달랑무를 소금에 굴려서 쪽파와 함께 하룻 동안 통에 담아둡니다. 달랑무가 없으면  큰무 하나를 토막낸 후 쪽파와 함께 소금을 그냥 고루 발라두세요. 2. 하루가 지난 후  생수에 소금으로 간을 짭짤하게 맞춰둡니다. 3. 지고추와 편으로 썬 마늘과 생강,  파프리카나 배, 감 등을 배보자기에 담아 모두 넣어요. 4. 실온에 하루정도 두었다가 김치냉장고에 넣어요.  5. 일주일 후부터 먹을 수 있습니다.",
+    "views": 63454
+  }
+]
+
+@app.get("/cooking_receipe")
+async def filterCookingReceipe(
+    creator: Optional[str] = Query(
+        None,
+        description="창작자를 한글로 적어주세요(ex. 꿀키, 양순맘)"
+    ),
+    food_classification: str = Query(
+        ...,
+        description="음식 분류를 한글로 적어주세요(ex. 밥, 죽, 면, 매일반찬, 저장음식, 소스, 양념장, 가족, 초대요리, 국, 찌개, 전골, 간식, 음료, 기타)"
+    ),
+    cook_name: Optional[str] = Query(
+        None,
+        description="요리명을 한글로 적어주세요(ex. 당근라페, 계란버섯전, 전 남친 토스트)"
+    ),
+    ingredients: Optional[str] = Query(
+        None,
+        description="재료를 한글로 적어주세요(ex. 당근, 버섯, 홀그레인머스타드, 시금치, 간장, 설탕)"
+    ),
+    time: Optional[int] = Query(
+        None,
+        ge=0,
+        description="소요시간(단위: 분)은 0이상의 정수로 적어주세요."
+    )
+):
+    # 데이터에서 검색 조건에 맞는 항목 필터링
+    filtered_data = []
+    for item in cooking_receipe_data:
+        if (creator is None or creator == item["creator"]) \
+                and food_classification in item["food_classification"] \
+                and (cook_name is None or cook_name == item["cook_name"]) \
+                and (ingredients is None or all(ingredient in item["ingredients"] for ingredient in ingredients.split(','))) \
+                and (time is None or time == item["time"]):
+            filtered_data.append(item)
+    return filtered_data
+
+
+
+#나이키 테스트
+nikes = [    {
+        "intent": "추천",
+        "product_type": "신발",
+        "category": "런닝",
+        "gender": None,
+        "color": None,
+        "product_name": None,
+        "answer": "나이키 러닝화 추천'에 대해 찾아볼게요!\n\n1. 인피니티 런 4\n나이키 리액트 폼보다 13% 더 높은 에너지 반환력을 갖춘 새로운 나이키 리액트X 폼으로 제작되어 상쾌하고 탄력 있는 발걸음이 유지되며, 지지력 있는 쿠셔닝을 적용해 러닝 시 안정적인 자세를 유지할 수 있도록 도와줍니다.\n\n2. 페가수스 40\n나이키 페가수스 40은 기존의 페가수스 모델을 업그레이드한 제품으로, 더욱 편안하고 안정적인 러닝을 할 수 있도록 설계되었습니다. 리액트 폼을 적용하여 부드럽고 탄력 있는 쿠셔닝을 제공하며, 발 중앙 부분에 아치를 지지해 주는 디자인이 적용되어 안정적인 러닝을 할 수 있도록 도와줍니다.\n\n3. 인빈서블 3\n줌X 폼을 적용하여 부드럽고 탄력 있는 쿠셔닝을 제공하며, 발 중앙 부분에 아치를 지지해 주는 디자인이 적용되어 안정적인 러닝을 할 수 있도록 도와줍니다.",
+        "card": ["인피니티 런 4","페가수스 40"],
+        "bubble": ["인빈서블3 알려줘", "페가수스 40 알려줘", "인피니티 런 4 알려줘"]
+    },
+             {
+        "intent": "정보",
+        "product_type": "신발",
+        "category": "런닝",
+        "gender": None,
+        "color": None,
+        "product_name": "인피니티런4",
+        "answer": "나이키 인피니티 런 4'에 대해 알려드릴게요.\n\n나이키 인피니티 런 4는 지지력 있는 쿠셔닝을 적용한 제품입니다. 나이키 리액트 폼보다 13% 더 높은 에너지 반환력을 갖춘 새로운 나이키 리액트X 폼으로 제작되어 더욱 상쾌하고 탄력 있는 발걸음을 유지할 수 있습니다. 플라이니트와 리액트X 폼이 어우러진 부드러운 갑피의 지지력과 통기성으로 자신감 있는 러닝을 만들어줘요.",
+        "card": ["인피니티 런 4"],
+        "bubble": ["인피니티 런 4 사이즈 알려줘", "인피니티 런 4 특징 알려줘", "인피니티 런 4 소재 알려줘"]
+    },
+             {
+        "intent": "정보",
+        "product_type": "신발",
+        "category": "런닝",
+        "gender": "남성",
+        "color": "오렌지",
+        "product_name": "알파플라이2",
+        "answer": "'나이키 알파플라이 2 남성 로드 레이싱화 사이즈'에 대해 찾아볼게요!\n\n나이키 알파플라이 2 남성 로드 레이싱화는 사이즈 250 ~ 310까지 있습니다.\n정확한 정보는 [제품 상세 페이지](https://www.nike.com/kr/t/%EC%95%8C%ED%8C%8C%ED%94%8C%EB%9D%BC%EC%9D%B4-2-%EB%82%A8%EC%84%B1-%EB%A1%9C%EB%93%9C-%EB%A0%88%EC%9D%B4%EC%8B%B1%ED%99%94-tL7CEVL8/DN3555-600)에서 확인해 주세요",
+        "card": ["나이키 알파플라이 2 남성 로드 레이싱화"],
+        "bubble": ["나이키 알파플라이 2 남성 로드 레이싱화 색상 알려줘", "나이키 알파플라이 2 남성 로드 레이싱화 소재 알려줘", "나이키 알파플라이 2 남성 로드 레이싱화 특징 알려줘"]
+    }
+            ]
+
+@app.get("/nike_test")
+async def search_nikes(
+    intent: str,
+    product_type: Optional[str] = None,
+    category: Optional[str] = None,
+    gender: Optional[str] = None,
+    color: Optional[str] = None,
+    product_name: Optional[str] = None,
+):
+    # 필터링된 결과를 저장할 리스트
+    filtered_nikes = []
+    
+    for nike in nikes:
+        # 각 필터에 대한 조건 확인
+        if (
+            (intent is None or nike['intent'] == intent) and
+            (product_type is None or nike['product_type'] == product_type) and
+            (category is None or nike['category'] == category) and
+            (gender is None or nike['gender'] == gender) and
+            (color is None or nike['color'] == color) and
+            (product_name is None or nike['product_name'] == product_name)
+        ):
+
+            filtered_nikes.append(nike)
+
+    
+    return filtered_nikes
+
+
+#240305 테스트
+rag_data = [{
+        "category": "Security Monitoring",
+        "context": "[['Security Monitoring Managed 서비스가 무엇인가요?', 'Security Monitoring Managed 서비스는 네이버 서비스를 외부의 공격으로부터 안전하게 보호하고 있  는 보안전문 인력이 네이버 클라우드 플랫폼 고객의 서비스를 24시간 365일 보호하는 보안관제 서비스예요.\nSecurity Monitoring Basic 서비스에서 보다 강화  된 모니터링을 원하는 고객에게 유료로 제공되는 서비스로 탐지/차단 서비스 및 분석 서비스를 추가로 제공해요.'], ['Security Monitoring Managed 서비스에   서 주간/월간 보고서를 제공하나요?', 'Security Monitoring Managed는 보다 강화된 모니터링을 원하는 고객에게 유료로 제공되는 서비스로 탐지/차단 서비스   별 주간/월간 보고서를 제공하고 있어요.'], ['WAF를 통해 차단된 것 같은데 예외 처리하려면 어떻게 해야하나요?', 'Security Monitoring에서 WAF를 통해 차   단되었을 때 예외 처리하려면,  아래 두 항목을 포함하여 [고객지원 > 문의하기]로 접수해 주세요.\n\n1. 예외 처리가 필요한 탐지 이벤트\n2. 예외 처리가 필  요한 Request URL\n3. 예외 처리가 필요한 Source IP\n\n자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['모의 침투 테스트란 무엇인가요?', '모의 침투   테스트란, 네이버 클라우드 플랫폼 상에 구성한 고객의 서비스 및 리소스에 대한 보안 수준을 평가하기 위해 실제 공격과 유사한 행위를 수행하는 것을 의미해  요.\n\n다만, 고객은 네이버 클라우드 플랫폼의 인프라 또는 네이버 클라우드 플랫폼 서비스 자체에 대한 보안 평가를 수행할 수 없어요.\n\n모의 침투 테스트  와 관련하여 상세한 정책과 사전 신청을 원하시는 경우, 아래 링크의 모의 침투 테스트 지원 정책 및 신청서를 참고해 주세요.'], ['모의 침투 테스트를 하기   위한 네이버 클라우드 플랫폼의 지원 정책은 무엇인가요?', '네이버 클라우드 플랫폼은 고객의 보안인증 및 감사를 위한 혹은 자체 계획에 따른 모의 침투 테   스트 진행을 지원하고 있어요.\n\n다만, 테스트 전 반드시 당사에 사전 신청을 해 주셔야 해요. 상세한 내용 및 사전 신청서의 양식은 아래 버튼을 눌러 확인   해 주세요.'], ['IPS V2 보안 이벤트 발생 시 어떻게 인지할 수 있나요?', 'Managed 서비스 이용 시 Security Monitoring IPS 이벤트가 발생하는 경우 Notification Setting에 설정된 정보로 이벤트 정보를 안내하고 있어요.\n상세 정보는 Console에서 확인하실 수 있어요.\n\nClassic 플랫폼 이용 시 [네이버 클라우드   플랫폼 > Console > Security Monitoring > Notification Setting > IPS(V1)]에서 안내받고자 하는 담당자를 설정할 수 있어요.\n\nVPC 플랫폼 이용 시 [네이  버 클라우드 플랫폼 > Console > Security Monitoring > Notification Setting > IPS(V2)]에서 안내받고자 하는 담당자를 설정할 수 있어요.\n\n자세한 내용은   아래 버튼을 눌러 확인해 주세요.'], ['Anti-DDoS 보안 이벤트 발생 시 어떻게 인지할 수 있나요?', 'Security Monitoring Anti-DDoS 이벤트 발생 시 Managed 고객에게는 Notification Setting에 설정된 정보로 이벤트 정보를 안내하고 있어요.\n\n자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['WAF 보안 이벤   트 발생 시 어떻게 인지할 수 있나요?', 'Security Monitoring WAF 이벤트 발생 시 Managed 고객에게는 Notification Setting에 설정된 정보로 이벤트 정보를   안내하고 있어요.\n\n자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['IDS 보안 이벤트 발생 시 어떻게 인지할 수 있나요?', 'Security Monitoring IDS    이벤트 발생 시 Managed 고객에게는 Notification Setting에 설정된 정보로 이벤트 정보를 간략하게 안내하고 있어요.\n\n자세한 내용은 아래 버튼을 눌러 확   인해 주세요.'], ['기본으로 제공되는 무료 보안 서비스는 무엇인가요?', 'Classic 플랫폼에서는 IDS, Anti-Virus(Window에 한해) 서비스를 무료로 제공하며,\nVPC 플랫폼에서는 IDS 서비스를 무료로 제공해요. (Anti-Virus는 무료로 제공하지 않아요.)\n\n무료 보안 서비스에 대한 더 자세한 내용은 아래 버튼을 눌러   확인해 주세요.'], ['IPS V2 서비스를 사용 시 주의사항은 무엇인가요?', 'IPS(V2) 서비스 사용 시 주의사항에 대해 알려 드릴게요.'], ['Security Monitoring의 IPS V2는 무엇인가요?', 'Security Monitoring의 IPS(V2)는 VPC 플랫폼에서 제공하며 Host 기반의 인바운드/아웃바운드 트래픽을 모니터링하여 의심스러운   활동을 탐지하고 차단해요.\n\nIPS는 24시간 365일 모니터링하고 공격에 대해 실시간 차단함으로써 안전하게 서비스가 운영될 수 있도록 지원해요.\n\nIPS(V2)에서 제공하는 서비스에 대한 자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['Anti-Virus 서비스를 사용 시 주의사항은 무엇인가요?', 'Anti-Virus 서비  스를 사용 시 주의사항에 대해 알려드릴게요.'], ['Anti-Virus 보안 이벤트 발생 시 어떻게 인지할 수 있나요?', 'Security Monitoring Anti-Virus 이벤트 발   생 시 Managed 고객에게는 Notification Setting에 설정된 정보로 이벤트 정보를 안내하고 있어요. 상세 정보는 Console에서 확인해 주세요.\n\n※ Security Monitoring에는 Basic과 Managed 서비스가 있으며,\nBasic 서비스를 사용하시는 경우 보안 이벤트가 발생했을 때 정보를 받아볼 이메일을 별도로 설정할 수 없으  며, 로그인 ID로 정보를 보내드려요.\nManaged 서비스를 사용하시는 경우 Notification Setting 메뉴에서 정보를 받아볼 이메일을 설정할 수 있으며, 별도 설   정을 하지 않으신 경우에는 로그인 ID로 정보를 보내드려요.\n\n자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['WAF 모니터링 대상은 어떻게 되나요?',   '\u200bWAF는 HTTP/HTTPS 표준 프로토콜을 사용하는 웹 서비스에 대해서만 모니터링할 수 있어요.\nLoad Balancer 설정된 서비스 모니터링을 위해서 Load Balancer Protocol 을 반드시 HTTP/HTTPS로 설정하셔야 해요. (TCP, SSL로 설정 시 WAF 서비스를 제공받을 수 없습니다.)'], ['OS 커널을 업데이트 할 경우 Security Monitoring에 영향이 있나요?', '고객이 임의로 OS 커널을 업데이트할 경우, Security Monitoring 서비스가 정상적으로 제공되지 않을 수 있어요.\n커널 업  데이트가 필요한 경우 호환 커널 리스트를 참고해 주세요.'], ['Security Monitoring의 IPS가 뭐야?', 'IPS(Intrusion Prevention System)란 고객의 서비스로   인입되는 공격을 탐지/차단하는 보안 솔루션으로, 24시간*365일 모니터링하여 고객의 서비스가 안전하게 운영될 수 있도록 지원하고 있어요.'], ['Security Monitoring의 보고서는 언제 발송돼?', '침입행위가 탐지될 경우 이를 분석하여 고객의 서비스에 위협이 된다고 판단되면 보고서를 발송해요.'], ['Security Monitoring에서 탐지된 공격정보는 어디서 확인해?', 'Security Monitoring에서 탐지된 공격정보는 [콘솔 > Security Monitoring > Dashboard] 에서 확인할 수 있  어요.'], ['Security Monitoring에서 침해사고 기술 지원이 뭐야?', '침해사고 기술 지원은 고객 서비스에 침해사고가 발생하면 대응 전문가가 침해사고에 대   한 분석을 수행하고, 원인을 파악해 차후 동일한 피해가 발생하지 않도록 지원하는 서비스예요.'], ['Security Monitoring에서 Anti-Virus 패턴 업데이트 주기   알려줘', '백신 패턴은 매일 새벽 1시에 업데이트 되며, 실시간 모니터링에 즉시 반영돼요.'], ['Security Monitoring의 Anti-Virus가 뭐야?', 'Anti-Virus는   고객이 운영 중인 서버에 악성코드를 실시간으로 탐지하고 격리/삭제 조치함으로써 고객의 서비스가 안정적으로 운영될 수 있도록 지원해요.\n플랫폼 환경에   따라 Anti-Virus(V1), Anti-Virus(V2)로 구분되며, Classic 환경에서 제공하는 서비스는 Anti-Virus(V1), VPC 환경에서 제공하는 서비스는 Anti-Virus(V2)라고   해요.\n\n더 자세한 내용은 아래 버튼을 눌러 확인해 주세요.'], ['Security Monitoring의 WAF가 뭐야?', 'WAF(Web Application Firewall)는 Web 기반(HTTP/HTTPS) 트래픽을 모니터링하여 공격 트래픽을 탐지 및 차단하는 보안 솔루션이에요.\n\nWAF에서 제공하는 서비스에 대한 자세한 내용은 아래 버튼을 눌러 확인   해 주세요.']]"
+                }
+           ]
+
+@app.get("/rag_test")
+async def get_rag_test(
+    category: Optional[str] = Query(None, description="Location of the rental car")
+) -> List[dict]:
+    filtered_rag = rag_data
+
+    if category:
+        filtered_rag = [rag for rag in filtered_rag if rag["category"] == category]
+    return filtered_rag
+
+
+rag_data2 = [{
+        "category": "Security Monitoring",
+        "context": "Security Monitoring에는 Basic 서비스와 Managed 서비스가 있으며, 서비스 구분에 따라 제공하는 기능 및 이용 요금이 상이합니다. Security Monitoring Managed가 플랫폼별로 제공하는 보안 서비스는 다음과 같습니다. 사용자 환경이 VPC인지 Classic인지에 따라 동일한 서비스여도 일부 기능에 차이가 있을 수 있습니다. 이용 중인 플랫폼을 먼저 확인한 후 상세 설명을 참고해 주십시오.  참고  •	Security Monitoring 개념의 원활한 이해를 위해 다음 용어에 유의해 주십시오.  o	V1: Classic 환경을 일컫는 약어  o	V2: VPC 환경을 일컫는 약어  •	Security Monitoring 개념 학습 전 보안 서비스별 주의 사항도 사전에 반드시 숙지해야 합니다. 보안 서비스별 주의 사항은 Security Monitoring 사용 준비를 참조해 주십시오.  VPC  VPC 환경에서 Security Monitoring Managed가 제공하는 IDS, Anti-Virus, Anti-DDoS, WAF, IPS 기능을 설명합니다.  IDS(V2)  사용자의 서비스로 인입되는 공격을 실시간 탐지합니다. 24시간 365일 모니터링함으로써 사용자의 서비스가 안전하게 운영될 수 있도록 지원합니다. 제공하는 기능은 다음과 같습니다.  •	보안 사고 의심 이벤트 발생 시 탐지 및 분석 보고서 전달  •	최신 공격 위협에 대해서 지속적인 탐지 정책 설정 및 패턴 업데이트 적용  •	사용자 요청 시 탐지 예외 처리 제공  •	주간, 월간 보고서 제공  Anti-Virus(V2)  악성코드를 탐지하고 방어합니다. 사용자가 운영 중인 서버에 악성코드를 실시간으로 탐지하고 격리 및 삭제 조치함으로써 사용자의 서비스가 안정적으로 운영될 수 있도록 지원합니다. 제공하는 기능은 다음과 같습니다.  •	바이러스, 스파이웨어의 격리 및 삭제  •	악성코드 의심 이벤트 발생 시 분석 보고서 제공  •	Windows/Linux용 서버 백신 제공  •	특정 파일 및 폴더에 대한 예외 처리 제공  •	최신 탐지 패턴 자동 업데이트  •	네이버 클라우드 플랫폼 콘솔에서 탐지 정보 확인 및 대시보드 제공  •	주간, 월간 보고서 제공  참고  Anti-Virus 백신 패턴은 매일 새벽 1시에 업데이트되며, 실시간 모니터링에 즉시 반영됩니다.  Anti-DDoS(V2)  사용자의 서비스로 인입되는 DDoS 공격을 24시간 365일 모니터링하여 탐지 및 차단함으로써 사용자의 서비스가 안정적으로 운영될 수 있도록 지원합니다. Full Packet Analysis 방식으로 빠르고 정확한 공격 탐지가 가능합니다. 제공하는 기능은 다음과 같습니다.  •	다단계 필터를 통한 다양한 유형의 DDoS 공격으로부터 보호  •	사용자별 특화된 보호 대상(Zone)을 생성하여 별도 정책으로 공격을 감지  •	사용자 특화 공격에 대한 분석 및 차단 룰 생성, 등록을 지원  •	정상적인 대량 트래픽을 유발하는 Source IP(NAT IP) 별도 관리 및 오탐 방지  •	학습을 통한 사용자 맞춤형 임계치 설정 제공  •	주간, 월간 보고서 제공  WAF(V2)  웹 공격을 전문적으로 탐지하고 방어합니다. HTTP, HTTPS의 웹 기반 트래픽을 모니터링하여 사용자의 웹 서비스로 공격이 인입될 경우 WAF 전용 솔루션을 통해 탐지하고 방어함으로써 즉각적인 대응이 가능하도록 지원합니다. VPC 환경에서 WAF는 Reverse Proxy 방식으로 사용자별 별도의 WAF 플랫폼을 제공하며, 안정적인 서비스를 위해 기본적으로 이중화 구조를 갖추고 있습니다. WAF VM과 사용자 서비스 Load Balancer 간의 통신은 HTTP 80 port 공인 통신을 사용합니다.  위 내용을 토대로 VPC 환경에서의 WAF 서비스 구성을 도식화하면 다음과 같습니다.    WAF는 기본적으로 탐지 모드와 차단 모드로 운영됩니다. 약 1개월 동안 탐지 모드로 운영한 다음 탐지 이벤트를 분석하여 차단 정책과 차단 모드 변경 일정을 사용자에게 제안하는 방식입니다. 이러한 방식으로 인해 탐지 모드로 운영되는 동안 네이버 클라우드 플랫폼 콘솔에서는 확인되는 로그는 없으며, 차단 모드로 변경된 후 차단된 로그만 제공하게 됩니다.  WAF에서 제공하는 기능은 다음과 같습니다.  •	접근 권한 취약점 탐지 및 차단  •	암호화 오류 탐지 및 차단  •	보안 설정 오류 탐지 및 차단  •	어플리케이션 취약점 탐지 및 차단  •	SSRF, XSS, CSRF, Injection 탐지 및 차단  •	Cookie 변조 및 도용 방지 등 다양한 웹 공격 탐지 및 차단  •	고객사 환경에 적합한 차단 정책 설정 및 관리  •	IP 및 URL 예외 기능 제공  •	주기적인 보안 정책 업데이트 제공  •	네이버 클라우드 플랫폼 콘솔에서 차단 정보 확인 및 대시보드 제공  •	주간, 월간 보고서 제공  IPS(V2)  호스트 기반의 Inbound, Outbound 트래픽을 24시간 365일 모니터링하여 의심스러운 활동을 탐지하고 차단하여 사용자의 서비스를 안전하게 운영될 수 있도록 지원합니다. IPS는 기본적으로 탐지 모드와 차단 모드로 운영됩니다. 약 1개월 동안 탐지 모드로 운영한 다음 탐지 이벤트를 분석하여 차단 정책과 차단 모드 변경 일정을 사용자에게 제안하는 방식입니다. 이러한 방식으로 인해 탐지 모드로 운영되는 동안 네이버 클라우드 플랫폼 콘솔에서는 확인되는 로그는 없으며, 차단 모드로 변경된 후 차단된 로그만 제공하게 됩니다.  IPS에서 제공하는 기능은 다음과 같습니다.  •	운영체제별, 애플리케이션별, 서버 용도별 맞춤형 탐지 및 차단 정책 기능 제공  •	가상 패치(virtual patching) 제공을 통해 취약한 버전의 애플리케이션이 패치될 때까지 시스템을 보호하여 제로데이 공격으로부터 VM 보호  •	IPS 탐지 및 차단 정책의 주기적인 업데이트  •	호스트의 애플리케이션에 대해 주기적인 스캔 및 탐지 정책 적용을 통해 취약점으로부터 VM 보호  •	네이버 클라우드 플랫폼 콘솔에서 차단 정보 확인 및 대시보드 제공  •	주간, 월간 보고서 제공  Classic  Classic 환경에서 Security Monitoring Managed가 제공하는 IDS, Anti-Virus, Anti-DDoS, WAF, IPS 기능을 설명합니다.  IDS(V1)  VPC 환경의 IDS 지원 내용과 동일합니다. 이 페이지의 VPC > IDS(V2)를 참조해 주십시오.  Anti-Virus(V1)  VPC 환경의 Anti-Virus 지원 내용과 동일합니다. 이 페이지의 VPC > Anti-Virus(V2)를 참조해 주십시오.  Anti-DDoS(V1)  VPC 환경의 Anti-DDoS 지원 내용과 동일합니다. 이 페이지의 VPC > Anti-DDoS(V2)를 참조해 주십시오.  WAF(V1)  웹 공격을 전문적으로 탐지하고 방어합니다. HTTP, HTTPS의 웹 기반 트래픽을 모니터링하여 사용자의 웹 서비스로 공격이 인입될 경우 WAF 전용 솔루션을 통해 탐지하고 방어함으로써 즉각적인 대응이 가능하도록 지원합니다. WAF는 기본적으로 탐지 모드와 차단 모드로 운영됩니다. 약 1개월 동안 탐지 모드로 운영한 다음 탐지 이벤트를 분석하여 차단 정책과 차단 모드 변경 일정을 사용자에게 제안하는 방식입니다. 이러한 방식으로 인해 탐지 모드로 운영되는 동안 네이버 클라우드 플랫폼 콘솔에서는 확인되는 로그는 없으며, 차단 모드로 변경된 후 차단된 로그만 제공하게 됩니다.  WAF에서 제공하는 기능은 다음과 같습니다.  •	접근 권한 취약점 탐지 및 차단  •	암호화 오류 탐지 및 차단  •	보안 설정 오류 탐지 및 차단  •	어플리케이션 취약점 탐지 및 차단  •	SSRF, XSS, CSRF, Injection 탐지 및 차단  •	Cookie 변조 및 도용 방지 등 다양한 웹 공격 탐지 및 차단  •	고객사 환경에 적합한 차단 정책 설정 및 관리  •	IP 및 URL 예외 기능 제공  •	주기적인 보안 정책 업데이트 제공  •	네이버 클라우드 플랫폼 콘솔에서 차단 정보 확인 및 대시보드 제공  •	주간, 월간 보고서 제공  IPS(V1)  네트워크 기반의 Inbound, Outbound 트래픽을 24시간 365일 모니터링하여 의심스러운 활동을 탐지하고 차단하여 사용자의 서비스를 안전하게 운영될 수 있도록 지원합니다. IPS는 기본적으로 탐지 모드와 차단 모드로 운영됩니다. 약 1개월 동안 탐지 모드로 운영한 다음 탐지 이벤트를 분석하여 차단 정책과 차단 모드 변경 일정을 사용자에게 제안하는 방식입니다. 이러한 방식으로 인해 탐지 모드로 운영되는 동안 네이버 클라우드 플랫폼 콘솔에서는 확인되는 로그는 없으며, 차단 모드로 변경된 후 차단된 로그만 제공하게 됩니다.  IPS에서 제공하는 기능은 다음과 같습니다.  •	실시간 트래픽 분석을 통해서 악의적인 유해 트래픽 탐지 차단  •	사용자별 차단 정책 제공  o	시그니처 기반 방어  o	Application 방어  o	프로토콜 기반 방어  o	도메인 차단  o	유해 사이트/URL 기반 차단  •	패턴 기반의 차단 예외 처리 제공  •	IP 차단 예외 처리 제공  •	IPS 탐지 및 차단 정책의 주기적인 업데이트  •	네이버 클라우드 플랫폼 콘솔에서 차단 정보 확인 및 대시보드 제공  •	주간, 월간 보고서 제공"
+                }
+           ]
+
+@app.get("/rag_test2")
+async def get_rag_test(
+    category: Optional[str] = Query(None, description="Location of the rental car")
+) -> List[dict]:
+    filtered_rag = rag_data2
+
+    if category:
+        filtered_rag = [rag for rag in filtered_rag if rag["category"] == category]
+    return filtered_rag
+
+
+#240226 테스트
+new_books = [    {
+        "title": "위대한 개츠비",
+        "year": 1925,
+        "country_code": 1,
+        "author": "프란시스 스콧 피츠제럴드",
+        "publisher": "차이크",
+        "rating": 8.9,
+        "price": 15000,
+        "genre_code": 1,
+        "reviews": ["로맨틱한 분위기가 가득한 명작", "최고의 소설 중 하나"]
+    },
+    {
+        "title": "1984",
+        "year": 1949,
+        "country_code": 1,
+        "author": "조지 오웰",
+        "publisher": "한국출판사",
+        "rating": 9.2,
+        "price": 12000,
+        "genre_code": 1,
+        "reviews": ["거장의 예언, 끝없는 경고", "현실적인 비전"]
+    },
+    {
+        "title": "미움받을 용기",
+        "year": 2013,
+        "country_code": 81,
+        "author": "기히로 시모노",
+        "publisher": "북하우스",
+        "rating": 8.5,
+        "price": 18000,
+        "genre_code": 1,
+        "reviews": ["자신을 다시 발견하는 여정", "위로와 용기를 주는 책"]
+    },
+    {
+        "title": "반지의 제왕",
+        "year": 1954,
+        "country_code": 1,
+        "author": "J.R.R. 톨킨",
+        "publisher": "팬텀",
+        "rating": 9.8,
+        "price": 25000,
+        "genre_code": 1,
+        "reviews": ["환상의 세계로 초대하는 대작", "마법같은 모험"]
+    },
+    {
+        "title": "죽은 시인의 사회",
+        "year": 1989,
+        "country_code": 1,
+        "author": "피터 위어",
+        "publisher": "대한출판사",
+        "rating": 9.0,
+        "price": 16000,
+        "genre_code": 1,
+        "reviews": ["자유와 열정을 논하는 명작", "파워풀한 메시지"]
+    },
+    {
+        "title": "동물농장",
+        "year": 1945,
+        "country_code": 1,
+        "author": "조지 오웰",
+        "publisher": "로지",
+        "rating": 8.7,
+        "price": 11000,
+        "genre_code": 1,
+        "reviews": ["유쾌하면서도 경쾌한 이야기", "사회 비판의 걸작"]
+    },
+    {
+        "title": "토지",
+        "year": 1935,
+        "country_code": 82,
+        "author": "박경리",
+        "publisher": "현대문학",
+        "rating": 9.5,
+        "price": 20000,
+        "genre_code": 1,
+        "reviews": ["한국 문학의 걸작", "희망과 우정의 이야기"]
+    },
+    {
+        "title": "데미안",
+        "year": 1919,
+        "country_code": 1,
+        "author": "헤르만 헤세",
+        "publisher": "서양문고",
+        "rating": 8.8,
+        "price": 17000,
+        "genre_code": 1,
+        "reviews": ["내면의 탐색과 성장", "청춘의 명작"]
+    },
+    {
+        "title": "사랑의 불시착",
+        "year": 2016,
+        "country_code": 82,
+        "author": "박지은",
+        "publisher": "샘터",
+        "rating": 9.3,
+        "price": 22000,
+        "genre_code": 1,
+        "reviews": ["감동과 재미를 모두 잡은 대작", "눈을 뗄 수 없는 몰입도"]
+    },
+    {
+        "title": "빨간 머리 앤",
+        "year": 1908,
+        "country_code": 1,
+        "author": "루시 모드 몽고메리",
+        "publisher": "문학동네",
+        "rating": 8.6,
+        "price": 13000,
+        "genre_code": 1,
+        "reviews": ["꿈과 용기의 이야기", "사랑스러운 캐릭터들"]
+    },
+        {
+        "title": "꽃을 보듯 너를 본다",
+        "year": 1992,
+        "country_code": 82,
+        "author": "나태주",
+        "publisher": "문학동네",
+        "rating": 9.2,
+        "price": 16000,
+        "genre_code": 2,
+        "reviews": ["감성을 자극하는 시집", "시를 통해 세상을 본다"]
+    },
+    {
+        "title": "어떻게 말해줘야 할까",
+        "year": 2018,
+        "country_code": 82,
+        "author": "윤정비",
+        "publisher": "시인정글",
+        "rating": 9.0,
+        "price": 18000,
+        "genre_code": 2,
+        "reviews": ["마음을 담은 시의 향연", "어떤 말로 표현할까 고민되는 감정을 담은 시"]
+    },
+    {
+        "title": "우리 집에 가는 길",
+        "year": 2005,
+        "country_code": 82,
+        "author": "하태완",
+        "publisher": "샘터",
+        "rating": 8.8,
+        "price": 15000,
+        "genre_code": 2,
+        "reviews": ["일상의 아름다움을 느낄 수 있는 시집", "마음이 따뜻해지는 시"]
+    },
+    {
+        "title": "내 마음의 숲",
+        "year": 2010,
+        "country_code": 82,
+        "author": "정호승",
+        "publisher": "행복한 어린이",
+        "rating": 8.5,
+        "price": 14000,
+        "genre_code": 2,
+        "reviews": ["힐링되는 시집", "자연과 함께하는 시"]
+    },
+    {
+        "title": "봄이 오나요",
+        "year": 2015,
+        "country_code": 82,
+        "author": "이해인",
+        "publisher": "봄봄",
+        "rating": 9.5,
+        "price": 20000,
+        "genre_code": 2,
+        "reviews": ["봄의 따뜻함을 느낄 수 있는 시집", "꽃 향기처럼 달콤한 시"]
+    },
+    {
+        "title": "오늘의 기분",
+        "year": 2008,
+        "country_code": 82,
+        "author": "이상철",
+        "publisher": "무드",
+        "rating": 8.9,
+        "price": 17000,
+        "genre_code": 2,
+        "reviews": ["하루를 마무리하는 시집", "감성을 자극하는 달콤한 시"]
+    },
+    {
+        "title": "너의 뒤에 서서",
+        "year": 2019,
+        "country_code": 82,
+        "author": "손히",
+        "publisher": "서현",
+        "rating": 9.2,
+        "price": 19000,
+        "genre_code": 2,
+        "reviews": ["사랑을 담은 시집", "눈물과 웃음을 함께하는 시"]
+    },
+    {
+        "title": "한 뼘의 자유",
+        "year": 2002,
+        "country_code": 82,
+        "author": "홍현희",
+        "publisher": "오늘의 책",
+        "rating": 8.7,
+        "price": 18000,
+        "genre_code": 2,
+        "reviews": ["자유로움을 노래하는 시집", "희망의 메시지를 전하는 시"]
+    },
+    {
+        "title": "여름날",
+        "year": 2017,
+        "country_code": 82,
+        "author": "박희진",
+        "publisher": "희망",
+        "rating": 9.0,
+        "price": 16000,
+        "genre_code": 2,
+        "reviews": ["여름의 시원함을 담은 시집", "더운 여름을 시원하게 해주는 시"]
+    },
+    {
+        "title": "소리없는 아우성",
+        "year": 2007,
+        "country_code": 82,
+        "author": "정재승",
+        "publisher": "소나무",
+        "rating": 8.8,
+        "price": 15000,
+        "genre_code": 2,
+        "reviews": ["감동과 울림을 주는 시집", "작은 소리에서 큰 울림을 느끼는 시"]
+    },
+    {
+        "title": "김정은의 불편한 진실",
+        "year": 2020,
+        "country_code": 82,
+        "author": "이선희",
+        "publisher": "한국출판사",
+        "rating": 8.7,
+        "price": 18000,
+        "genre_code": 3,
+        "reviews": ["북한에 대한 새로운 시각을 제시하는 책", "김정은의 인간적인 면을 다룬 책"]
+    },
+    {
+        "title": "여행의 이유",
+        "year": 2015,
+        "country_code": 82,
+        "author": "김영하",
+        "publisher": "북한산",
+        "rating": 9.1,
+        "price": 20000,
+        "genre_code": 3,
+        "reviews": ["여행의 진정한 의미를 찾아가는 여정", "인생을 바꿀 수 있는 책"]
+    },
+    {
+        "title": "삶과 죽음에 대하여",
+        "year": 2018,
+        "country_code": 82,
+        "author": "조용필",
+        "publisher": "다산북스",
+        "rating": 8.8,
+        "price": 17000,
+        "genre_code": 3,
+        "reviews": ["인생의 가치에 대해 다시 생각하게 만드는 책", "삶과 죽음에 대한 깊은 인사이트를 제공하는 책"]
+    },
+    {
+        "title": "우리들의 무지개",
+        "year": 2019,
+        "country_code": 82,
+        "author": "이영철",
+        "publisher": "모아씨엔씨",
+        "rating": 8.9,
+        "price": 19000,
+        "genre_code": 3,
+        "reviews": ["다양성과 포용에 대한 메시지를 전하는 책", "우리 사회의 미래를 엿보는 책"]
+    },
+    {
+        "title": "나의 하루",
+        "year": 2017,
+        "country_code": 82,
+        "author": "서울시립",
+        "publisher": "세계문학",
+        "rating": 8.6,
+        "price": 16000,
+        "genre_code": 3,
+        "reviews": ["일상의 아름다움을 발견하는 책", "작은 것들에 감사하는 마음을 심는 책"]
+    },
+    {
+        "title": "무모한 도전",
+        "year": 2016,
+        "country_code": 82,
+        "author": "김영민",
+        "publisher": "노란별",
+        "rating": 8.5,
+        "price": 15000,
+        "genre_code": 3,
+        "reviews": ["포기하지 않는 열정을 보여주는 책", "성공과 실패 사이의 비밀을 말해주는 책"]
+    },
+    {
+        "title": "한 걸음 더",
+        "year": 2021,
+        "country_code": 82,
+        "author": "강호동",
+        "publisher": "성안당",
+        "rating": 8.4,
+        "price": 14000,
+        "genre_code": 4,
+        "reviews": ["자기계발의 길을 찾아가는 책", "한 발 더 나아가는 비결을 알려주는 책"]
+    },
+        {
+        "title": "부의 시나리오",
+        "year": 2018,
+        "country_code": 1,
+        "author": "이제니",
+        "publisher": "성인당",
+        "rating": 8.9,
+        "price": 18000,
+        "genre_code": 4,
+        "reviews": ["부자가 되기 위한 실전 가이드", "재무 교육의 바이블"]
+    },
+    {
+        "title": "죽음에 관하여",
+        "year": 1999,
+        "country_code": 1,
+        "author": "베르테르스만",
+        "publisher": "문학동네",
+        "rating": 9.2,
+        "price": 20000,
+        "genre_code": 4,
+        "reviews": ["인생의 가치를 깊이 생각하게 하는 책", "생의 진정한 의미를 찾아가는 여정"]
+    },
+    {
+        "title": "코스모스",
+        "year": 1980,
+        "country_code": 1,
+        "author": "칼 세이건",
+        "publisher": "사이언스북스",
+        "rating": 8.8,
+        "price": 17000,
+        "genre_code": 3,
+        "reviews": ["우주에 대한 감탄을 자아내는 책", "과학을 통해 세계를 이해하는 철학적인 접근"]
+    },
+    {
+        "title": "인생의 가치",
+        "year": 2015,
+        "country_code": 1,
+        "author": "팀 클라인",
+        "publisher": "빅픽처스프레스",
+        "rating": 9.0,
+        "price": 19000,
+        "genre_code": 4,
+        "reviews": ["인생의 방향을 재정립하는 책", "진정한 행복의 길을 찾아가는 지침서"]
+    },
+    {
+        "title": "내가 좋아하는 것만 남기고, 나머지는 모두 정리하라",
+        "year": 2019,
+        "country_code": 1,
+        "author": "미노스",
+        "publisher": "현대경제사",
+        "rating": 8.7,
+        "price": 16000,
+        "genre_code": 4,
+        "reviews": ["간소화된 삶을 위한 지혜", "불필요한 것을 버리고 진정한 가치를 찾아가는 여정"]
+    },
+    {
+        "title": "성공하는 사람들의 7가지 습관",
+        "year": 2010,
+        "country_code": 1,
+        "author": "스티븐 R. 코비",
+        "publisher": "시네21",
+        "rating": 8.5,
+        "price": 15000,
+        "genre_code": 4,
+        "reviews": ["성공의 비결을 알려주는 베스트셀러", "변화와 성장을 이끌어내는 실용적인 가이드북"]
+    },
+    {
+        "title": "행복의 운",
+        "year": 2005,
+        "country_code": 1,
+        "author": "조슈아 워튼",
+        "publisher": "한국경제사",
+        "rating": 8.4,
+        "price": 14000,
+        "genre_code": 4,
+        "reviews": ["인생의 목표를 달성하는 법을 알려주는 책", "내면의 우주적인 행복을 발견하는 여정"]
+    }
+]
+
+@app.get("/books/search")
+async def search_books(
+    genre_code: Optional[int] = None,
+    country_code: Optional[int] = None,
+    author: Optional[str] = None,
+    publisher: Optional[str] = None,
+    rating: Optional[float] = None,
+    min_price: Optional[int] = None,
+    max_price: Optional[int] = None,
+    title: Optional[str] = None,
+    keyword: Optional[str] = None
+):
+    # 필터링된 결과를 저장할 리스트
+    filtered_books = []
+    
+    for book in new_books:
+        # 각 필터에 대한 조건 확인
+        if (
+            (genre_code is None or book['genre_code'] == genre_code) and
+            (country_code is None or book['country_code'] == country_code) and
+            (author is None or author.lower() in book['author'].lower()) and
+            (publisher is None or publisher.lower() in book['publisher'].lower()) and
+            (rating is None or book['rating'] >= rating) and
+            (min_price is None or book["price"] >= min_price) and
+            (max_price is None or book["price"] <= max_price) and
+            (title is None or (title.lower() in book['title'].lower()))
+        ):
+            # keyword가 None이 아닌 경우에만 검색
+            if keyword is not None:
+                # 키워드 검색 결과 저장
+                keyword_results = [keyword.lower() in ' '.join(book['reviews']).lower() for keyword in keyword.split(',')]
+                # 모든 키워드가 만족하는지 확인
+                if all(keyword_results):
+                    filtered_books.append(book)
+            else:
+                filtered_books.append(book)
+            
+            # 호출 개수 제한
+            if len(filtered_books) >= 10:
+                break
+    
+    return filtered_books
+
+
+new_movies = [
+    {
+        "title": "기생충",
+        "year": 2019,
+        "country_code": 82,
+        "director": "봉준호",
+        "actors": ["송강호", "이선균"],
+        "rating": 8.6,
+        "audience_count": 10000000,
+        "genre_code": 6,
+        "reviews": ["현실을 반영한 작품", "봉준호 감독의 뛰어난 연출"]
+    },
+    {
+        "title": "올드보이",
+        "year": 2003,
+        "country_code": 82,
+        "director": "박찬욱",
+        "actors": ["최민식", "유지태"],
+        "rating": 8.4,
+        "audience_count": 5000000,
+        "genre_code": 2,
+        "reviews": ["긴박한 스토리", "완벽한 연출과 연기"]
+    },
+    {
+        "title": "마더",
+        "year": 2009,
+        "country_code": 82,
+        "director": "봉준호",
+        "actors": ["김혜자", "원빈"],
+        "rating": 8.1,
+        "audience_count": 3000000,
+        "genre_code": 5,
+        "reviews": ["감정을 자극하는 작품", "봉준호 감독의 역작"]
+    },
+    {
+        "title": "괴물",
+        "year": 2006,
+        "country_code": 82,
+        "director": "봉준호",
+        "actors": ["송강호", "박해일"],
+        "rating": 7.8,
+        "audience_count": 4000000,
+        "genre_code": 5,
+        "reviews": ["모든 것이 완벽한 영화", "최고의 엔딩"]
+    },
+    {
+        "title": "택시운전사",
+        "year": 2017,
+        "country_code": 82,
+        "director": "장훈",
+        "actors": ["송강호", "토마스 크레취만"],
+        "rating": 8.0,
+        "audience_count": 7000000,
+        "genre_code": 5,
+        "reviews": ["감동적인 이야기", "우리의 역사를 되새기게 하는 작품"]
+    },
+    {
+        "title": "범죄와의 전쟁: 나쁜놈들 전성시대",
+        "year": 2012,
+        "country_code": 82,
+        "director": "윤종빈",
+        "actors": ["최민식", "하정우"],
+        "rating": 7.9,
+        "audience_count": 6000000,
+        "genre_code": 2,
+        "reviews": ["긴장감 넘치는 스토리", "연기력이 돋보이는 작품"]
+    },
+    {
+        "title": "아가씨",
+        "year": 2016,
+        "country_code": 82,
+        "director": "박찬욱",
+        "actors": ["김민희", "김태리"],
+        "rating": 8.3,
+        "audience_count": 4500000,
+        "genre_code": 6,
+        "reviews": ["비정한 세계를 그린 작품", "박찬욱 감독의 아름다운 영상"]
+    },
+    {
+        "title": "좋은 놈, 나쁜 놈, 이상한 놈",
+        "year": 2008,
+        "country_code": 82,
+        "director": "김지운",
+        "actors": ["이선균", "이정재"],
+        "rating": 7.5,
+        "audience_count": 5500000,
+        "genre_code": 1,
+        "reviews": ["한국 영화의 역사를 다시 쓴 작품", "유쾌한 액션과 긴장감 있는 스토리"]
+    },
+    {
+        "title": "타짜",
+        "year": 2006,
+        "country_code": 82,
+        "director": "최동훈",
+        "actors": ["최승현", "박신양"],
+        "rating": 7.6,
+        "audience_count": 6500000,
+        "genre_code": 2,
+        "reviews": ["도박 소재의 재미있는 영화", "역동적인 연출과 스토리"]
+    },
+        {
+        "title": "해운대",
+        "year": 2009,
+        "country_code": 82,
+        "director": "윤제균",
+        "actors": ["하정우", "강동원"],
+        "rating": 7.8,
+        "audience_count": 4200000,
+        "genre_code": 5,
+        "reviews": ["스릴 넘치는 해변 액션", "감동적인 우정 이야기"]
+    },
+    {
+        "title": "내부자들",
+        "year": 2015,
+        "country_code": 82,
+        "director": "우민호",
+        "actors": ["이병헌", "조승우"],
+        "rating": 8.2,
+        "audience_count": 4800000,
+        "genre_code": 2,
+        "reviews": ["긴박한 범죄 스릴러", "뛰어난 연기력"]
+    },
+    {
+        "title": "광복절 특사",
+        "year": 2010,
+        "country_code": 82,
+        "director": "신재영",
+        "actors": ["송강호", "류승룡"],
+        "rating": 7.6,
+        "audience_count": 3700000,
+        "genre_code": 5,
+        "reviews": ["극적인 역사 드라마", "훈훈한 가족 이야기"]
+    },
+    {
+        "title": "밀정",
+        "year": 2016,
+        "country_code": 82,
+        "director": "김지운",
+        "actors": ["송강호", "공유"],
+        "rating": 7.9,
+        "audience_count": 5300000,
+        "genre_code": 2,
+        "reviews": ["일제 강점기의 은밀한 스파이 이야기", "긴장감 넘치는 전개"]
+    },
+    {
+        "title": "아수라",
+        "year": 2016,
+        "country_code": 82,
+        "director": "김성수",
+        "actors": ["정우성", "황정민"],
+        "rating": 8.0,
+        "audience_count": 5900000,
+        "genre_code": 2,
+        "reviews": ["폭력과 복수의 소재를 다룬 작품", "긴박한 액션과 연기"]
+    },
+    {
+        "title": "백두산",
+        "year": 2019,
+        "country_code": 82,
+        "director": "이해준",
+        "actors": ["이병헌", "하정우"],
+        "rating": 7.7,
+        "audience_count": 4600000,
+        "genre_code": 5,
+        "reviews": ["북한을 배경으로 한 인간 드라마", "감동적인 결말"]
+    },
+    {
+        "title": "신과함께: 죄와 벌",
+        "year": 2017,
+        "country_code": 82,
+        "director": "김용화",
+        "actors": ["하정우", "차태현"],
+        "rating": 8.1,
+        "audience_count": 7100000,
+        "genre_code": 5,
+        "reviews": ["죽음을 다룬 판타지 영화", "인생과 죽음에 대한 깊은 사유"]
+    },
+    {
+        "title": "베테랑",
+        "year": 2015,
+        "country_code": 82,
+        "director": "류승완",
+        "actors": ["황정민", "유아인"],
+        "rating": 8.3,
+        "audience_count": 6400000,
+        "genre_code": 2,
+        "reviews": ["타격감 넘치는 액션 스릴러", "사회 비판적 메시지"]
+    },
+    {
+        "title": "아저씨",
+        "year": 2010,
+        "country_code": 82,
+        "director": "이정범",
+        "actors": ["원빈", "김새론"],
+        "rating": 7.9,
+        "audience_count": 5000000,
+        "genre_code": 2,
+        "reviews": ["한국판 복수 액션물", "긴장감 넘치는 전개"]
+    },
+    {
+        "title": "광해, 왕이 된 남자",
+        "year": 2012,
+        "country_code": 82,
+        "director": "이준익",
+        "actors": ["이병헌", "한효주"],
+        "rating": 7.7,
+        "audience_count": 8000000,
+        "genre_code": 1,
+        "reviews": ["사극의 재미를 만끽할 수 있는 작품", "화려한 영상미"]
+    },
+    {
+        "title": "어벤져스: 엔드게임",
+        "year": 2019,
+        "country_code": 1,
+        "director": "안소니 루소, 조 루소",
+        "actors": ["로버트 다우니 주니어", "크리스 에반스"],
+        "rating": 8.4,
+        "audience_count": 12000000,
+        "genre_code": 4,
+        "reviews": ["마블의 히어로들의 대미 장면", "감동적인 결말"]
+    },
+    {
+        "title": "인셉션",
+        "year": 2010,
+        "country_code": 1,
+        "director": "크리스토퍼 놀란",
+        "actors": ["레오나르도 디카프리오", "조셉 고든 레빗"],
+        "rating": 8.8,
+        "audience_count": 8500000,
+        "genre_code": 4,
+        "reviews": ["꿈 속의 꿈을 그린 사이킷 액션", "뛰어난 시나리오와 비주얼"]
+    },
+    {
+        "title": "다크 나이트",
+        "year": 2008,
+        "country_code": 1,
+        "director": "크리스토퍼 놀란",
+        "actors": ["크리스찬 베일", "히스 레저"],
+        "rating": 9.0,
+        "audience_count": 9000000,
+        "genre_code": 4,
+        "reviews": ["조커의 뛰어난 연기", "어둠 속의 영웅"]
+    },
+    {
+        "title": "포레스트 검프",
+        "year": 1994,
+        "country_code": 1,
+        "director": "로버트 저메키스",
+        "actors": ["톰 행크스", "로빈 라이트"],
+        "rating": 8.8,
+        "audience_count": 7000000,
+        "genre_code": 5,
+        "reviews": ["감동적인 우정 이야기", "삶의 의미를 다시 생각하게 함"]
+    },
+    {
+        "title": "인터스텔라",
+        "year": 2014,
+        "country_code": 1,
+        "director": "크리스토퍼 놀란",
+        "actors": ["매튜 맥커너히", "앤 해서웨이"],
+        "rating": 8.6,
+        "audience_count": 6500000,
+        "genre_code": 4,
+        "reviews": ["우주 여행을 다룬 SF 스토리", "시간 여행의 개념"]
+    },
+    {
+        "title": "레옹",
+        "year": 1994,
+        "country_code": 1,
+        "director": "뤽 베송",
+        "actors": ["장 르노", "나탈리 포트만"],
+        "rating": 8.5,
+        "audience_count": 6000000,
+        "genre_code": 2,
+        "reviews": ["소년과 킬러의 독특한 우정", "액션과 감동의 조화"]
+    },
+    {
+        "title": "인사이드 아웃",
+        "year": 2015,
+        "country_code": 1,
+        "director": "피트 닥터, 론니 델 카르멘",
+        "actors": ["에이미 포엘러", "필리스 스미스"],
+        "rating": 8.2,
+        "audience_count": 7500000,
+        "genre_code": 5,
+        "reviews": ["감정의 세계를 그린 애니메이션", "어른들도 공감하는 메시지"]
+    },
+    {
+        "title": "셔터 아일랜드",
+        "year": 2010,
+        "country_code": 1,
+        "director": "마틴 스콜세지",
+        "actors": ["레오나르도 디카프리오", "마크 러팔로"],
+        "rating": 8.1,
+        "audience_count": 6000000,
+        "genre_code": 4,
+        "reviews": ["환상적인 섬 모험", "의미 있는 결말"]
+    },
+    {
+        "title": "쇼생크 탈출",
+        "year": 1994,
+        "country_code": 1,
+        "director": "프랭크 다라본트",
+        "actors": ["팀 로빈스", "모건 프리먼"],
+        "rating": 9.3,
+        "audience_count": 8000000,
+        "genre_code": 2,
+        "reviews": ["감옥에서의 탈출 이야기", "삶과 자유에 대한 깊은 이야기"]
+    },
+    {
+        "title": "캐스트 어웨이",
+        "year": 2000,
+        "country_code": 1,
+        "director": "로버트 저메키스",
+        "actors": ["톰 행크스", "헬렌 헌트"],
+        "rating": 7.8,
+        "audience_count": 5500000,
+        "genre_code": 5,
+        "reviews": ["무인도에서의 생존기", "우정과 결단의 이야기"]
+    },
+    {
+        "title": "레디 플레이어 원",
+        "year": 2018,
+        "country_code": 1,
+        "director": "스티븐 스필버그",
+        "actors": ["테이크 액시트", "올리비아 쿡"],
+        "rating": 7.5,
+        "audience_count": 6000000,
+        "genre_code": 4,
+        "reviews": ["가상 현실을 다룬 SF 모험", "팝컬처의 풍부한 참조"]
+    },
+    {
+        "title": "캐치 미 이프 유 캔",
+        "year": 2002,
+        "country_code": 1,
+        "director": "스티븐 스필버그",
+        "actors": ["레오나르도 디카프리오", "톰 행크스"],
+        "rating": 8.1,
+        "audience_count": 7000000,
+        "genre_code": 1,
+        "reviews": ["슬픈 장면과 따뜻한 감동", "캐치볼 게임을 통한 성장 이야기"]
+    },
+    {
+        "title": "그래비티",
+        "year": 2013,
+        "country_code": 1,
+        "director": "알폰소 쿠아론",
+        "actors": ["샌드라 블록", "조지 클루니"],
+        "rating": 7.7,
+        "audience_count": 5500000,
+        "genre_code": 4,
+        "reviews": ["우주 공간에서의 사람의 생존을 그린 SF 스릴러", "진짜감 있는 비주얼"]
+    },
+    {
+        "title": "터미네이터 2:오리지널",
+        "year": 1991,
+        "country_code": 1,
+        "director": "제임스 카메론",
+        "actors": ["아놀드 슈워제네거", "린다 해밀턴"],
+        "rating": 8.5,
+        "audience_count": 8000000,
+        "genre_code": 2,
+        "reviews": ["로봇의 액션 시퀀스", "과거와 미래의 충돌"]
+    },
+    {
+        "title": "인디아나 존스: 마법의 석호",
+        "year": 1984,
+        "country_code": 1,
+        "director": "스티븐 스필버그",
+        "actors": ["해리슨 포드", "캐럴라인 무클로드"],
+        "rating": 8.4,
+        "audience_count": 7500000,
+        "genre_code": 2,
+        "reviews": ["모험과 액션의 대표적인 시리즈", "고전적인 어드벤처"]
+    },
+    {
+        "title": "피어스트 킹덤",
+        "year": 1993,
+        "country_code": 1,
+        "director": "스티븐 스필버그",
+        "actors": ["사무엘 L. 잭슨", "리암 니슨"],
+        "rating": 7.6,
+        "audience_count": 6000000,
+        "genre_code": 4,
+        "reviews": ["공룡의 세계를 그린 전투 액션", "흥미진진한 모험"]
+    },
+    {
+        "title": "레인 맨",
+        "year": 1988,
+        "country_code": 1,
+        "director": "배리 레빈슨",
+        "actors": ["더스틴 호프먼", "톰 크루즈"],
+        "rating": 8.0,
+        "audience_count": 7000000,
+        "genre_code": 5,
+        "reviews": ["조수를 따라가는 두 남자의 이야기", "정신병의 이해와 용기"]
+    },
+    {
+        "title": "크루엘라",
+        "year": 2021,
+        "country_code": 1,
+        "director": "크레이그 질레스피",
+        "actors": ["엠마 스톤", "엠마 톰슨"],
+        "rating": 7.4,
+        "audience_count": 6500000,
+        "genre_code": 6,
+        "reviews": ["디즈니 악당의 미래를 보여주는 영화", "패션과 반항의 여정"]
+    },
+    {
+        "title": "아메리칸 뷰티",
+        "year": 1999,
+        "country_code": 1,
+        "director": "샘 멘데스",
+        "actors": ["케빈 스페이시", "안네트 베닝"],
+        "rating": 8.3,
+        "audience_count": 6000000,
+        "genre_code": 1,
+        "reviews": ["중년의 위기와 욕망을 그린 블랙 코미디", "인간 심리의 다층적인 이해"]
+    },
+    {
+        "title": "로건",
+        "year": 2017,
+        "country_code": 1,
+        "director": "제임스 맨골드",
+        "actors": ["휴 잭맨", "패트릭 스튜어트"],
+        "rating": 8.1,
+        "audience_count": 7000000,
+        "genre_code": 2,
+        "reviews": ["월버린의 마지막 이야기", "액션과 감동의 조화"]
+    },
+    {
+        "title": "아마데우스",
+        "year": 1984,
+        "country_code": 1,
+        "director": "밀로스 포르만",
+        "actors": ["톰 훌스", "페이 브러스넌"],
+        "rating": 8.3,
+        "audience_count": 5500000,
+        "genre_code": 6,
+        "reviews": ["모차르트의 삶과 음악을 그린 작품", "명작 클래식"]
+    },
+    {
+        "title": "라이프 이즈 비욘드",
+        "year": 1999,
+        "country_code": 1,
+        "director": "프랭크 다라본트",
+        "actors": ["짐 캐리", "에드 해리스"],
+        "rating": 8.8,
+        "audience_count": 7000000,
+        "genre_code": 5,
+        "reviews": ["현실과 환상이 교차하는 판타지 영화", "생각할 거리를 주는 작품"]
+    },
+    {
+        "title": "테오와 마법의 성",
+        "year": 2006,
+        "country_code": 1,
+        "director": "미켈란젤로 코르비니",
+        "actors": ["리처드 해리스", "사이러스 벤"],
+        "rating": 7.9,
+        "audience_count": 6500000,
+        "genre_code": 6,
+        "reviews": ["어린이를 위한 판타지 모험", "마법과 용의 세계"]
+    },
+    {
+        "title": "아마데우스: 최후의 소원",
+        "year": 1988,
+        "country_code": 1,
+        "director": "밀로스 포르만",
+        "actors": ["톰 훌스", "페이 브러스넌"],
+        "rating": 8.0,
+        "audience_count": 7000000,
+        "genre_code": 6,
+        "reviews": ["모차르트의 삶과 음악을 그린 작품", "감동적인 이야기"]
+    },
+    {
+        "title": "레옹: 감독판",
+        "year": 1996,
+        "country_code": 1,
+        "director": "뤽 베송",
+        "actors": ["장 르노", "나탈리 포트만"],
+        "rating": 8.7,
+        "audience_count": 7500000,
+        "genre_code": 2,
+        "reviews": ["감독의 감정적인 집착", "더욱 깊어진 캐릭터 탐구"]
+    },
+    {
+        "title": "이터널 선샤인",
+        "year": 2004,
+        "country_code": 1,
+        "director": "미셸 공드리",
+        "actors": ["진 캐리", "케이트 윈슬렛"],
+        "rating": 8.3,
+        "audience_count": 6000000,
+        "genre_code": 5,
+        "reviews": ["기억과 사랑의 이야기", "시간과 공간을 초월한 결말"]
+    },
+    {
+        "title": "시간을 달리는 소녀",
+        "year": 2006,
+        "country_code": 81,
+        "director": "시마무라 마모루",
+        "actors": ["타카하시 미술", "카미시라이시 모네"],
+        "rating": 8.4,
+        "audience_count": 6500000,
+        "genre_code": 6,
+        "reviews": ["타임 트래블을 다룬 판타지 이야기", "감동과 여운의 메시지"]
+    },
+    {
+        "title": "아포칼립토",
+        "year": 1999,
+        "country_code": 1,
+        "director": "린다스 파르머",
+        "actors": ["조지 클루니", "니콜 키드먼"],
+        "rating": 7.8,
+        "audience_count": 6000000,
+        "genre_code": 4,
+        "reviews": ["최후의 날을 그린 인류의 생존 이야기", "파괴와 희망의 대립"]
+    }
+]
+
+
+@app.get("/movies/search")
+async def search_movies(
+    genre_code: Optional[int] = None,
+    country_code: Optional[int] = None,
+    director: Optional[str] = None,
+    actor: Optional[str] = None,
+    rating: Optional[float] = None,
+    min_audience_count: Optional[int] = None,
+    max_audience_count: Optional[int] = None,
+    title: Optional[str] = None,
+    keyword: Optional[str] = None
+):
+    # 필터링된 결과를 저장할 리스트
+    filtered_movies = []
+    
+    for movie in new_movies:
+        # 각 필터에 대한 조건 확인
+        if (
+            (genre_code is None or movie['genre_code'] == genre_code) and
+            (country_code is None or movie['country_code'] == country_code) and
+            (director is None or director.lower() in movie['director'].lower()) and
+            (actor is None or actor.lower() in [actor.lower() for actor in movie['actors']]) and
+            (rating is None or movie['rating'] >= rating) and
+            (min_audience_count is None or movie["audience_count"] >= min_audience_count) and
+            (max_audience_count is None or movie["audience_count"] <= max_audience_count) and
+            (title is None or (title.lower() in movie['title'].lower()))
+        ):
+            # keyword가 None이 아닌 경우에만 검색
+            if keyword is not None:
+                # 키워드 검색 결과 저장
+                keyword_results = [keyword.lower() in ' '.join(movie['reviews']).lower() for keyword in keyword.split(',')]
+                # 모든 키워드가 만족하는지 확인
+                if all(keyword_results):
+                    filtered_movies.append(movie)
+            else:
+                filtered_movies.append(movie)
+            
+            # 호출 개수 제한
+            if len(filtered_movies) >= 10:
+                break
+    
+    return filtered_movies
 #Connect X echo
 
 @app.get("/serviceAPI")
