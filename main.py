@@ -4,6 +4,95 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+@app.get("/socartest")
+async def socar(
+    location: Optional[str] = Query(None),
+    car_type: Optional[str] = Query(None),
+    price: Optional[str] = Query(None),
+    color: Optional[str] = Query(None),
+):
+    if location == '전주역' and car_type == '경차' and price == '10만원대' and color == '빨강':
+        return '전주역에서 빌릴 수 있는 10만원대 빨간 경차 소개해드리겠습니다.'
+    elif location == '전주역' and car_type == '경차' and price == '10만원대':
+        return '전주역에서 빌릴 수 있는 10만원대 경차 소개해드리겠습니다.'
+    elif location == '전주역' and car_type == '경차' :
+        return '전주역에서 빌릴 수 있는 경차 소개해드리겠습니다.'
+    elif location == '전주역':
+        return '{"차량 이름" : "싼타페"}'
+    else:
+        return '죄송합니다. 해당 차량 정보를 찾을 수 없습니다. 자세한 문의는 고객센터 1212-4545-7878로 문의 부탁드립니다.'
+
+@app.get("/carpricesearch")
+async def socar(
+    car_name: Optional[str] = Query(None)
+):
+    if car_name == '싼타페':
+        return '2500만원'
+
+
+
+@app.get("/AICC")
+async def aicc(
+    category: Optional[str] = Query(None),
+    third_party: Optional[str] = Query(None),
+    matching_state: Optional[str] = Query(None),
+    elapsed_8hr: Optional[str] = Query(None),
+    elapsed_2day: Optional[str] = Query(None),
+    exclusion_reason: Optional[str] = Query(None),
+    correction_state: Optional[str] = Query(None)
+):
+    if category == '가격비교 매칭 방법':
+        if third_party == 'T':
+            return '11번가, 쿠팡 상품의 가격비교 매칭은 해당 오픈마켓/종합몰 담당자에게 매칭 요청해주시기 바랍니다.'
+        else:
+            return '가격비교 매칭 방법은 http://imgshopping.naver.net/admin/notice/g98cytj1o5y.png 를 참조해주세요.'
+    elif category == '가격비교 노출 안됨':
+        if matching_state == '완료':
+            if elapsed_8hr == 'T':
+                return '상담사 연결'
+            else:
+                return '업데이트 반영까지 8시간이 걸릴 수 있습니다. 8시간 이상 지나도 반영이 안 된다면 상담사 연결해 드리겠습니다.'
+        elif matching_state == '추천중':
+            if elapsed_2day == 'T':
+                return '상담사 연결'
+            else:
+                return '매칭 결과 안내까지 2일이 소요될 수 있습니다. 2일이 지나도 반영이 안 된다면 상담사 연결해 드리겠습니다.'
+        elif matching_state == '반려':
+            return '1. 다른 옵션이 포함된 모음 상품명 2. 1개 또는 몇 개 단위 배송비 부과 상품 3. 원부와 사이즈,용량,수량이 다른 상품일 수 있습니다. 자세한 매칭 기준은 https://help.pay.naver.com/faq/content.help?faqId=13388를 참조해주세요.'
+        else:
+            return '가격비교 매칭을 요청했는데 노출이 안된다면 매칭 상태를 확인해주세요. 매칭 상태는 https://adcenter.shopping.naver.com/member/login/form.nhn?targetUrl=%2Fiframe%2Fproduct%2Fmanage%2Fservice%2Flist.nhn 에서 확인할 수 있습니다.'
+    elif category == '가격비교 제외 상품':
+        if exclusion_reason == '원부 내 포함대상 아님':
+            if correction_state == 'T':
+                return '상담원 연결'
+            else:
+                return '상품 기본정보(대표 이미지, 제조사, 브랜드, 상품명, 상품코드) 불일치, 여러 상품을 취급하는 모음전 상품은 매칭이 불가합니다. 다음의 사항을 수정 하셨다면 상담원 연결 도와드리겠습니다.'
+        elif exclusion_reason == '원부 배송비 기준 위반':
+            if correction_state == 'T':
+                return '상담원 연결'
+            else:
+                return '수량 단위로 배송비가 발생하거나, 가격비교 배송비 조건을 초과한 배송비 상품은 가격비교에서 제외됩니다. 다음의 사항을 수정 하셨다면 상담원 연결 도와드리겠습니다.'
+        elif exclusion_reason == '원부 설치비 기준 위반':
+            if correction_state == 'T':
+                return '상담원 연결'
+            else:
+                return '에어컨, 보일러, 온수기 등 설치가 필요한 상품은 상품명에 "기본설치비 포함" 및 상세페이지에 추가비용 정보를 표기하지 않으면 매칭이 불가합니다. 설치 상품군 서비스 기준은 https://adcenter.shopping.naver.com/board/notice_detail.nhn?page=1&noticeType=&noticeSeq=274384&srchKey=cont&srchVal=%EC%84%A4%EC%B9%98%EB%B9%84를 참조해주세요. 다음의 사항을 수정 하셨다면 상담원 연결 도와드리겠습니다.'
+        elif exclusion_reason == '원부기준 위반_기타':
+            if correction_state == 'T':
+                return '상담원 연결'
+            else:
+                return '가격비교 매칭 가이드에 맞지 않은 상품은 가격비교에 노출할 수 없습니다. 제외된 사유는 https://adcenter.shopping.naver.com/board/notice_detail.nhn?page=1&noticeType=&noticeSeq=276064&srchKey=ttl&srchVal=%EB%A7%A4%EC%B9%AD 링크 내 첨부파일을 통해 확인 가능합니다. 다음의 사항을 수정 하셨다면 상담원 연결 도와드리겠습니다.'
+        elif exclusion_reason == '원부 비대상 상품군':
+            if correction_state == 'T':
+                return '상담원 연결'
+            else:
+                return '가격비교를 서비스하지 않는 상품군으로 매칭이 불가능합니다. 상품 타입 : 중고, 리퍼, 전시, 반품, 스크래치 판매 방식 : 대여, 도매, 할부, 예약판매, 구매대행'
+        elif exclusion_reason is not None :
+            return '가격비교 제외 사유를 정확히 입력해주세요. 사유 : 원부 내 포함대상 아님, 원부 배송비 기준 위반, 원부 설치비 기준 위반, 원부기준 위반_기타, 원부 비대상 상품군'
+        else:
+            return '가격비교 제외 사유를 확인해주세요. '
+    else:
+        return '정의 되지 않은 상담 영역입니다.'
 
 #Connect X echo
 
