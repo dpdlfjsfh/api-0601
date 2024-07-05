@@ -11,6 +11,8 @@ async def socar(
     price: Optional[str] = Query(None),
     color: Optional[str] = Query(None),
 ):
+    if location == None:
+        return '빌리고 싶은 장소를 확인해주세요.'
     if location == '전주역' and car_type == '경차' and price == '10만원대' and color == '빨강':
         return '전주역에서 빌릴 수 있는 10만원대 빨간 경차 소개해드리겠습니다.'
     elif location == '전주역' and car_type == '경차' and price == '10만원대':
