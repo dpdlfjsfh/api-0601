@@ -4,6 +4,20 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+@app.get("/restaurant_inform/{station1}")
+async def get_restaurant_inform_1(station1: str):
+    return {"message": f"맛집! {station1}"}
+
+@app.get("/restaurant_inform/{station1}/{station2}")
+async def get_restaurant_inform_2(station1: str, station2: str):
+    return {"message": f"맛집! {station1} 와 {station2} 근처"}
+
+@app.get("/restaurant_inform/{station1}/{station2}/{station3}")
+async def get_restaurant_inform_3(station1: str, station2: str, station3: str):
+    return {"message": f"맛집! {station1}, {station2}, {station3}"}
+
+
+
 @app.get("/socartest")
 async def socar(
     location: Optional[str] = Query(None),
