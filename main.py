@@ -4,9 +4,9 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-@app.get("/perform_inform")
 
-perform_data_0718 = [
+
+perform_data = [
   {
     "공연_이름": "햄릿의 귀환",
     "공연_일자": "2024-08-15",
@@ -99,12 +99,14 @@ perform_data_0718 = [
   }
 ]
 
+@app.get("/perform_inform")
+
 async def perform(
     location: Optional[str] = Query(None),
 ):
 
     if location == "세종문화회관":
-        return perform_data_0718
+        return perform_data
 
 
 @app.get("/restaurant_inform/{station1}")
