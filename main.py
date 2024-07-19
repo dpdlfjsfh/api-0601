@@ -22,7 +22,7 @@ async def get_available_slots(date_time: str):
     if date_time in available_slots:
         return {"available_slots": available_slots[date_time]}
     else:
-        raise HTTPException(status_code=404, detail="해당 시간에 예약 가능한 타석이 없습니다.")
+        raise HTTPException(status_code=200, detail="해당 시간에 예약 가능한 타석이 없습니다.")
 
 @app.post("/reserve_slot/")
 async def reserve_slot(reservation: ReservationRequest):
@@ -30,10 +30,10 @@ async def reserve_slot(reservation: ReservationRequest):
     slot_number = reservation.slot_number
 
     if date_time not in available_slots:
-        raise HTTPException(status_code=404, detail="해당 시간에 예약 가능한 타석이 없습니다.")
+        raise HTTPException(status_code=200, detail="해당 시간에 예약 가능한 타석이 없습니다.")
     
     if slot_number not in available_slots[date_time]:
-        raise HTTPException(status_code=400, detail="해당 타석은 이미 예약되었습니다.")
+        raise HTTPException(status_code=200, detail="해당 타석은 이미 예약되었습니다.")
     
     # 예약 처리
     available_slots[date_time].remove(slot_number)
