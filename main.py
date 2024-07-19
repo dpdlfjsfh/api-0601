@@ -32,16 +32,11 @@ async def reserve_slot(reservation: ReservationRequest):
     if date_time not in available_slots:
         raise HTTPException(status_code=200, detail="해당 시간에 예약 가능한 타석이 없습니다.")
     
-    if slot_number not in available_slots[date_time]:
+    if slot_number > 10 :
         raise HTTPException(status_code=200, detail="해당 타석은 이미 예약되었습니다.")
     
-    # 예약 처리
-    available_slots[date_time].remove(slot_number)
-    if date_time not in booked_slots:
-        booked_slots[date_time] = []
-    booked_slots[date_time].append(slot_number)
-    
-    return {"message": f"{date_time}에 {slot_number}번 타석이 예약되었습니다."}
+    if slot_number <= 10:
+        return '예약완료!'
 
 
 
