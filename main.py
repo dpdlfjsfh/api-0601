@@ -161,11 +161,11 @@ result_oos = [
     "25": None
   },
   {
-    "Step SEQ": 6,
-    "EINECN No": "AB101000",
-    "EINECN Title": "ECO123461-X",
-    "PPID": "설명 관련 정보 입니다. 수십자 수준입니다.",
-    "1": "영어와 숫자, 특수문자 조합",
+    "Step SEQ": "AB000560",
+    "EINECN No": "ECO122256-X",
+    "EINECN Title": "내용을 가볍게 아무거나 적어봅니다.",
+    "PPID": "ABCA!13#",
+    "1": "O",
     "2": "O",
     "3": "O",
     "4": "O",
