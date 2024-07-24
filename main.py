@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-@app.get("/available_slots/")
+@app.get("/oosTest")
 
 result_oos = 
 [
