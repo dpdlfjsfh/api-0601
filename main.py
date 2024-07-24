@@ -4,8 +4,6 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-@app.get("/oosTest")
-
 result_oos = 
 [
   {
@@ -195,6 +193,7 @@ result_oos =
     "25": null
   }
 ]
+@app.get("/oosTest")
 async def get_available_slots(LotID: str):
     return result_oos
 
