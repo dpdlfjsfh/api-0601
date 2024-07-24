@@ -4,8 +4,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-result_oos = 
-[
+result_oos = [
   {
     "Step SEQ": 1,
     "EINECN No": "AB000100",
