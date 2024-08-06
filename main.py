@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Query, HTTPException, Body, Request
 from typing import List, Optional, Dict
 from pydantic import BaseModel
+import asyncio
+
 
 app = FastAPI()
 
@@ -192,6 +194,7 @@ async def perform(
 ):
 
     if location == "세종문화회관":
+        await asyncio.sleep(120)  # 120초 (2분) 대기
         return perform_data
 
 
