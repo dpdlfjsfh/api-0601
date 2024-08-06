@@ -194,7 +194,7 @@ async def perform(
 ):
 
     if location == "세종문화회관":
-        await asyncio.sleep(120)  # 120초 (2분) 대기
+        await asyncio.sleep(29)  # 120초 (2분) 대기
         return perform_data
 
 
