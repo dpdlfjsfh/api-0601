@@ -194,6 +194,7 @@ async def perform(
 ):
 
     if location == "세종문화회관":
+      await asyncio.sleep(120)
       return perform_data
 
 
