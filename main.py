@@ -194,9 +194,7 @@ async def perform(
 ):
 
     if location == "세종문화회관":
-        for _ in range(4):
-          await asyncio.sleep(9)  # 9초 동안 비동기 지연
-       return perform_data
+      return perform_data
 
 
 @app.get("/restaurant_inform/{station1}")
