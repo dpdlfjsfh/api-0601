@@ -375,7 +375,8 @@ perform_data2 = [
 async def perform(
     location: Optional[str] = Query(None),
 ):
-
+    if location == "예술의전당":
+      return "공연정보가 없습니다"
     if location == "세종문화회관":
       await asyncio.sleep(91)
       return perform_data
