@@ -378,10 +378,10 @@ async def perform(
 ):
 
     if location == "세종문화회관":
-      await asyncio.sleep(61)
+      await asyncio.sleep(91)
       return perform_data
     if location == "국립극장":
-      await asyncio.sleep(59)
+      await asyncio.sleep(89)
       return perform_data2
 
 
