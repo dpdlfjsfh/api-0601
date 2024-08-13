@@ -383,6 +383,9 @@ async def perform(
     if location == "국립극장":
       await asyncio.sleep(89)
       return perform_data2
+    if location == "서울극장":
+      await asyncio.sleep(91)
+      return "공연장 이름을 다시 확인해주세요"
 
 
 @app.get("/restaurant_inform/{station1}")
