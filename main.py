@@ -384,7 +384,7 @@ async def perform(
       await asyncio.sleep(89)
       return perform_data2
     if location == "서울극장":
-      await asyncio.sleep(91)
+      await asyncio.sleep(31)
       return "공연장 이름을 다시 확인해주세요"
 
 
