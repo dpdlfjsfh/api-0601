@@ -407,7 +407,7 @@ async def perform(location: Optional[str] = Query(None)):
 
 async def generate(grade: int, class_num: int, student_num: int):
     for i in range(grade):
-      await asyncio.sleep(class)  # 세 번째 대기
+      await asyncio.sleep(class_num)  # 세 번째 대기
     await asuncio.sleep(student_num)
     yield f"홍길동"
 
