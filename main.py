@@ -390,7 +390,7 @@ async def generate(location: str):
         for i in range(5):  # 31초 동안 5초마다 메시지 전송
             await asyncio.sleep(11)
             yield f"서울극장 진행 중: {i * 5}초 경과\n"
-        await asyncio.sleep(4)
+        await asyncio.sleep(2)
         yield "공연장 이름을 다시 확인해주세요\n"
     elif location == "대전극장":
         for i in range(12):  # 31초 동안 5초마다 메시지 전송
