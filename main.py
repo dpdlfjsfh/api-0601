@@ -405,6 +405,20 @@ async def generate(location: str):
 async def perform(location: Optional[str] = Query(None)):
     return StreamingResponse(generate(location), media_type="text/plain")
 
+async def generate(grade: int, class_num: int, student_num: int):
+    for i in range(grade):
+      await asyncio.sleep(class)  # 세 번째 대기
+    await asuncio.sleep(student_num)
+    yield f"홍길동"
+
+@app.get("/student_info")
+async def student_info(
+    grade: Optional[int] = Query(None),
+    class_num: Optional[int] = Query(None),
+    student_num: Optional[int] = Query(None)
+):
+    return StreamingResponse(generate(grade, class_num, student_num), media_type="text/plain")
+
 
 @app.get("/restaurant_inform/{station1}")
 async def get_restaurant_inform_1(station1: str):
