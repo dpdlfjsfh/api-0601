@@ -372,38 +372,10 @@ perform_data2 = [
   }
 ]
 
-async def generate(location: str):
-    if location == "예술의전당":
-        yield "공연정보가 없습니다\n"
-        return
-    elif location == "세종문화회관":
-        for i in range(11):  # 59초 동안 5초마다 메시지 전송
-            await asyncio.sleep(7)
-            yield f"세종문화회관 진행 중: {i * 5}초 경과\n"
-        yield "perform_data"
-    elif location == "국립극장":
-        for i in range(9):  # 89초 동안 5초마다 메시지 전송
-            await asyncio.sleep(5)
-            yield f"국립극장 진행 중: {i * 5}초 경과\n"
-        yield "perform_data2"
-    elif location == "서울극장":
-        for i in range(5):  # 31초 동안 5초마다 메시지 전송
-            await asyncio.sleep(11)
-            yield f"서울극장 진행 중: {i * 5}초 경과\n"
-        await asyncio.sleep(2)
-        yield "공연장 이름을 다시 확인해주세요\n"
-    elif location == "대전극장":
-        for i in range(12):  # 31초 동안 5초마다 메시지 전송
-            await asyncio.sleep(5)
-            yield f"서울극장 진행 중: {i * 5}초 경과\n"
-        await asyncio.sleep(1)
-        yield "공연장 이름을 다시 확인해주세요\n"
-    else:
-        yield "알 수 없는 위치입니다\n"
-
 @app.get("/perform_inform")
-async def perform(location: Optional[str] = Query(None)):
-    return StreamingResponse(generate(location), media_type="text/plain")
+async def generate(location: str):
+    if location == "국립극장":
+      return perform_data2
 
 async def generate(grade: int, class_num: int, student_num: int):
     for i in range(grade):
