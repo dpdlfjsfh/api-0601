@@ -378,7 +378,7 @@ async def generate(location: str):
       return perform_data2
       
     if location == "서울극장":
-      return perform_data2, perform_data2
+      return perform_data2, perform_data
 
     if location == "대전극장":
       return perform_data2, perform_data2, perform_data2
