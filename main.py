@@ -376,6 +376,12 @@ perform_data2 = [
 async def generate(location: str):
     if location == "국립극장":
       return perform_data2, perform_data2, perform_data2, perform_data2
+      
+    if location == "서울극장":
+      return perform_data2, perform_data2
+
+    if location == "대전극장":
+      return perform_data2, perform_data2, perform_data2
 
 async def generate(grade: int, class_num: int, student_num: int):
     for i in range(grade):
