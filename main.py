@@ -375,7 +375,7 @@ perform_data2 = [
 @app.get("/perform_inform")
 async def generate(location: str):
     if location == "국립극장":
-      return perform_data2, perform_data2, perform_data2, perform_data2
+      return perform_data2
       
     if location == "서울극장":
       return perform_data2, perform_data2
